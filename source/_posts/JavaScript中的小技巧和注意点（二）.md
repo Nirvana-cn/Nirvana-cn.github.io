@@ -3,8 +3,11 @@ title: JavaScript中的小技巧和注意点（二）
 date: 2018-01-05 16:37:42
 tags:
 ---
-###tip:自己收集的一些前端注意事项
+
+自己收集的一些前端注意事项
+
 https://github.com/Nirvana-cn/WebTechnology
+
 # 1.函数优先
 函数声明和变量声明都会被提升，但是一个值得注意的细节是函数会首先被提升，然后才是变量
 ```

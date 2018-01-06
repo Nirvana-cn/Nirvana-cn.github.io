@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a18a9558-5425-4ef4-9739-1533a6a72c1c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_config.yml" afterPath="$PROJECT_DIR$/_config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/摘记01.md" afterPath="$PROJECT_DIR$/source/_posts/摘记01.md" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/source/_posts/JavaScript中如何判断一个对象是不是数组.md" afterPath="$PROJECT_DIR$/source/_posts/JavaScript中判断一个对象是不是数组.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/JavaScript中的小技巧和注意点（二）.md" afterPath="$PROJECT_DIR$/source/_posts/JavaScript中的小技巧和注意点（二）.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/MongoDB安装和使用-Webstorm可视化插件.md" afterPath="$PROJECT_DIR$/source/_posts/MongoDB安装和使用-Webstorm可视化插件.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/区块链入门.md" afterPath="$PROJECT_DIR$/source/_posts/区块链入门.md" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,21 +19,48 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="font-size-0的妙用.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/source/_posts/font-size-0的妙用.md">
+      <file leaf-file-name="摘记01.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/_posts/摘记01.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="651">
-                <caret line="47" column="33" lean-forward="false" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+              <first_editor relative-caret-position="232">
+                <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_config.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="492">
+              <caret line="74" column="16" lean-forward="false" selection-start-line="74" selection-start-column="16" selection-end-line="74" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MongoDB安装和使用-Webstorm可视化插件.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/_posts/MongoDB安装和使用-Webstorm可视化插件.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="551">
+                <caret line="25" column="16" lean-forward="true" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
                 <folding>
-                  <marker date="1515227259090" expanded="true" signature="126:658" ph="..." />
-                  <marker date="1515227259090" expanded="true" signature="133:546" ph="..." />
-                  <marker date="1515227259090" expanded="true" signature="194:538" ph="..." />
-                  <marker date="1515227259090" expanded="true" signature="205:261" ph="{...}" />
-                  <marker date="1515227259090" expanded="true" signature="278:380" ph="{...}" />
-                  <marker date="1515227259090" expanded="true" signature="395:526" ph="{...}" />
-                  <marker date="1515227259090" expanded="true" signature="553:650" ph="..." />
-                  <marker date="1515227259090" expanded="true" signature="575:642" ph="..." />
+                  <marker date="1515228893066" expanded="true" signature="2122:2297" ph="{&quot;name&quot;: String...}" />
+                  <marker date="1515228893066" expanded="true" signature="2662:2725" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="2763:2825" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="2872:2928" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="2945:3016" ph="{&quot;name&quot;: 'jiwei'...}" />
+                  <marker date="1515228893066" expanded="true" signature="3029:3071" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="3124:3308" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="3150:3198" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="3204:3304" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="3371:3425" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="3492:3654" ph="{...}" />
+                  <marker date="1515228893066" expanded="true" signature="3581:3648" ph="{...}" />
                 </folding>
               </first_editor>
               <second_editor />
@@ -41,12 +68,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="摘记01.md" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/source/_posts/摘记01.md">
+      <file leaf-file-name="区块链入门.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/source/_posts/区块链入门.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="232">
-                <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <first_editor relative-caret-position="551">
+                <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -71,21 +98,22 @@
         <option value="$PROJECT_DIR$/source/_posts/Nginx实现https以及https二级m域名转发.md" />
         <option value="$PROJECT_DIR$/source/_posts/Nginx实现https以及https二级域名转发.md" />
         <option value="$PROJECT_DIR$/themes/next/_config.yml" />
-        <option value="$PROJECT_DIR$/_config.yml" />
         <option value="$PROJECT_DIR$/source/_posts/JavaScript原型与闭包总结.md" />
         <option value="$PROJECT_DIR$/source/_posts/test.md" />
         <option value="$PROJECT_DIR$/source/_posts/JavaScript中判断一个对象是不是数组.md" />
         <option value="$PROJECT_DIR$/source/_posts/空气中PM2-5问题的建模和分析.md" />
         <option value="$PROJECT_DIR$/source/_posts/做一个质疑者.md" />
         <option value="$PROJECT_DIR$/source/_posts/《写给大家看的设计书》总结.md" />
-        <option value="$PROJECT_DIR$/source/_posts/MongoDB安装和使用-Webstorm可视化插件.md" />
         <option value="$PROJECT_DIR$/source/_posts/Webstorm中使用babel转码器.md" />
         <option value="$PROJECT_DIR$/source/_posts/现代启发式算法（一）——遗传算法.md" />
         <option value="$PROJECT_DIR$/source/_posts/现代启发式算法（二）——模拟退火算法.md" />
         <option value="$PROJECT_DIR$/source/_posts/font-size-0的妙用.md" />
         <option value="$PROJECT_DIR$/source/_posts/2017年全国研究生数学建模自记.md" />
-        <option value="$PROJECT_DIR$/source/_posts/区块链入门.md" />
         <option value="$PROJECT_DIR$/source/_posts/摘记01.md" />
+        <option value="$PROJECT_DIR$/source/_posts/JavaScript中的小技巧和注意点（二）.md" />
+        <option value="$PROJECT_DIR$/_config.yml" />
+        <option value="$PROJECT_DIR$/source/_posts/MongoDB安装和使用-Webstorm可视化插件.md" />
+        <option value="$PROJECT_DIR$/source/_posts/区块链入门.md" />
       </list>
     </option>
   </component>
@@ -105,7 +133,7 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="42" />
     <option name="y" value="5" />
     <option name="width" value="1936" />
@@ -172,8 +200,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -217,14 +245,15 @@
       <workItem from="1515219387898" duration="8335000" />
       <workItem from="1515228104718" duration="14000" />
       <workItem from="1515228154850" duration="17000" />
+      <workItem from="1515228430476" duration="520000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17243000" />
+    <option name="totallyTimeSpent" value="17763000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17913593" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -261,6 +290,37 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/source/_posts/font-size-0的妙用.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="1363">
+            <caret line="47" column="33" lean-forward="false" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+            <folding>
+              <marker date="1515227259090" expanded="true" signature="126:658" ph="..." />
+              <marker date="1515227259090" expanded="true" signature="133:546" ph="..." />
+              <marker date="1515227259090" expanded="true" signature="194:538" ph="..." />
+              <marker date="1515227259090" expanded="true" signature="205:261" ph="{...}" />
+              <marker date="1515227259090" expanded="true" signature="278:380" ph="{...}" />
+              <marker date="1515227259090" expanded="true" signature="395:526" ph="{...}" />
+              <marker date="1515227259090" expanded="true" signature="553:650" ph="..." />
+              <marker date="1515227259090" expanded="true" signature="575:642" ph="..." />
+            </folding>
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/摘记01.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="232">
+            <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/font-size-0的妙用.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -487,14 +547,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="2" column="42" lean-forward="true" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/Centos7命令行下安装和配置Apache服务器.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -567,30 +619,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/MongoDB安装和使用-Webstorm可视化插件.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="490">
-            <caret line="120" column="6" lean-forward="false" selection-start-line="120" selection-start-column="6" selection-end-line="120" selection-end-column="6" />
-            <folding>
-              <marker date="1515226162316" expanded="true" signature="2068:2243" ph="{&quot;name&quot;: String...}" />
-              <marker date="1515226162316" expanded="true" signature="2608:2671" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="2709:2771" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="2818:2874" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="2891:2962" ph="{&quot;name&quot;: 'jiwei'...}" />
-              <marker date="1515226162316" expanded="true" signature="2975:3017" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="3070:3254" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="3096:3144" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="3150:3250" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="3317:3371" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="3438:3600" ph="{...}" />
-              <marker date="1515226162316" expanded="true" signature="3527:3594" ph="{...}" />
-            </folding>
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/Webstorm中使用babel转码器.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -624,17 +652,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/区块链入门.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="696">
-            <caret line="24" column="24" lean-forward="true" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/2017年全国研究生数学建模自记.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -649,7 +666,7 @@
     <entry file="file://$PROJECT_DIR$/source/_posts/font-size-0的妙用.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="651">
+          <first_editor relative-caret-position="0">
             <caret line="47" column="33" lean-forward="false" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
             <folding>
               <marker date="1515227259090" expanded="true" signature="126:658" ph="..." />
@@ -666,11 +683,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/JavaScript中的小技巧和注意点（二）.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="116">
+            <caret line="16" column="19" lean-forward="true" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/摘记01.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="232">
-            <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="492">
+          <caret line="74" column="16" lean-forward="false" selection-start-line="74" selection-start-column="16" selection-end-line="74" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/MongoDB安装和使用-Webstorm可视化插件.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="551">
+            <caret line="25" column="16" lean-forward="true" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
+            <folding>
+              <marker date="1515228893066" expanded="true" signature="2122:2297" ph="{&quot;name&quot;: String...}" />
+              <marker date="1515228893066" expanded="true" signature="2662:2725" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="2763:2825" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="2872:2928" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="2945:3016" ph="{&quot;name&quot;: 'jiwei'...}" />
+              <marker date="1515228893066" expanded="true" signature="3029:3071" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="3124:3308" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="3150:3198" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="3204:3304" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="3371:3425" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="3492:3654" ph="{...}" />
+              <marker date="1515228893066" expanded="true" signature="3581:3648" ph="{...}" />
+            </folding>
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/区块链入门.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="551">
+            <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
             <folding />
           </first_editor>
           <second_editor />

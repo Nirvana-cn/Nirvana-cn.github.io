@@ -10,11 +10,16 @@ tags:
 
 在MongoDB的安装目录下的bin文件夹下打开命令行窗口，执行命令，初始化数据库存储位置。命令执行成功之后，系统就会提示等待连接。
 
-> mongod --dbpath  D:\MongoData\db
+```shell
+mongod --dbpath  D:\MongoData\db
+```
+
 
 如果使用win10的PowerShell
 
-> .\mongod --dbpath  D:\MongoData\db
+```shell
+.\mongod --dbpath  D:\MongoData\db
+```
 
 ![](http://img.blog.csdn.net/20170830202641333)
 
@@ -22,9 +27,11 @@ tags:
 
 初始化MongoDB存储位置之后，在当前目录下新开一个命令行窗口，输入mongo命令就可以连接上MongoDB数据库了，输入show dbs 进行验证（MongoDB默认存在三个数据库admin，local和test）
 
-> mongo
+```shell
+mongo
 
-> show dbs
+show dbs
+```
 
 ![](http://img.blog.csdn.net/20170830204059660)
 
@@ -34,13 +41,19 @@ tags:
 
 依旧是在当前目录下，以管理员身份打开命令行窗口，输入以下命令。
 
-> mongod -dbpath "D:\MongoData\db" -logpath "D:\MongoData\log\MongoDB.log" -install -serviceName "mongodb"
+
+```shell
+mongod -dbpath "D:\MongoData\db" -logpath "D:\MongoData\log\MongoDB.log" -install -serviceName "mongodb"
+```
 
 此时服务已经安装成功，运行
 
-> net start mongodb   (开启服务)
+```shell
+net start mongodb   (开启服务)
 
-> net stop mongodb   (关闭服务)
+net stop mongodb   (关闭服务)
+```
+
 
 # 5.使用webstorm可视化插件
 
