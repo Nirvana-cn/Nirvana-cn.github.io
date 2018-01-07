@@ -87,7 +87,9 @@ net stop mongodb   (关闭服务)
 
 （1）安装mogoose
 
-> npm install moogse --save
+```shell
+npm install moogse --save
+```
 
 （2）使用mogoose建立连接
 

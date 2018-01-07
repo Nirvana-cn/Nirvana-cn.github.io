@@ -7,7 +7,9 @@ tags:
 
 1. 安装babel-cli
 
-> npm install babel-cli --save
+```shell
+npm install babel-cli --save
+```
 
 安装babel会报错，提醒你卸载babel安装babel-cli
 
@@ -25,7 +27,9 @@ tags:
 
 配置好之后babel还是无法运行的，因为在babel配置选项中Arguments有一个 --presets env参数会报错，提示找不到，所以还需要安装babel-preset-env
 
-> npm install babel-preset-env --save
+```shell
+npm install babel-preset-env --save
+```
 
 注意，这里babel-preset-env一定要本地安装，不可以全局安装。
 
