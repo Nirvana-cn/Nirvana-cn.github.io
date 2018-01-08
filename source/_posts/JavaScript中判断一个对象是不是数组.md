@@ -1,8 +1,13 @@
 ---
 title: JavaScript中判断一个对象是不是数组
-date: 2018-01-05 16:06:05
+date: 2017-07-16 16:06:05
 tags:
+- JavaScript
+categories:
+- Web前端
 ---
+判断一个对象为数组的所有方法以及原理分析
+<!--more-->
 # 一.typeof
 首先typeof只能判断原始类型和对象，返回结果是一个说明运算数类型的字符串。如："number"，"string"，"boolean"，"object"，"function"，"undefined"（可用于判断变量是否存在）。 typeof 的能力有限，其对于Array、Date、RegExp类型返回的都是"object"
 

@@ -1,8 +1,13 @@
 ---
 title: JavaScript原型与闭包总结
-date: 2018-01-06 15:26:17
+date: 2017-06-12 15:26:17
 tags:
+- JavaScript
+categories:
+- Web前端
 ---
+自己学习JS原型和闭包的总结
+<!--more-->
 原型那一块确实有点绕，但是理解之后会发现JS还是很神奇的，这一块知识可以参考[王福朋的博客](http://www.cnblogs.com/wangfupeng1988/p/3977924.html)，作者写的还是很用心的
 
 1. 判断一个变量是不是对象

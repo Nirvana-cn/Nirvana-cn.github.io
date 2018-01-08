@@ -1,8 +1,14 @@
 ---
 title: Webstorm中使用babel转码器
-date: 2018-01-06 16:09:45
+date: 2017-08-30 16:09:45
 tags:
+- WebStorm
+- Babel
+categories:
+- Web前端
 ---
+webstorm内使用babel将es6语法转换为es5的配置过程
+<!--more-->
 首先我使用的是目前最新版的webstorm-2017.2.2，不确定老版本是否一致。
 
 1. 安装babel-cli

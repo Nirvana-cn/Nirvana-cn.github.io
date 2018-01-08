@@ -1,8 +1,14 @@
 ---
 title: Sticky footers布局的实现
-date: 2018-01-05 16:35:02
+date: 2017-11-18 16:35:02
 tags:
+- CSS
+- Sticky footers
+categories:
+- Web前端
 ---
+Sticky footers这种效果不仅是无处不在，很受欢迎，而且实现起来看上去也非常容易。但实际上实现起来要比预期花的时间更多，这里我们使用固定高度和flex布局两种方法实现Sticky footer布局
+<!--more-->
 # 1.什么是sticky footers布局
 在网页设计中，Sticky footers设计是最古老和最常见的效果之一，大多数人都曾经经历过。它可以概括如下：如果页面内容不够长的时候，页脚块粘贴在视窗底部；如果内容足够长时，页脚块会被内容向下推送。
 # 2.Flexbox解决方案

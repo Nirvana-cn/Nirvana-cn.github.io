@@ -1,8 +1,13 @@
 ---
 title: Nginx实现https以及https二级域名转发
-date: 2018-01-03 20:57:55
+date: 2017-06-23 20:57:55
 tags:
+- Nginx
+categories:
+- Web前端
 ---
+最近在开发微信小程序，但是小程序只能连接https服务器，所以就用nginx自己搭一个https服务器
+<!--more-->
 最近在倒腾微信小程序，研究小程序怎么和服务器通信，上一篇博客里通过nginx实现了http的二级域名转发，结果发现https实现二级域名转发又是另一会事，心累啊
 
 目的：通过https://abc.com访问主域名，使用nginx将访问https://shop.abc.com二级域名的请求转发到https://abc.com:3000端口

@@ -1,8 +1,14 @@
 ---
 title: MongoDB安装和使用+Webstorm可视化插件
-date: 2018-01-06 16:04:01
+date: 2017-08-29 16:04:01
 tags:
+- MongoDB
+- WebStorm
+categories:
+- Web前端
 ---
+windows下MongoDB安装和使用，以及Webstorm上MongoDB可视化插件的使用
+<!--more-->
 # 1.准备条件
 从官网安装好相应的MongoDB版本，自选位置建立如下文件夹用来存放MongoDB数据和日志文件
 

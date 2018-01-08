@@ -1,9 +1,13 @@
 ---
 title: JavaScript中的小技巧和注意点（二）
-date: 2018-01-05 16:37:42
+date: 2017-11-28 16:37:42
 tags:
+- JavaScript
+categories:
+- Web前端
 ---
-
+记录平时学习过程中关于JavaScript容易遗忘的知识点和需要注意的地方，点点滴滴贵在积累...
+<!--more-->
 自己收集的一些前端注意事项
 
 https://github.com/Nirvana-cn/WebTechnology

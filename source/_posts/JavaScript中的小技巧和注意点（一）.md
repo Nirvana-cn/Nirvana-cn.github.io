@@ -1,8 +1,13 @@
 ---
 title: JavaScript中的小技巧和注意点（一）
-date: 2018-01-05 16:16:15
+date: 2017-07-17 16:16:15
 tags:
+- JavaScript
+categories:
+- Web前端
 ---
+记录平时学习过程中关于JavaScript容易遗忘的知识点和需要注意的地方，点点滴滴贵在积累
+<!--more-->
 # 1.检查变量是否存在
 ```javascript
 var result = "";
