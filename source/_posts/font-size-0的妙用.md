@@ -42,7 +42,7 @@ categories:
 </body>
 </html>
 ```
-![](http://112.74.18.120/p03.png)
+![](http://main.libaozhi.com/p03.png)
 
 .title类并没有设置任何margin，但是两个div并没有紧紧贴合在一起，这是出于排版的原因两个div之间留下了空白字符，才导致两个div元素之间留有间距
 
@@ -50,4 +50,4 @@ categories:
 
 虽然不换行可以暂时解决这一问题，但是肯定有更好的方法。在父类中设置font-size:0就可以完美地解决这个空白间距问题。 
 
-![](http://112.74.18.120/p04.png)
+![](http://main.libaozhi.com/p04.png)

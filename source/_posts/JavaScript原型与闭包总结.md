@@ -79,7 +79,7 @@ instanceof判断准则：沿着A的__proto__这条线来找，同时沿着B的pr
 
 由于所有的对象的原型链都会找到Object.prototype，因此所有的对象都会有Object.prototype的方法，这就是继承。
 
-![](http://112.74.18.120/p06.png)
+![](http://main.libaozhi.com/p06.png)
 
 13.执行上下文环境：在执行代码之前，把将要用到的所有变量都事先拿出来，有的直接赋值了，有的先用undefined占个位
 
