@@ -89,15 +89,15 @@ net stop mongodb   (关闭服务)
 
 ![](http://img.blog.csdn.net/20170830211828701)
 
-# 6.使用mogoose进行CRUD
+# 6.使用mongoose进行CRUD
 
-（1）安装mogoose
+（1）安装mongoose
 
 ```shell
-npm install moogse --save
+npm install mongoose --save
 ```
 
-（2）使用mogoose建立连接
+（2）使用mongoose建立连接
 
 SQL中的数据库表叫做table，对应MongoDB数据库中的collection。使用mongoose新建collection时，系统会默认collection为复数，所以当你新建一个名为"person"的表时，在数据库中的实际名称为"people"。解决的一种方法是指定collectionName，并作为参数传入，如下面代码第9-10行所示。
 
