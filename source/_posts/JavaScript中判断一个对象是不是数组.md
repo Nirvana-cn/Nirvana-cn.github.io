@@ -37,7 +37,7 @@ instanceof 运算符用来测试一个对象在其原型链中是否存在一个
 语法： object  instanceof  constuctor
 
 ### 4.[ ].__proto__ == Array.prototype
-![数组原型链](http://main.libaozhi.com/p01.png)
+![数组原型链](http://112.74.18.120:3001/p01.png)
 ### 5.[ ].constructor  
 调用该对象的构造器方法，该方法会返回该对象的构造器函数，由于 [ ] 实例中不存在constructor属性，JS会沿着原型链向上查找，会在Array.prototype中找到constructor属性，调用该方法，则返回Array（）构造函数
  ```javascript
