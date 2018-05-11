@@ -118,6 +118,47 @@ localConnection.addIceCandidate(new RTCIceCandidate(ice))
 
 ### 3. 数据通道
 
+WebRTC擅长进行数据传输，不仅仅是音频和视频流，还包括我们希望的任何数据类型，相比于复杂的数据交换过程，创建一个数据通道这个主要功能已经在RTCDataConnection对象中实现了：
+
+```javascript
+var peerConnection = new RTCPeerConnection();
+var dataChannel = peerConnection.createDataChannel("label",dataChannelOptions);
+```
+WebRTC会处理好所有的事情，包括浏览器内部层。浏览器通过一系列的事件来通知应用程序，当前数据通道所处的状态。
+ondatachannel事件会通知RTCPeerConnection对象，RTCDataChannel对象本身在开启、关闭、发生错误或者接收到消息时会触发对应的事件。
+
+```javascript
+dataChannel.onerror = function (error){
+    console.log(error)
+}
+
+dataChannel.onmessage = function (event){
+    console.log(event.data)
+}
+
+dataChannel.onopen = function (error){
+    console.log('data channel opened')
+    // 当创建一个数据通道后，你必须等onopen事件触发后才能发送消息
+    dataChannel.send('Hello world')
+}
+
+dataChannel.onclose = function (error){
+    console.log('data channel closed')
+}
+```
+
+dataChannelOptions传入的配置项是可选的，并且是一个普通的JavaScript对象，这些配置项可以使应用在UDP或者TCP的优势之间进行变化。
+
+- reliable:设置消息是否进行担保
+- ordered:设置消息的接受是否需要按照发送时的顺序
+- maxRetransmitTime:设置消息发送失败时，多久重新发送
+- maxRetransmits:设置消息发送失败时，最多重发次数
+- protocol:设置强制使用其他子协议，但当用户代理不支持该协议时会报错
+- negotiated:设置开发人员是否有责任在两边创建数据通道，还是浏览器自动完成这个步骤
+- id:设置通道的唯一标识
+
+### 4. 文件共享
+
 未完待续
 
 
