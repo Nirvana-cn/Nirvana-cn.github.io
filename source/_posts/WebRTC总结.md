@@ -159,8 +159,14 @@ dataChannelOptions传入的配置项是可选的，并且是一个普通的JavaS
 
 ### 4. 文件共享
 
-未完待续
+目前，数据通道支持如下类型：
 
+- String:JavaScript基本的字符串
+- Blob(binary large object):二进制大对象
+- ArrayBuffer:确定数组长度的数据类型
+- ArrayBufferView:基础的数组视图
+
+其中，Blob类型是一个可以存储二进制文件的容器，结合H5相关文件读取API，可以实现文件共享的功能
 
 ### 参考文献
 
