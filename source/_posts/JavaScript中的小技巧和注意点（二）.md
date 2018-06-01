@@ -135,3 +135,76 @@ var a;
 typeof a;//undefined
 typeof b;//undefined
 ```
+
+# 8.数组的键值
+
+数组通过数字进行索引，但有趣的是它们也是对象，所以也可以包含字符串键值和属性(但是，这些并不计算在数组长度内！！！)
+
+```
+var a=[]
+a[0]=1
+a['foo']=2
+a.length    //1
+```
+
+这里有个问题需要特别注意，如果字符串键值能够被强制类型转换为十进制数字的话，它就会被当作数字索引来处理。
+
+```
+var a=[]
+a['3']=3
+a.length    //4
+```
+
+# 9.页面拥有ID的元素会创建全局变量
+
+在一张HTML页面中，所有设置了ID属性的元素会在JavaScript的执行环境中创建对应的全局变量，这意味着document.getElementById像人的阑尾一样显得多余了。但实际项目中最好老老实实该怎么写就怎么写，毕竟常规代码出乱子的机会要小得多。
+```
+<div id="sample"></div>
+<script type="text/javascript">
+        console.log(sample);
+</script>
+```
+
+# 10.if语句的变形
+
+当你需要写一个if语句的时候，不妨尝试另一种更简便的方法，用JavaScript中的逻辑操作符来代替。
+
+```
+var day=(new Date).getDay()===0;
+//传统if语句
+if (day) {
+	alert('Today is Sunday!');
+};
+//运用逻辑与代替if
+day&&alert('Today is Sunday!');
+```
+
+# 11.数字的语法
+
+对于 . 运算需要给予特别注意，因为它是一个有效的数字字符，会被优先识别为数字常量的一部分，然后才是对象属性访问运算符。
+
+```
+// 无效语法
+42.toFixed(3)
+
+// 有效语法
+(42).toFixed(3) //"42.000"
+0.42.toFixed(3) //"0.420"
+42..toFixed(3)  //"42.000"
+42 .toFixed(3)
+```
+
+42..toFixed(3)没有问题，因为第一个.被视为number的一部分，第二个.是属性访问运算符
+
+# 12.获取当前时间
+
+ES5引入了静态函数Date.now()来获取当前时间，Date.now()同样返回毫秒数
+
+```
+if(!Date.now){
+    Date.now = function() {
+        return (new Date()).getTime()
+    }
+}
+```
+
