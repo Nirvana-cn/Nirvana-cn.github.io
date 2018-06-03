@@ -306,13 +306,173 @@ s2 + '' // TypeError
 
 # 4. 宽松相等和严格相等
 
-常见的误区是“==检查值是否相等，===检查值和类型是否相等”，正确的解释是：“==允许在相等比较中进行强制类型转换，而===不允许”。
+常见的误区是“==检查值是否相等，===检查值和类型是否相等”，正确的解释是：“==允许在相等比较中进行强制类型转换，而===不允许”。事实上，==和===都会检查操作数的类型，区别在于操作数类型不同时它们的处理方式不同。
 
-## 4.1 
+## 4.1 抽象相等
 
+ES5规范11.9.3节的“抽象相等比较算法”定义了==运算符的行为。该算法简单而又全面，涵盖了所有可能出现的类型组合，以及它们进行强制类型转换的方式。
 
+```
+比较运算x==y, 其中x和 y是值，产生true或者false。这样的比较按如下方式进行：
+	1. 若Type(x)与Type(y)相同， 则
+		a. 若Type(x)为Undefined， 返回true。
+		b. 若Type(x)为Null， 返回true。
+		c. 若Type(x)为Number， 则
+			i. 若x为NaN， 返回false。
+			ii. 若y为NaN， 返回false。
+			iii. 若x与y为相等数值， 返回true。
+			iv. 若x 为 +0 且 y为−0， 返回true。
+			v. 若x 为 −0 且 y为+0， 返回true。
+			vi. 返回false。
+		d. 若Type(x)为String, 则当x和y为完全相同的字符序列（长度相等且相同字符在相同位置）时返回true。 否则， 返回false。
+		e. 若Type(x)为Boolean, 当x和y为同为true或者同为false时返回true。 否则， 返回false。
+		f. 当x和y为引用同一对象时返回true。否则，返回false。
+	2. 若x为null且y为undefined， 返回true。
+	3. 若x为undefined且y为null， 返回true。
+	4. 若Type(x) 为 Number 且 Type(y)为String， 返回comparison x == ToNumber(y)的结果。
+	5. 若Type(x) 为 String 且 Type(y)为Number，返回比较ToNumber(x) == y的结果。
+	6. 若Type(x)为Boolean， 返回比较ToNumber(x) == y的结果。
+	7. 若Type(y)为Boolean， 返回比较x == ToNumber(y)的结果。
+	8. 若Type(x)为String或Number，且Type(y)为Object，返回比较x == ToPrimitive(y)的结果。
+	9. 若Type(x)为Object且Type(y)为String或Number， 返回比较ToPrimitive(x) == y的结果。
+       10. 返回false。
+```
+
+### 4.1.1 字符串和数字之间的相等比较
+
+```javascript
+var a = 42
+var b = '42'
+a == b  //true
+```
+
+a==b是宽松相等，即如果两个值的类型不同，则对其中之一或两者都进行强制类型转换。具体怎么转换？这就需要匹配前文的“抽象相等比较算法”，寻找适应的转换规则。
+
+根据第4条规则返回x == ToNumber(y)的结果。
+
+### 4.1.2 其他类型和布尔类型之间的相等比较
+
+==最容易出错的一个地方是true和false与其他类型之间的相等比较。
+
+```javascript
+var a = '42'
+var b = true
+a == b  //false
+```
+
+结果是false，这让人很容易掉坑里。如果严格按照“抽象相等比较算法”，这个结果也就是意料之中的。
+
+根据第7条规则，若Type(y)为Boolean， 返回比较x == ToNumber(y)的结果，即返回'42' == 1，结果为false。
+
+很奇怪吧？所以无论什么情况下都不要使用== true和== false。
+
+### 4.1.3 null和undefined之间的相等比较
+
+在==中null和undefined相等，这也就是说在==中null和undefined是一回事，可以相互进行隐式强制类型转换。
+
+** 掌握“抽象相等比较算法”，读者可以自行推倒为什么[]==![]返回true。
+
+## 4.2 比较少见的情况
+
+```javascript
+if(a == 2 && a == 3){
+    //...    
+}
+```
+
+你也许觉得这不可能，因为a不会同时等于2和3。但如果让a.valueOf()每次调用都产生副作用，比如第一次返回2，第二次返回3，就会出现这样的情况。
+
+```javascript
+var i = 2
+Number.prototype.valueOf = function() {
+  return i++
+}
+var a = new Number(42)
+if(a == 2 && a == 3){
+    console.log('Yeah, it happened!')
+}
+```
+
+还有一个坑常常被提到：
+
+```javascript
+0 == '\n'   //true
+```
+
+""、"\n"(或者" "等其他空格组合)等空字符串被ToNumber强制类型转换为0。
+
+## 4.3 完整性检查
+
+再来看看那些“短”的地方：
+
+```javascript
+"0" == false    // true
+false == 0      // true
+false == ""     // true
+false == []     // true
+"" == 0          // true
+"" == []         // true
+0 == []          // true
+```
+
+其中有4种情况涉及== false，之前我们说过应该避免，所以还剩下后面3种。
+
+这些特殊情况会导致各种问题，使用中要多加小心。我们要对==两边的值认真推敲，以下两个原则可以让我们有效地避免出错。
+
+- 如果两边的值中有true或者false，千万不要使用==
+- 如果两边的值中有[]、""、或者0，尽量不要使用==
+
+隐式强制转换在部分情况下确实很危险，为了安全起见就要使用===
+
+# 5. 抽象关系比较
+
+以 x 和 y 为值进行小于比较（x < y 的比较），会产生的结果可为="" true，false或 undefined（这说明 x、y 中最少有一个操作数是 NaN）。除了 x 和 y，这个算法另外需要一个名为 LeftFirst 的布尔值标记作为参数。这个标记用于解析顺序的控制，因为操作数 x 和 y 在执行的时候会有潜在可见的副作用。LeftFirst 标志是必须的，因为 ECMAScript 规定了表达式是从左到右顺序执行的。LeftFirst 的默认值是 true，这表明在相关的表达式中，参数 x 出现在参数 y 之前。如果 LeftFirst 值是 false，情况会相反，操作数的执行必须是先 y 后 x。这样的一个小于比较的执行步骤如下：
+
+```
+	1. 如果 LeftFirst 标志是 true，那么
+		a. 让 px 为调用 ToPrimitive(x, hint Number) 的结果。
+		b. 让 py 为调用 ToPrimitive(y, hint Number) 的结果。
+	2. 否则解释执行的顺序需要反转，从而保证从左到右的执行顺序
+		a. 让 py 为调用 ToPrimitive(y, hint Number) 的结果。
+		b. 让 px 为调用 ToPrimitive(x, hint Number) 的结果。
+	3. 如果 Type(px) 和 Type(py) 得到的结果不都是 String 类型，那么
+		a. 让 nx 为调用 ToNumber(px) 的结果。因为 px 和 py 都已经是基本数据类型（primitive values 也作原始值），其执行顺序并不重要。
+		b. 让 ny 为调用 ToNumber(py) 的结果。
+		c. 如果 nx 是 NaN，返回 undefined
+		d. 如果 ny 是 NaN，返回 undefined
+		e. 如果 nx 和 ny 的数字值相同，返回 false
+		f. 如果 nx 是 +0 且 ny 是 -0，返回 flase
+		g. 如果 nx 是 -0 且 ny 是 +0，返回 false
+		h. 如果 nx 是 +∞，返回 fasle
+		i. 如果 ny 是 +∞，返回 true
+		j. 如果 ny 是 -∞，返回 flase
+		k. 如果 nx 是 -∞，返回 true
+		l. 如果 nx 数学上的值小于 ny 数学上的值（注意这些数学值都不能是无限的且不能都为 0），返回 ture。否则返回 false。
+	4. 否则，px 和 py 都是 Strings 类型
+		a. 如果 py 是 px 的一个前缀，返回 false。（当字符串 q 的值可以是字符串 p 和一个其他的字符串 r 拼接而成时，字符串 p 就是 q 的前缀。注意：任何字符串都是自己的前缀，因为 r 可能是空字符串。）
+		b. 如果 px 是 py 的前缀，返回 true。
+		c. 让 k 成为最小的非负整数，能使得在 px 字符串中位置 k 的字符与字符串 py 字符串中位置 k 的字符不相同。（这里必须有一个 k，使得互相都不是对方的前缀）
+		d. 让 m 成为字符串 px 中位置 k 的字符的编码单元值。
+		e. 让 n 成为字符串 py 中位置 k 的字符的编码单元值。
+                f.如果 n<m，返回 true。否则，返回 false。
+```
+
+ 下面的例子就有些奇怪了：
  
+ ```javascript
+var a = {b:42}
+var b = {b:43}
 
+a < b   // false
+a == b  // false
+a > b   // false
 
+a <= b  // true
+a >= b  // true
+```
 
+如果a < b和a == b结果为false，为什么a <= b和a >= b的结果会是true呢？
 
+因为根据规范a <= b被处理为b < a，然后将结果反转。因为b < a的结果为false，所以a <= b的结果为true。
+
+这可能与我们设想的大相径庭，即<=应该是“小于或者等于”，实际上，JavaScript中<=是“不大于”的意思，即a <= b被处理为 !(b < a)。
