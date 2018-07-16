@@ -11,6 +11,37 @@ categories:
 
 <!--more-->
 
+## 准备知识
+
+使用new来调用函数会自动执行下面的操作：
+1. 创建一个全新的对象
+2. 这个新对象会被执行原型连接
+3. 这个新对象会绑定到函数调用的this
+4. 如果函数没有返回其他对象，那么new表达式中的函数调用会自动返回这个新对象
+
+注意this绑定规则，new操作具有最高的优先级
+
+《你不知道的JavaScript(上卷)》提供了一个例子，bar被硬绑定到obj上，但是new bar(3) 并没有像我们预计的那样把obj.a修改为3。相反，new修改了硬绑定调用bar()中的this。因为使用了new绑定，我们得到了一个名字为baz的新对象，并且baz.a的值为3。
+
+```
+function foo(something) {
+    this.a = something
+}
+var obj = {}
+var bar = foo.bind(obj)
+bar(2)
+console.log(obj.a)  //2
+var baz = new bar(3)
+console.log(obj.a)  //2
+console.log(baz.a)  //3
+```
+
+instanceof运算符的第一个变量是一个对象，暂时称为A；第二个变量一般是一个函数，暂时称为B。
+
+instanceof判断准则：沿着A的__proto__这条线来找，同时沿着B的prototype这条线来找，如果两条线能找到同一个引用，即同一个对象，那么就返回true。
+
+## 源码分析
+
 MDN上提供的polyfill如下，主要的疑惑点应该就是 this instanceof fNOP 作用是什么？
 
 ```
@@ -89,33 +120,26 @@ fBound.prototype = new fNOP()
 
 如果没有进行new操作的话，就用apply模拟bind绑定，一切按照原计划进行。
 
-## 准备知识
+最后我们分析一下维护原型关系的重要性，例子如下：
 
-使用new来调用函数会自动执行下面的操作：
-1. 创建一个全新的对象
-2. 这个新对象会被执行原型连接
-3. 这个新对象会绑定到函数调用的this
-4. 如果函数没有返回其他对象，那么new表达式中的函数调用会自动返回这个新对象
-
-注意this绑定规则，new操作具有最高的优先级
-
-《你不知道的JavaScript(上卷)》提供了一个例子，bar被硬绑定到obj上，但是new bar(3) 并没有像我们预计的那样把obj.a修改为3。相反，new修改了硬绑定调用bar()中的this。因为使用了new绑定，我们得到了一个名字为baz的新对象，并且baz.a的值为3。
-
-```
-function foo(something) {
-    this.a = something
+```javascript
+function Foo(){
+    console.log(this.a);
+    this.a=1;
 }
-var obj = {}
-var bar = foo.bind(obj)
-bar(2)
-console.log(obj.a)  //2
-var baz = new bar(3)
-console.log(obj.a)  //2
-console.log(baz.a)  //3
+Foo.prototype.show=function() {console.log(this.a)};
+Foo();// undefined
+var obj1=new Foo();
+obj1.show();
+
+var bar=Foo.bind({a:2});
+bar();// 2
+var obj2=new bar();
+obj2.show();
 ```
+因为bind函数内部保持了原型关系的继承，所以对象obj2才能访问到原型上的show方法。
 
-instanceof运算符的第一个变量是一个对象，暂时称为A；第二个变量一般是一个函数，暂时称为B。
+** 注意：Foo.show()是错误的，因为Foo的原型指向的是Function.prototype，只有Foo的实例才能调用show方法。
 
-instanceof判断准则：沿着A的__proto__这条线来找，同时沿着B的prototype这条线来找，如果两条线能找到同一个引用，即同一个对象，那么就返回true。
 
 
