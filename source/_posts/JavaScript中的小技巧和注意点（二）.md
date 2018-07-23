@@ -208,3 +208,72 @@ if(!Date.now){
 }
 ```
 
+# 13.清空和截短数组
+
+最简单的清空和截短数组的方法就是改变length属性：
+
+```javascript
+// 截短
+const arr=[11,22,33,44,55];
+arr.length=3;
+console.log(arr); //[11,22,33]
+// 清空
+arr.length=0;
+console.log(arr); //[]
+```
+# 14.数组的对象解构
+
+使用对象解构将数组项赋值给变量：
+
+```javascript
+const csvFileLine = '1997,John Doe,US,john@doe.com,New York';
+const { 2: country, 4: state } = csvFileLine.split(',');
+```
+
+# 15.await 多个 async 函数
+
+await 多个 async 函数并等待他们执行完成，我们可以使用 Promise.all：
+
+```
+await Promise.all([anAsyncCall(), thisIsAlsoAsync(), oneMore()])
+```
+
+# 16.格式化 JSON 代码
+
+JSON.stringify 不仅可以字符串化对象，它也可以格式化你的 JSON 输出：
+
+```javascript
+const obj = {
+  foo: {
+    bar: [11, 22, 33, 44],
+    baz: {
+      bing: true,
+      boom: 'Hello'
+    }
+  }
+};
+// 第三个参数为格式化需要的空格数目
+JSON.stringify(obj, null, 4);
+// =>"{
+  // => "foo": {
+    // => "bar": [
+      // => 11,
+      // => 22,
+      // => 33,
+      // => 44
+    // => ],
+    // => "baz": {
+      // => "bing": true,
+      // => "boom": "Hello"
+    // => }
+  // => }
+// =>}"
+```
+
+
+
+
+
+
+
+
