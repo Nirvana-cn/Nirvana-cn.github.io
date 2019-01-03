@@ -19,7 +19,7 @@ categories:
 
 基本类型值的字符串化规则为：null转换为"null",undefined转换为"undefined",true转换为""true"。数字的字符串化遵循通用规则，那些极小和极大的数字使用指数形式：
 
-```
+```javascript
 var a = 1.07*1000*1000*1000*1000*1000*1000*1000
 a.toString()    //"1.07e21"
 ```

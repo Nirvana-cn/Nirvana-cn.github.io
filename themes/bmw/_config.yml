@@ -10,14 +10,14 @@ favicon:
 rss: 
 
 # 自定义样式文件位置
-custom_style: /custom/style.css
+custom_style:
 
 # 自定义脚本：支持自定义多个脚本文件
 # src: 文件位置
 # load: <script>加载方式(async/defer/默认)
 custom_script:
   -
-    src: /custom/script.js
+    src:
     load: async
   # - 
   #   src: 
