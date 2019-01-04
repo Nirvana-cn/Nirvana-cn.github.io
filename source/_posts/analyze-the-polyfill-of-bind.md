@@ -116,10 +116,9 @@ if (this.prototype) {
 }
 fBound.prototype = new fNOP()
 ```
-我们假设对`bind(...)`返回的函数进行`new`操作(原型链如下),则`this instanceof fNOP`为`true`，此时我们就知道执行了`new`操作，
-硬绑定的`this`不能生效，需要把`this`绑定到新生成的对象上。
+我们假设对`bind(...)`返回的函数进行`new`操作(原型链如下),则`this instanceof fNOP`为`true`，此时我们就知道执行了`new`操作，硬绑定的`this`不能生效，需要把`this`绑定到新生成的对象上。
 
-![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p15.png)
+<!--![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p15.png)-->
 
 如果没有进行`new`操作的话，就用`apply`模拟`bind`绑定，一切按照原计划进行。
 
@@ -147,6 +146,3 @@ obj2.show();
 ## 3. 更多
 
 `MDN`的`ployfill`地址：[>>>点我进入](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Polyfill)
-
-
-

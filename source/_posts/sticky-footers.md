@@ -2,7 +2,7 @@
 title: Sticky footers布局的实现
 date: 2017-11-18 16:35:02
 tags:
-- CSS
+- css
 - Sticky footers
 categories:
 - Web前端

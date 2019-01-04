@@ -2,21 +2,21 @@
 title: JavaScript中的小技巧和注意点（一）
 date: 2017-07-17 16:16:15
 tags:
-- JavaScript
+- javascript
 categories:
-- Web前端
+- 前端,每天学一点
 ---
-记录平时学习过程中关于JavaScript容易遗忘的知识点和需要注意的地方，点点滴滴贵在积累
+记录平时学习过程中关于`JavaScript`容易遗忘的知识点和需要注意的地方，点点滴滴贵在积累。
 <!--more-->
-# 1.检查变量是否存在
+## 1.检查变量是否存在
 ```javascript
 var result = "";
 if (typeof somevar !== "undefined"){
     result = "yes";
 }
 ```
-在这种情况下，typeof 返回的是一个字符串（先执行 typeof 再比较），这样就可以与字符串"undefined"进行直接比对，如果 somevar 这个变量存在，则执行if条件语句。实际上是在用 typeof 测试一个变量是否已经被初始化（或者说测试变量值是否为 undefined ）
-# 2.parseInt()
+在这种情况下，`typeof` 返回的是一个字符串（先执行 `typeof` 再比较），这样就可以与字符串`"undefined"`进行直接比对，如果 `somevar` 这个变量存在，则执行`if`条件语句。实际上是在用 `typeof` 测试一个变量是否已经被初始化（或者说测试变量值是否为 `undefined` ）
+## 2.parseInt()
 parseInt（）会试图将其收到的任何输入值（通常是字符串）转换成整数类型输出。如果转换失败就返回NaN。
 ```javascript
 parseInt('123');
