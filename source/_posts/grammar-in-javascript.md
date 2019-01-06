@@ -2,9 +2,9 @@
 title: JavaScript中的语法
 date: 2018-06-04 16:28:34
 tags:
-- JavaScript
+- javascript
 categories:
-- JavaScript
+- 前端,每天学一点
 ---
 
 总结和剖析JavaScript中的语法，主要参考《你不知道的JavaScript(中卷)》第五章。

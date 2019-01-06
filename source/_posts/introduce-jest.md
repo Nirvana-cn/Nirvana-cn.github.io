@@ -2,14 +2,18 @@
 title: Jest 入门指南
 date: 2018-12-29 16:17:21
 tags:
-- Jest
-- Unit Test
+- jest
+- unit test
 categories:
-- Jest
+- 前端,每天学一点
 ---
+
+首先这并不是一篇完整的关于`Jest`的教程，只是个人在接触`Jest`时的一点学习笔记，在此对`Jest`的特性和基础用法进行一些总结。大部分内容都是对官方文档的一些翻译，只是让想了解`Jest`的人快速知道一下`Jest`是做什么的，怎么做。
 
 
 <!-- more -->
+
+## 前言
 Jest是Facebook开源的一个前端测试框架，主要用于React和React Native的单元测试（同样也可以进行JavaScript测试），已被集成在create-react-app中。
 
 Jest特点：
@@ -200,9 +204,12 @@ Mock函数提供的以下三种特性，在我们写测试代码时十分有用�
 - 改变函数的内部实现
 
 Mock函数常用方法：
-1. mockFn.mockName(value)：设置mock函数的名字
-2. mockFn.getMockName()： 返回mockFn.mockName(value)中设置的名字
-3. mockFn.mock.calls：mock函数的调用信息
+
+1.mockFn.mockName(value)：设置mock函数的名字
+
+2.mockFn.getMockName()： 返回mockFn.mockName(value)中设置的名字
+
+3.mockFn.mock.calls：mock函数的调用信息
 
 mockFn.mock.calls返回一个数组，数组中的每一个元素又是一个数组，包含mock函数的调用信息。比如，
 一个被调用两次的模拟函数f，参数为f('arg1'，'arg2')，然后使用参数f('arg3'，'arg4')，mockFn.mock.calls返回的数组形式如下：
@@ -211,8 +218,9 @@ mockFn.mock.calls返回一个数组，数组中的每一个元素又是一个数
 
 因此，mockFn.mock.calls.length代表mock函数被调用次数，mockFn.mock.calls[0][0]代表第一次调用传入的第一个参数，以此类推。
 
-4. mockFn.mock.results：mock函数的return值，以数组存储
-5. mockFn.mock.instances：mock函数实例
+4.mockFn.mock.results：mock函数的return值，以数组存储
+
+5.mockFn.mock.instances：mock函数实例
 
 ```
 const mockFn = jest.fn();
@@ -224,11 +232,11 @@ mockFn.mock.instances[0] === a; // true
 mockFn.mock.instances[1] === b; // true
 ```
 
-6. mockFn.mockImplementation(fn)：创建一个mock函数
+6.mockFn.mockImplementation(fn)：创建一个mock函数
 
 注意：jest.fn(implementation)是jest.fn().mockImplementation(implementation)的简写。
 
-7. mockFn.mockImplementationOnce(fn)：创建一个mock函数
+7.mockFn.mockImplementationOnce(fn)：创建一个mock函数
 
 该函数将用作对mocked函数的一次调用的mock的实现。可以链式调用，以便多个函数调用产生不同的结果。
 
@@ -255,7 +263,7 @@ const myMockFn = jest
 console.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());
 ```
 
-8. mockFn.mockReturnThis()：jest.fn()的语法糖
+8.mockFn.mockReturnThis()：jest.fn()的语法糖
 
 ```
 jest.fn(function() {
@@ -263,7 +271,7 @@ jest.fn(function() {
 });
 ```
 
-9. mockFn.mockReturnValue(value)：接受一个值作为调用mock函数时的返回值
+9.mockFn.mockReturnValue(value)：接受一个值作为调用mock函数时的返回值
 
 ```
 const mock = jest.fn();
@@ -273,7 +281,7 @@ mock.mockReturnValue(43);
 mock(); // 43
 ```
 
-10. mockFn.mockReturnValueOnce(value)：接受一个值作为调用mock函数时的返回值，可以链式调用，以便产生不同的结果。
+10.mockFn.mockReturnValueOnce(value)：接受一个值作为调用mock函数时的返回值，可以链式调用，以便产生不同的结果。
 
 当不再使用mockReturnValueOnce值时，调用将返回mockReturnValue指定的值。
 
@@ -288,7 +296,7 @@ const myMockFn = jest
 console.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());
 ```
 
-11. mockFn.mockResolvedValue(value)：mock异步函数的语法糖
+11.mockFn.mockResolvedValue(value)：mock异步函数的语法糖
 
 实现上类似于
 
@@ -306,7 +314,7 @@ test('async test', async () => {
 });
 ```
 
-12. mockFn.mockResolvedValueOnce(value)：语法糖
+12.mockFn.mockResolvedValueOnce(value)：语法糖
 
 实现上类似于
 
@@ -329,7 +337,7 @@ test('async test', async () => {
 });
 ```
 
-13. mockFn.mockRejectedValue(value)：语法糖
+13.mockFn.mockRejectedValue(value)：语法糖
 
 实现上类似于
 
@@ -345,7 +353,7 @@ test('async test', async () => {
 });
 ```
 
-14. mockFn.mockRejectedValueOnce(value)：语法糖
+14.mockFn.mockRejectedValueOnce(value)：语法糖
 
 实现上类似于
 
@@ -365,15 +373,15 @@ test('async test', async () => {
 });
 ```
 
-15. mockFn.mockClear()：重置所有存储在mockFn.mock.calls 和 mockFn.mock.instances数组中的信息
+15.mockFn.mockClear()：重置所有存储在mockFn.mock.calls 和 mockFn.mock.instances数组中的信息
 
 当你想要清除两个断言之间的模拟使用数据时，这通常很有用。
 
-16. mockFn.mockReset()：完成mockFn.mockClear()所做的所有事情，还删除任何模拟的返回值或实现
+16.mockFn.mockReset()：完成mockFn.mockClear()所做的所有事情，还删除任何模拟的返回值或实现
 
 当你想要将模拟完全重置回其初始状态时，这非常有用。（请注意，重置spy将导致函数没有返回值）。
 
-17. mockFn.mockRestore()：完成mockFn.mockReset()所做的所有事情，并恢复原始（非模拟）实现
+17.mockFn.mockRestore()：完成mockFn.mockReset()所做的所有事情，并恢复原始（非模拟）实现
 
 当你想在某些测试用例中模拟函数并在其他测试用例中恢复原始实现时，这非常有用。
 
@@ -580,7 +588,7 @@ export default class SoundPlayerConsumer {
 
 分别有4种方法可以创建ES6类的模拟：
 
-1. Automatic mock
+1.Automatic mock
 
 使用该方法，类中的所有方法调用状态保存在theAutomaticMock.mock.instances[index].methodName.mock.calls中。
 
@@ -588,18 +596,18 @@ export default class SoundPlayerConsumer {
 
 ** 注：由于Example.6中同时存在Automatic mock和Manual mock，所以在使用该方法时需要把__mocks__文件夹改个名。
 
-2. Manual mock
+2.Manual mock
 
 在相邻的__mocks__文件夹下生成同名文件从而进行替换模拟。
 
 ** 注意：使用manual mock时确保__mocks__文件夹命名正确。
 
-3. Calling jest.mock() with the module factory parameter
+3.Calling jest.mock() with the module factory parameter
 
 使用此种方法就是在jest.mock()中添加一个参数：jest.mock(path，moduleFactory)接受moduleFactory参数，moduleFactory返回一个模拟的函数。
 为了模拟构造函数，moduleFactory必须返回构造函数，换句话说，模块工厂必须是返回函数的函数。
 
-4. Replacing the mock using mockImplementation() or mockImplementationOnce()
+4.Replacing the mock using mockImplementation() or mockImplementationOnce()
 
 对jest.mock的调用会被提升到代码的顶部。 您通过在现有mock上调用mockImplementation()（或mockImplementationOnce()）而不是使用factory参数，
 从而稍后指定模拟（例如，在beforeAll()），或者在测试之间更改模拟。
@@ -612,15 +620,15 @@ jest.requireActual()允许你导入实际的版本，而不是模拟的版本。
 
 ## 推荐阅读
 
-[使用Jest测试JavaScript (入门篇)](https://segmentfault.com/a/1190000016232248)
+使用Jest测试JavaScript (入门篇)：[>>>点我进入](https://segmentfault.com/a/1190000016232248)
 
-[使用Jest测试JavaScript(Mock篇)](https://segmentfault.com/a/1190000016717356)
+使用Jest测试JavaScript(Mock篇)：[>>>点我进入](https://segmentfault.com/a/1190000016717356)
 
-[顶级测试框架Jest指南：跑通一个完美的程序，就是教出一群像样的学生](https://segmentfault.com/a/1190000016399447)
+顶级测试框架Jest指南：[>>>点我进入](https://segmentfault.com/a/1190000016399447)
 
-[Jest cheat sheet](https://github.com/sapegin/jest-cheat-sheet)
+Jest cheat sheet：[>>>点我进入](https://github.com/sapegin/jest-cheat-sheet)
 
-[Jest官方demo](https://github.com/facebook/jest/tree/master/examples)
+Jest官方demo地址：[>>>点我进入](https://github.com/facebook/jest/tree/master/examples)
 
 
 

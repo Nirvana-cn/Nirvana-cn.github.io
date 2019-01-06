@@ -46,7 +46,7 @@ categories:
 </body>
 </html>
 ```
-<!--![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p03.png)-->
+![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p03.png)
 
 `.title`类并没有设置任何`margin`，但是两个`div`并没有紧紧贴合在一起，这是出于排版的原因两个`div`之间留下了空白字符，才导致两个`div`元素之间留有间距
 
@@ -54,7 +54,7 @@ categories:
 
 虽然不换行可以暂时解决这一问题，但是肯定有更好的方法。在父类中设置`font-size:0`就可以完美地解决这个空白间距问题。
 
-<!--![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p04.png)-->
+![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p04.png)
 
 ## 3. 更多
 

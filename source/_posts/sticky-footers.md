@@ -3,9 +3,9 @@ title: Sticky footers布局的实现
 date: 2017-11-18 16:35:02
 tags:
 - css
-- Sticky footers
+- sticky footer
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 Sticky footers这种效果不仅是无处不在，很受欢迎，而且实现起来看上去也非常容易。但实际上实现起来要比预期花的时间更多，这里我们使用固定高度和flex布局两种方法实现Sticky footer布局
 <!--more-->

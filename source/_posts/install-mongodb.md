@@ -1,11 +1,11 @@
 ---
-title: MongoDB安装和使用+Webstorm可视化插件
+title: MongoDB安装和使用
 date: 2017-08-29 16:04:01
 tags:
-- MongoDB
-- WebStorm
+- mongodb
+- webstorm
 categories:
-- Web前端
+- 后端,不抛弃
 ---
 windows下MongoDB安装和使用，以及Webstorm上MongoDB可视化插件的使用
 <!--more-->

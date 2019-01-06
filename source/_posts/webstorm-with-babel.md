@@ -1,11 +1,11 @@
 ---
-title: Webstorm中使用babel转码器
+title: Webstorm中使用babel进行转码
 date: 2017-08-30 16:09:45
 tags:
-- WebStorm
-- Babel
+- webstorm
+- babel
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 webstorm内使用babel将es6语法转换为es5的配置过程
 <!--more-->

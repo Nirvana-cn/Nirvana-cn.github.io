@@ -1,12 +1,11 @@
 ---
-title: 我理解的JS事件轮询机制
+title: 我理解的JavaScript事件轮询机制
 date: 2018-03-26 16:40:32
 tags: 
-- JavaScript
-- Event Loop
-
+- javascript
+- event loop
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 JS是单线程语言，深入理解JS里的Event Loop
 

@@ -2,9 +2,9 @@
 title: JavaScript中的小技巧和注意点（二）
 date: 2017-11-28 16:37:42
 tags:
-- JavaScript
+- javascript
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 记录平时学习过程中关于JavaScript容易遗忘的知识点和需要注意的地方，点点滴滴贵在积累...
 <!--more-->

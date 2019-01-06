@@ -2,10 +2,9 @@
 title: WebRTC学习总结
 date: 2018-04-16 16:28:34
 tags:
-- WebRTC
-- 直播
+- webrtc
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 
 WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。

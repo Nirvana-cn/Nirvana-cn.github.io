@@ -2,9 +2,10 @@
 title: JavaScript中判断一个对象是不是数组
 date: 2017-07-16 16:06:05
 tags:
-- JavaScript
+- javascript
+- array
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 判断一个对象为数组的所有方法以及原理分析
 <!--more-->

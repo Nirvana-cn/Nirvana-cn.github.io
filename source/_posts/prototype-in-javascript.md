@@ -2,9 +2,10 @@
 title: JavaScript原型与闭包总结
 date: 2017-06-12 15:26:17
 tags:
-- JavaScript
+- javascript
+- prototype
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 自己学习JS原型和闭包的总结
 <!--more-->

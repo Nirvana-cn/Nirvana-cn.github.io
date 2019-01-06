@@ -3,8 +3,9 @@ title: Vertical-Align，你应该知道的一切
 date: 2018-05-23 16:28:34
 tags:
 - css
+- vertical align
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 
 本文转载自众成翻译

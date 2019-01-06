@@ -2,10 +2,10 @@
 title: 深入JavaScript中的精度丢失
 date: 2018-06-13 16:28:34
 tags:
-- JavaScript
+- javascript
 - 双精度浮点数
 categories:
-- Web前端
+- 前端,每天学一点
 ---
 
 深入剖析使用双精度浮点数存储小数精度丢失的原因，重现计算机存储方式和计算过程，提供解决精度丢失的方法。
