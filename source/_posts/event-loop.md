@@ -8,7 +8,7 @@ categories:
 - 前端,每天学一点
 ---
 
-`JavaScript`是单线程语言，深入理解JS里的`Event Loop`有助于我们理解代码的执行顺序。
+在浏览器中，事件作为一个极为重要的机制，给予`JavaScript`响应用户操作与`DOM`变化的能力；在`NodeJS`中，异步事件驱动模型则是提高并发能力的基础。深入理解JS中的`Event Loop`有助于深刻理解代码的执行顺序。
 
 <!--more-->
 
@@ -78,6 +78,4 @@ console.log(5);
 
 ### setImmediate
 
-`node.js 0.8`以前是没有`setImmediate`的，在当前"任务队列"的尾部添加事件，官方称setImmediate指定的回调函数，类似于`setTimeout(callback,0)`，会将事件放到下一个事件循环中，所以也会比`nextTick`慢执行。
-
-有一点需要了解：`setImmediate`和`nextTick`的区别。`nextTick`虽然异步执行，但是不会给其他`io`事件执行的任何机会，而`setImmediate`是执行于下一个`event loop`。总之`process.nextTick()`的优先级高于`setImmediate`。
+`node.js 0.8`以前是没有`setImmediate`的，`setImmediate`用于在当前"任务队列"的尾部添加事件，官方称setImmediate指定的回调函数类似于`setTimeout(callback,0)`，会将事件放到下一个事件循环中，所以也会比`nextTick`慢执行。还有一点需要了解：`setImmediate`和`nextTick`的区别。`nextTick`虽然异步执行，但是不会给其他`io`事件执行的任何机会，而`setImmediate`是执行于下一个`event loop`。总之`process.nextTick()`的优先级高于`setImmediate`。
