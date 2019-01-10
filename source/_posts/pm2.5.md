@@ -10,7 +10,7 @@ categories:
 <!--more-->
 2013年的题目比较新颖，和实际情况密切相关，贴近生活，也比较开放。共有三个大问题，第一个问题很明确，所以求解过程中一定要保证思路清晰并有合理的误差分析；第三个问题比较开放，言之有理即可；难点和出彩的地方主要在第二个问题的偏微分方程建模。我自己也是刚刚开始建模之路，还有很多东西需要学习，如果有什么地方大家觉得有问题欢迎指正，尤其是Comsol Multipyhsics仿真那一方面，我还在摸索阶段，希望大家可以给点建议。
 
-# 一.PM2.5的相关因素分析
+## 1.PM2.5的相关因素分析
 
 题目要求依据附件1或附件2中的数据或自行采集数据，利用或建立适当的数学模型，对AQI中6个基本监测指标的相关与独立性进行定量分析，尤其是对其中PM2.5（含量）与其它5项分指标及其对应污染物（含量）之间的相关性及其关系进行分析。
 
@@ -24,11 +24,11 @@ categories:
 
 4. PM2.5分别与其它5项指标作多元线性回归，，结果依旧不理想，所以根据残差去掉异常点，经过多次循环最终得到的多元回归方程。
 
-![](http://img.blog.csdn.net/20170807162331373?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvTWV0cm9wb2xpc19jbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p30.jpg)
 
 南航同学对于第一问的解决，思路十分清晰，从拟合到两两回归分析，再到多元回归方程的建立循序渐进，并用残差检验的方法对结果的合理性进行分析。
 
-# 二.PM2.5的分布与演变及应急处理
+## 2.PM2.5的分布与演变及应急处理
 
 ### 2.1第一小问的模型建立与求解
 
@@ -45,9 +45,12 @@ categories:
 4. 污染评估。
 
 shepard反距离插值结果
-![](http://img.blog.csdn.net/20170807162725122?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvTWV0cm9wb2xpc19jbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+
+![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p31.jpg)
+
 加入人工神经网络训练的结果
-![](http://img.blog.csdn.net/20170807162839680?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvTWV0cm9wb2xpc19jbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+
+![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p32.jpg)
 
 原文思路清晰，以PM2.5全市平均浓度随时间的变化刻画西安市PM2.5浓度的时间分布；通过Shepard插值求得西安市PM2.5浓度的空间分布。但是原文程序在计算PM2.5浓度空间分布时用的却是立方插值，并没有使用上文提到的Shepard反距离插值。
 
@@ -63,7 +66,8 @@ shepard反距离插值结果
 本人能力有限，反正我看不懂，对于该问题的求解，我主要参考了国防科技大学同学的一篇优秀论文，利用经典的对流扩散方程进行建模，并使用ComsolMultiphysics对问题进行仿真实验。
 
 最终的对流扩散方程如下，等号左边后两项为对流项，等号右边前两项为扩散项，第三项为源项。
-![扩散方程](http://img.blog.csdn.net/20170807162950558)
+
+![扩散方程](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p33.png)
 
 原文的方法对我而言晦涩难懂，对环境工程、污染物传播的相关知识要有良好的基础，超出了我专业能力范畴，所以我选择以国防科技大学的论文作为研究该问题的主要方法，国防科技大学的同学在论文中对所使用的方法进行了详细的阐述，通俗易懂，使我获益匪浅，并且该方法有良好的可扩展性强。南京航空航天大学的论文在进行PM2.5与风力、湿度等天气和季节因素间的多元回归分析时，提到“对于风速，根据风速与风级的对照表，由于基本都为小于等于三级风，若为平均值或等级值将为定常数不具有统计作用，对此我们另外在相关气息官网上查阅到的该地区风速情况的具体数据以及历史数据，对此为风速数据”，然而找遍全文我也没有看到风速历史数据的出处，对于一篇超过50页的科技论文而言，用一句话说明你论文中用到数据的来源应该不过分吧。
 ### 2.3第三小问的模型建立与求解
@@ -71,10 +75,14 @@ shepard反距离插值结果
 题目要求以该地区PM2.5 监测数据最高的一天为例，在全地区PM2.5浓度最高点处的浓度增至2倍，持续2小时，利用建立的模型进行预测和评估。
 
 使用Comsol Multiphysic进行无风情况下仿真，无风情况对流为零，以扩散为主，而PM2.5的扩散系数很小，所以呈现堆积现象。
-![](http://img.blog.csdn.net/20170807163533727)
+
+![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p34.png)
+
 使用Comsol Multiphysic进行有风情况下仿真
-![](http://img.blog.csdn.net/20170807163608282)
-# 三.总结
+
+![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p35.png)
+
+## 3.总结
 
 自己在重现的过程中发现自己用具体方法实现可能还可以，但具体的数学逻辑推导可能就不能表达得很清楚，在数学逻辑写作方面需要向两篇优秀论文学习。
 
@@ -88,4 +96,7 @@ shepard反距离插值结果
 
 考虑到建模时间的紧迫性，在论文写作的过程中难免会有瑕疵，总的来说南航同学的论文还是非常优秀的，很值得我们吸收和借鉴。
 
-访问[GitHub](https://github.com/Nirvana-cn/PM2.5.git)获取详细内容和程序代码
+
+## 4.更多
+
+本文源码地址：[>>>点我进入](https://github.com/Nirvana-cn/PM2.5.git)

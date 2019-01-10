@@ -3,7 +3,6 @@ title: MongoDB安装和使用
 date: 2017-08-29 16:04:01
 tags:
 - mongodb
-- webstorm
 categories:
 - 后端,不抛弃
 ---
