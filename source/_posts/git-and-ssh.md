@@ -93,17 +93,21 @@ touch config
 # gitlab
     Host git.iboxpay.com
     HostName git.iboxpay.com
-    PreferredAuthentications publickey
+    PreferredAuthentications publickey // 可以省略
+    KexAlgorithms diffie-hellman-group1-sha1 // 可以省略
     IdentityFile ~/.ssh/id_rsa_work
 
 # github
     Host github.com
     HostName github.com
-    PreferredAuthentications publickey
+    PreferredAuthentications publickey // 可以省略
+    KexAlgorithms diffie-hellman-group-exchange-sha256 // 可以省略
     IdentityFile ~/.ssh/id_rsa
 ```
 
-其中，`Host`和`HostName`填写`git`服务器的域名，`IdentityFile`指定私钥的路径。
+其中，`Host`和`HostName`填写`git`服务器的域名，`IdentityFile`指定私钥的路径，`KexAlgorithms`指定密钥加(解)密算法，注意需要和服务器提供的方法相匹配。
+
+**  目前`github`提供以下几种加(解)密方法：`ecdh-sha2-nistp256,ecdh-sha2-nistp384`, `ecdh-sha2-nistp521`, `diffie-hellman-group-exchange-sha256`
 
 ### 1.5 测试
 
