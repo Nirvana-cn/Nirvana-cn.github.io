@@ -1,5 +1,5 @@
 ---
-title: Nginx实现二级域名转发
+title: nginx实现二级域名转发
 date: 2017-06-23 20:52:28
 tags:
 - nginx

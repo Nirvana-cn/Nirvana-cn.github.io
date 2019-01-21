@@ -125,3 +125,18 @@ friends:
     avatar: https://gravatar.loli.net/avatar/b20750c40cd911256ddbd76a7f7e724c # 头像链接
     site: https://godbmw.com # 站点地址
     meta: BMW 主题作者 # 站点描述
+  -
+    nickname: justjavac(迷渡)
+    avatar: https://avatars1.githubusercontent.com/u/359395?s=460&v=4
+    site: https://justjavac.com/
+    meta: 专注最时髦的web开发技术
+  -
+    nickname: 人人网FED
+    avatar: https://fed.renren.com/wp-content/uploads/2017/08/%E4%BA%BA%E4%BA%BAFED-logo-4-2.png
+    site: https://fed.renren.com/
+    meta: 专注于前端技术
+  -
+    nickname: 前端开发博客
+    avatar: https://avatars1.githubusercontent.com/u/3055447?s=400&v=4
+    site: http://caibaojian.com/
+    meta: 分享前端开发教程和资讯

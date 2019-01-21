@@ -1,8 +1,9 @@
 ---
-title: Nginx实现https以及https二级域名转发
+title: nginx实现https以及https二级域名转发
 date: 2017-06-23 20:57:55
 tags:
 - nginx
+- https
 categories:
 - 后端,不抛弃
 ---
