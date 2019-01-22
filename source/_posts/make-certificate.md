@@ -23,29 +23,65 @@ categories:
 
 以管理员权限打开`cmd`窗口，输入以下命令进行安装
 
-```shell
+```bash
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 ```
 
 以管理员权限打开`power shell`窗口，输入以下命令进行安装
 
-```
+```bash
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 ```
 
 `Chocolatey`安装完成之后，命令行窗口输入以下命令安装`mkcert`
 
-```shell
+```bash
 choco install mkcert
 ```
 
 ### 1.2 Linux
 
+** 以下假定使用的是全新的`Linux`系统！**
+
+首先更新软件源，防止`E: Unable to locate package `的错误，
+
+```bash
+sudo apt update
+```
+
+首先安装证书数据库工具`certutil`:
+
+```bash
+sudo apt install libnss3-tools // ubuntu
+sudo yum install nss-tools // centos
+```
+
+然后，安装包管理工具`Linuxbrew`:
+
+```bash
+sudo apt install linuxbrew-wrapper  // ubuntu
+sudo yum install linuxbrew-wrapper // centos 待定
+```
+
+最后，使用`brew`安装`mkcert`
+
+```bash
+brew install mkcert
+```
+
+tips:可能需要执行两次命令，同时不要使用`sudo`命令，系统会提示你不要使用`root`权限来执行`brew`。
+
+在`mkcert`安装目录下启动`mkcert`，推荐将`mkcert`加入全局命令，
+
+```bash
+PATH=$PATH:/home/linuxbrew/.linuxbrew/Cellar/mkcert/1.2.0/bin
+```
+
 ### 1.3 macOS
 
 使用[Homebrew](https://brew.sh/)安装`mkcert`：
 
-```
+```bash
 brew install mkcert
 brew install nss # if you use Firefox
 ```
@@ -64,7 +100,7 @@ brew install nss # if you use Firefox
 
 `rootCA`文件就是告诉浏览器我们自签的证书是真实有效的，接下来我们签发的本地证书都离不开`rootCA`。
 
-```shell
+```bash
 $ mkcert -install
 Created a new local CA at "/Users/filippo/Library/Application Support/mkcert" 💥
 The local CA is now installed in the system trust store! ⚡️
@@ -75,7 +111,7 @@ The local CA is now installed in the Firefox trust store (requires restart)! �
 
 根证书生成之后就可以签发本地证书了，命令超级简单，唯一需要注意的就是生成的证书存放路径就是命令的执行路径。
 
-```shell
+```bash
 $ mkcert example.com "*.example.org" myapp.dev localhost 127.0.0.1 ::1
 Using the local CA at "/Users/filippo/Library/Application Support/mkcert" ✨
 
@@ -112,15 +148,15 @@ The certificate is at "./example.com+5.pem" and the key at "./example.com+5-key.
 
 `node`不会使用`root store`，因此需要特殊对待，命令行手动设置`NODE_EXTRA_CA_CERTS`这个环境变量。
 
-```
+```bash
 set NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
 ```
 
-** 环境变量`$CAROOT`用来指定寻找证书的默认路径。
+** `mkcert -CAROOT`会输出本地根证书的存储路径，可以使用环境变量`$CAROOT`来指定寻找证书的默认路径。
 
 使用`node`开启`https`服务：
 
-```
+```javascript
 var https = require('https');
 var fs = require('fs');
 
@@ -151,3 +187,25 @@ server.listen(port, hostname, () => {
 
 搞定了自己，接下来就要搞定别人，如何让其它用户也识别我们的本地证书呢？
 
+`mkcert`同样也给我们提供了可移植的解决方案。
+
+将自签证书(包括公钥和私钥)以及根证书的公钥拷贝给其它用户，修改`$CAROOT`环境变量，指定`mkcert`寻找根证书的路径，
+
+`linux`系统下：
+
+```bash
+export CAROOT="/home/..."
+```
+
+`window`系统下：
+
+```bash
+
+```
+
+最后执行`mkcert -install`即可，控制台会提示，此时我们的自签证书就可以在其它机器上运行了，根证书被导入到了浏览器的证书信任中心。
+
+```bash
+The local CA is now installed in the system trust store! ⚡️
+The local CA is now installed in the Firefox and/or Chrome/Chromium trust store (requires browser restart)! 🦊
+```
