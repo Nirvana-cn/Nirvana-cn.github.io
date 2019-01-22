@@ -92,9 +92,7 @@ brew install nss # if you use Firefox
 
 `mkcert`安装完成之后就可以使用`mkcert`命令生成本地`CA`证书了，非常简单，傻瓜式安装。
 
-第一步：
-
-生成根证书，一般在`C:\Users\用户名\AppData\Local\mkcert`目录下会生成`rootCA.pem`和`rootCA-key.pem`两个文件。
+首先，生成根证书，一般在`C:\Users\用户名\AppData\Local\mkcert`目录下会生成`rootCA.pem`和`rootCA-key.pem`两个文件。
 
 根证书用来充当第三方证书签发机构，类似于`Symantec`这种机构，为网站签发CA证书。因为证书也可以伪造，所以浏览器需要验证证书的有效性，证书有效之后才可以进行`https`连接，而第三方签发机构提供证书的可信度验证。
 
@@ -140,7 +138,7 @@ The certificate is at "./example.com+5.pem" and the key at "./example.com+5-key.
 - Chrome and Chromium
 - Java (when JAVA_HOME is set)
 
-这句话的意思就是说，`mkcert`会自动把证书加入系统认证，操作系统和浏览器可以直接识别。比如，证书安装完成之后chrome的证书管理中会增加以下内容：
+这句话的意思就是说，`mkcert`会自动把证书加入系统认证，操作系统和浏览器可以直接识别。比如，证书安装完成之后chrome的证书信任中心会增加以下内容：
 
 ![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p36.png)
 
