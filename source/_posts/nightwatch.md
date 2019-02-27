@@ -1,5 +1,5 @@
 ---
-title: Nightwatch入坑指南
+title: Nightwatch入门指南
 date: 2019-02-20 16:40:32
 tags: 
 - nightwatch
@@ -14,9 +14,9 @@ categories:
 童鞋们，`nightwatch`了解一下🤣🤣🤣。
 <!--more-->
 
-# 1. 前言
+## 1.前言
 
-## 1.1 安装和初始化
+### 1.1 安装和初始化
 
 大多数情况下，为了执行命令或断言，`nightwatch`需要向`WebDriver`服务发起至少两次请求，第一次请求通过`css`选择器或`Xpath`表达式确定一个元素的位置，第二次请求才会在元素上执行实际的命令或断言。
 
@@ -70,13 +70,13 @@ module.exports = (function(settings) {
 
 当你想要关闭测试时，请记住始终调用`.end()`方法，以便正确关闭浏览器会话。
 
-## 1.2 before[Each] and after[Each] hooks
+### 1.2 before[Each] and after[Each] hooks
 
 在测试中，`nightwatch`提供标准的`before/after`和`beforeEach/afterEach`的钩子。
 
 `before`和`after`将分别在执行测试套件之前和之后运行，而`beforeEach`和`afterEach`分别在每个测试用例之前和之后运行（参见demo4-hooks）。
 
-## 1.3 Asynchronous hooks
+### 1.3 Asynchronous hooks
 
 所有`before[Each] and after[Each]`都可以执行异步操作，只需要将回调函数作为第二个参数传入。
 
@@ -102,7 +102,7 @@ module.exports = {
 
 注意：当异步操作完成后，回调函数`done`必需作为最后一个步骤被调用，否则会导致超时错误。默认的超时时间是10s，可以通过指定`asyncHookTimeout`属性修改默认超时时间。
 
-# 2. 运行测试
+## 2. 运行测试
 
 `nightwatch`提供命令行的方式来运行测试和生成测试报告，同时提供多种配置选项。
 
@@ -110,7 +110,7 @@ module.exports = {
 nightwatch [source] [options]
 ```
 
-## 2.1 指定测试实例source
+### 2.1 指定测试实例source
 
 除了在`nightwatch.json`文件中配置`src_folders`来指定需要进行测试的实例，同样可以在命令行中直接传入测试实例。
 
@@ -125,7 +125,7 @@ nightwatch tests/one/firstTest.js tests/secondTest.js
 nightwatch tests/one/test.js tests/utils
 ```
 
-## 2.2 命令行选项options
+### 2.2 命令行选项options
 
 | 名称 | 简写  |  默认值 | 描述 |
 | ------ | ------ | ------ | ------ |
@@ -146,7 +146,7 @@ nightwatch tests/one/test.js tests/utils
 |--suiteRetries	  |	 |   | 重试失败或错误的测试套件（测试模块）达到指定的次数。
 
 
-## 2.3 Test Environments
+### 2.3 Test Environments
 
 你可以定义测试设置的多个环境，以便覆盖每个环境的特定值。
 
@@ -179,7 +179,7 @@ nightwatch tests/one/test.js tests/utils
 nightwatch --env integration
 ```
 
-## 2.4 Test Tags
+### 2.4 Test Tags
 
 我们还可以选择性地将测试目标定位为基于标签运行，以便测试可以属于多个标签。
 
@@ -207,7 +207,7 @@ nightwatch --tag login --tag something_else
 nightwatch --skiptags login
 ```
 
-## 2.5 Disabling Tests
+### 2.5 Disabling Tests
 
 要阻止测试模块运行，只需将该模块中的`disabled`属性设置为`true`，如下所示：
 
@@ -221,13 +221,13 @@ module.exports = {
 };
 ```
 
-# 3. Page Objects
+## 3. Page Objects
 
 待续... 
 
 https://blog.csdn.net/qq_25324335/article/details/82052509
 
-# 4. 更多
+## 4. 更多
 
 本文demo源码地址：[>>>点我进入](https://github.com/Nirvana-cn/Learning-nightwatch)
 

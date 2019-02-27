@@ -52,7 +52,7 @@ function handleSuccess(stream) {
   document.getElementById("video").srcObject = stream
   localConnection=new RTCPeerConnection()
   localConnection.addStream(stream)
-  localConnection.onaddStream=function(e) {
+  localConnection.onaddstream=function(e) {
     console.log('获得应答方的视频流' + e.stream)
   }
   localConnection.onicecandidate=function(event){
@@ -78,7 +78,7 @@ function handleSuccess(stream) {
   document.getElementById("video").srcObject = stream
   remoteConnection=new RTCPeerConnection()
   remoteConnection.addStream(stream)
-  remoteConnection.onaddStream=function(e) {
+  remoteConnection.onaddstream=function(e) {
     console.log('获得发起方的视频流' + e.stream)
   }
   remoteConnection.onicecandidate=function(event){
@@ -198,6 +198,6 @@ WebRTC学习资料大全：[>>>点我进入](https://blog.csdn.net/foruok/articl
 
 官方Github地址：[>>>点我进入](https://github.com/webrtc)
 
-SDP字段解析：[>>>点我进入](https://github.com/Nirvana-cn/Live-platform/blob/master/readme%20about%20SDP.md)
+SDP字段解析：[>>>点我进入](https://github.com/Nirvana-cn/Live-platform/blob/master/doc/sdp.md)
 
 书籍《WebRTC权威指南》，《Learning WebRTC 中文版》
