@@ -131,12 +131,28 @@ friends:
     site: https://justjavac.com/
     meta: 专注最时髦的web开发技术
   -
-    nickname: 人人网FED
-    avatar: https://fed.renren.com/wp-content/uploads/2017/08/%E4%BA%BA%E4%BA%BAFED-logo-4-2.png
-    site: https://fed.renren.com/
-    meta: 专注于前端技术
+    nickname: 小旋锋
+    avatar: http://laijianfeng.org/img/avatar.jpg
+    site: http://laijianfeng.org/
+    meta: 专注于大数据，Java 后端类技术分享
   -
     nickname: 前端开发博客
     avatar: https://avatars1.githubusercontent.com/u/3055447?s=400&v=4
     site: http://caibaojian.com/
     meta: 分享前端开发教程和资讯
+  -
+    nickname: Break易站
+    avatar: https://cdn.breakyizhan.com/wp-content/uploads/2019/04/xingkong666.jpg
+    site: https://www.breakyizhan.com/
+    meta: 已识乾坤大，忧怜草木青
+  -
+    nickname: 贾鹏辉的技术博客
+    avatar: http://www.devio.org/img/avatar.png
+    site: http://www.devio.org/
+    meta: 专注于移动开发，分享知识，共享快乐
+  -
+    nickname: 前端路上
+    avatar: https://refined-x.com/asset/album.jpg
+    site: https://refined-x.com/
+    meta: 枪在手，跟我走，前端路上不回头
+
