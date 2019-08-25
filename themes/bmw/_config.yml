@@ -88,6 +88,25 @@ nav:
     name: 主页
     path: /
   -
+    name: 专栏
+    children:
+      -
+        name: "Android指东"
+        path: "http://iceiceice.top/categories/Android指南/"
+        blank: true
+      -
+        name: "Flutter指南(暂无)"
+        path: "http://iceiceice.top/tags/css/"
+        blank: true
+      -
+        name: "IOS指西(暂无)"
+        path: "http://iceiceice.top/tags/css/"
+        blank: true
+      -
+        name: "React Native指北(暂无)"
+        path: "http://iceiceice.top/tags/css/"
+        blank: true
+  -
     name: 归档
     path: /archives/
   -
