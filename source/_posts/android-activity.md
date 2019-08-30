@@ -1,5 +1,5 @@
 ---
-title: Android指东：活动 activity
+title: Android指东：活动 Activity
 date: 2019-08-20 10:59:08
 tags:
 - android
@@ -62,6 +62,29 @@ public class BaseActivity extends AppCompatActivity {
 
 ### 3.2 知晓当前Activity
 
+新建一个`BaseActivity`，在`onCreate`方法中打印所需要的信息。
+
+```java
+public class BaseActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("BaseActivity", getClass().getSimpleName());
+    }
+}
+```
+
+让以后新建的`Activity`继承`BaseActivity`，而不是`AppCompatActivity`即可。
+
+```java
+public class MainActivity extends BaseActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+}
+```
 
 ## 4. Activity 之间通信
 
