@@ -246,9 +246,9 @@ setProgress(5000);
 
 ## 7. 更多
 
-`Android`中`Intent`对象与`Intent Filter`过滤匹配过程详解：[>>>点我进入](https://blog.csdn.net/iispring/article/details/48481793)
+Intent 对象与 Intent Filter 过滤匹配过程详解：[>>>点我进入](https://blog.csdn.net/iispring/article/details/48481793)
 
-详解 `Android` 的 `Activity` 组件：[>>>点我进入](https://www.ibm.com/developerworks/cn/opensource/os-cn-android-actvt/index.html)
+详解 Activity 组件：[>>>点我进入](https://www.ibm.com/developerworks/cn/opensource/os-cn-android-actvt/index.html)
 
 
 

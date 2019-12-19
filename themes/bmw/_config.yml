@@ -98,14 +98,6 @@ nav:
         name: "Flutter指南(暂无)"
         path: "http://iceiceice.top/tags/css/"
         blank: true
-      -
-        name: "IOS指西(暂无)"
-        path: "http://iceiceice.top/tags/css/"
-        blank: true
-      -
-        name: "React Native指北(暂无)"
-        path: "http://iceiceice.top/tags/css/"
-        blank: true
   -
     name: 归档
     path: /archives/
@@ -174,4 +166,8 @@ friends:
     avatar: https://refined-x.com/asset/album.jpg
     site: https://refined-x.com/
     meta: 枪在手，跟我走，前端路上不回头
-
+  -
+    nickname: Code-Porter
+    avatar: https://profile.csdnimg.cn/F/8/2/2_a_zhon
+    site: https://azhon.blog.csdn.net/
+    meta: 做个俗人，贪财好色，一身正气
