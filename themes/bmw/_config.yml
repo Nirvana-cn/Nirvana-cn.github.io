@@ -95,8 +95,8 @@ nav:
         path: "http://iceiceice.top/categories/Android指南/"
         blank: true
       -
-        name: "Flutter指南(暂无)"
-        path: "http://iceiceice.top/tags/css/"
+        name: "Flutter指南"
+        path: "http://iceiceice.top/categories/Flutter指南/"
         blank: true
   -
     name: 归档
