@@ -56,11 +56,10 @@ sudo apt install libnss3-tools // ubuntu
 sudo yum install nss-tools // centos
 ```
 
-然后，安装包管理工具`Linuxbrew`:
+然后，安装包管理工具`Homebrew`，参考`Homebrew`官网:
 
 ```bash
-sudo apt install linuxbrew-wrapper  // ubuntu
-sudo yum install linuxbrew-wrapper // centos 待定
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 ```
 
 最后，使用`brew`安装`mkcert`
@@ -92,7 +91,7 @@ brew install nss # if you use Firefox
 
 `mkcert`安装完成之后就可以使用`mkcert`命令生成本地`CA`证书了，非常简单，傻瓜式安装。
 
-首先，生成根证书，一般在`C:\Users\用户名\AppData\Local\mkcert`目录下会生成`rootCA.pem`和`rootCA-key.pem`两个文件。
+首先，生成根证书。`Windows`会在`C:\Users\用户名\AppData\Local\mkcert`目录下会生成`rootCA.pem`和`rootCA-key.pem`两个文件，而`Linux`存放在`/home/${userName}/.local/share/mkcert`目录下。
 
 根证书用来充当第三方证书签发机构，类似于`Symantec`这种机构，为网站签发CA证书。因为证书也可以伪造，所以浏览器需要验证证书的有效性，证书有效之后才可以进行`https`连接，而第三方签发机构提供证书的可信度验证。
 
@@ -177,7 +176,7 @@ server.listen(port, hostname, () => {
 });
 ```
 
-`https`进行访问：
+使用`https`进行访问：
 
 ![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p37.png)
 
