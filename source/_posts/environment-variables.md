@@ -45,7 +45,7 @@ echo $NODE_ENV
 #如果不存在则添加环境变量
 export NODE_ENV=production
 #环境变量追加值
-export path=$path:/home/download:/usr/local/
+export PATH=$PATH:/home/download:/usr/local/
 #某些时候需要删除环境变量
 unset NODE_ENV
 #某些时候需要显示所有的环境变量
@@ -67,7 +67,7 @@ vim ~/.bash_profile
 
 ```bash
 # 在文件末尾添加如下格式的环境变量
-export path=$path:/home/download:/usr/local/
+export PATH=$PATH:/home/download:/usr/local/
 export NODE_ENV = product
 ```
 
