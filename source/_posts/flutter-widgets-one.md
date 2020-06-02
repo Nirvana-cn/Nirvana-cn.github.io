@@ -311,7 +311,7 @@ Tween是一种补间动画。在补间动画中，定义了开始点和结束点
 
 Flutter中的Animation对象是一个在一段时间内依次生成一个区间之间值的类。Animation对象的输出可以是线性的、曲线的、一个步进函数或者任何其他可以设计的映射。根据Animation对象的控制方式，动画可以反向运行，甚至可以在中间切换方向。
 
-Animation还可以生成除double之外的其他类型值，如：Animation<Color> 或 Animation<Size>。Animation对象有状态。可以通过访问其value属性获取动画的当前值。
+Animation还可以生成除double之外的其他类型值，如：Animation\<Color\> 或 Animation\<Size\>。Animation对象有状态。可以通过访问其value属性获取动画的当前值。
 
 一个Animation对象可以拥有Listeners和StatusListeners监听器，可以用addListener()和addStatusListener()来添加。 只要动画的值发生变化，就会调用监听器。一个Listener最常见的行为是调用setState()来触发UI重建。动画开始、结束、向前移动或向后移动（如AnimationStatus所定义）时会调用StatusListener。
 
