@@ -1,5 +1,5 @@
 ---
-title: Flutter Widget
+title: Flutter Widget — Part 1
 date: 2019-11-05 16:28:34
 tags:
 - flutter
@@ -469,3 +469,8 @@ class _MyHomePageState extends State<MyHomePage> {
 ![](https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/PageView.gif)
 
 PageView的默认构造函数适用于比较少的子Widget，PageView.builder则用于创建大量或无限的子控件。有关PageView更加详细的说明和使用示例可以参考Medium上的一篇博客 [A Deep Dive Into PageView](https://medium.com/flutter-community/a-deep-dive-into-pageview-in-flutter-with-custom-transitions-581d9ea6dded)。
+
+
+## 附录
+
+完整代码仓库地址: [>>>点我进入](https://github.com/Nirvana-cn/Flutter-widget-weekly)
