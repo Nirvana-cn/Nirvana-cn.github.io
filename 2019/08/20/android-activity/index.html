@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>Android指东：活动 Activity | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Android指南,android,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>Android指东：活动 Activity</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-08-20
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/Android指南/">
+            Android指南
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="android-activity"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="1-Activity-的状态"><a href="#1-Activity-的状态" class="headerlink" title="1. Activity 的状态"></a>1. Activity 的状态</h2><p>在 <code>android</code> 中，<code>Activity</code> 拥有四种基本状态：</p>
+<ul>
+<li><code>Active/Runing</code> 一个新 Activity 启动入栈后，它在屏幕最前端，处于栈的最顶端，此时它处于可见并可和用户交互的激活状态</li>
+<li><code>Paused</code> 当 Activity 被另一个透明或者 Dialog 样式的 Activity 覆盖时的状态。此时它依然与窗口管理器保持连接，系统继续维护其内部状态，所以它仍然可见，但它已经失去了焦点故不可与用户交互</li>
+<li><code>Stoped</code> 当 Activity 被另外一个 Activity 覆盖、失去焦点并不可见时处于 Stoped 状态</li>
+<li><code>Killed</code> 当 Activity 被系统杀死回收或者没有被启动时处于 Killed 状态</li>
+</ul>
+<p><code>Android</code> 是通过一种 <code>Activity</code> 栈的方式来管理 <code>Activity</code> 的，一个 <code>Activity</code> 的实例的状态决定它在栈中的位置。处于前台的 <code>Activity</code> 总是在栈的顶端，当前台的 <code>Activity</code> 因为异常或其它原因被销毁时，处于栈第二层的 <code>Activity</code> 将被激活，上浮到栈顶。当新的 <code>Activity</code> 启动入栈时，原 <code>Activity</code> 会被压入到栈的第二层。一个 <code>Activity</code> 在栈中的位置变化反映了它在不同状态间的转换。</p>
+<p><img src="https://www.ibm.com/developerworks/cn/opensource/os-cn-android-actvt/image002.jpg" alt="Activity 的状态与它在栈中的位置关系"></p>
+<p>除了最顶层即处在 <code>Active</code> 状态的 <code>Activity</code> 外，其它的 <code>Activity</code> 都有可能在系统内存不足时被回收，一个 <code>Activity</code> 的实例越是处在栈的底层，它被系统回收的可能性越大。</p>
+<h2 id="2-Activity-生命周期"><a href="#2-Activity-生命周期" class="headerlink" title="2. Activity 生命周期"></a>2. Activity 生命周期</h2><ul>
+<li><code>protected void onCreate(Bundle savedInstanceState)</code> 一个 Activity 的实例被启动时调用的第一个方法。一般情况下都要在这里从 xml 中加载设计好的用户界面。当然，也可从 savedInstanceState中读我们保存到存储设备中的数据，但是需要判断 savedInstanceState是否为 null，因为 Activity 第一次启动时并没有数据被存贮在设备中：</li>
+<li><code>protected void onStart()</code> 在 Activity 从 Pause 状态转换到 Active 状态时被调用。</li>
+<li><code>protected void onResume()</code> 在 Activity 从 Active 状态转换到 Pause 状态时被调用。</li>
+<li><code>protected void onStop()</code> 在 Activity 从 Active 状态转换到 Stop 状态时被调用。一般我们在这里保存 Activity 的状态信息。</li>
+<li><code>protected void onDestroy()</code> 在 Active 被结束时调用，它是被结束时调用的最后一个方法，在这里一般做些释放资源，清理内存等工作。</li>
+</ul>
+<p><img src="https://developer.android.com/guide/components/images/activity_lifecycle.png" alt="activity_lifecycle"></p>
+<h2 id="3-启动另外一个-Activity"><a href="#3-启动另外一个-Activity" class="headerlink" title="3. 启动另外一个 Activity"></a>3. 启动另外一个 Activity</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent(CurrentActivity.this,OtherActivity.class); </span><br><span class="line">startActivity(intent);</span><br></pre></td></tr></table></figure>
+<p>当然，OtherActivity同样需要在 AndroidManifest.xml 中定义。</p>
+<h3 id="3-1-优雅地启动另一个-Activity"><a href="#3-1-优雅地启动另一个-Activity" class="headerlink" title="3.1 优雅地启动另一个 Activity"></a>3.1 优雅地启动另一个 Activity</h3><p>有时，另一个<code>Activity</code>可能不是你开发的，但是你想启动该<code>Activity</code>，却不知道应该传递哪些数据。如下的封装可以优雅地解决这个问题哦。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">launch</span><span class="params">(Context context, String data)</span></span>&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(context, BaseActivity.class);</span><br><span class="line">        intent.putExtra(<span class="string">"param"</span>,data);</span><br><span class="line">        context.startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-知晓当前Activity"><a href="#3-2-知晓当前Activity" class="headerlink" title="3.2 知晓当前Activity"></a>3.2 知晓当前Activity</h3><p>新建一个<code>BaseActivity</code>，在<code>onCreate</code>方法中打印所需要的信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        Log.d(<span class="string">"BaseActivity"</span>, getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>让以后新建的<code>Activity</code>继承<code>BaseActivity</code>，而不是<code>AppCompatActivity</code>即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">BaseActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-Activity-之间通信"><a href="#4-Activity-之间通信" class="headerlink" title="4. Activity 之间通信"></a>4. Activity 之间通信</h2><h3 id="4-1-使用-Intent-通信"><a href="#4-1-使用-Intent-通信" class="headerlink" title="4.1 使用 Intent 通信"></a>4.1 使用 Intent 通信</h3><p>在 <code>Android</code> 中，不同的 <code>Activity</code> 实例可能运行在一个进程中，也可能运行在不同的进程中。因此我们需要一种特别的机制帮助我们在 <code>Activity</code> 之间传递消息。<code>Android</code> 中通过 <code>Intent</code> 对象来表示一条消息，一个 <code>Intent</code> 对象不仅包含有这个消息的目的地，还可以包含消息的内容，这好比一封 <code>Email</code>，其中不仅应该包含收件地址，还可以包含具体的内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent(CurrentActivity.this,OtherActivity.class);</span><br><span class="line">intent.putExtra(key, value);</span><br><span class="line">startActivity(intent);</span><br></pre></td></tr></table></figure>
+<p>在 <code>OtherActivity</code>类的 <code>onCreate()</code>或者其它任何地方使用下面的代码就可以打开这封<code>e-mail</code>阅读其中的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = getIntent();</span><br><span class="line">Bundle bundle = intent.getBundleExtra(&quot;key&quot;);</span><br><span class="line">// or</span><br><span class="line">String string = intent.getStringExtra();</span><br><span class="line">// or</span><br><span class="line">Serializable str = intent.getSerializableExtra();</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-使用-SharedPreferences"><a href="#4-2-使用-SharedPreferences" class="headerlink" title="4.2 使用 SharedPreferences"></a>4.2 使用 SharedPreferences</h3><p><code>SharedPreferences</code> 使用 <code>xml</code> 格式为 <code>Android</code> 应用提供一种永久的数据存贮方式。对于一个 <code>Android</code> 应用，它存贮在文件系统的 <code>/data/ data/your_app_package_name/shared_prefs/</code>目录下，可以被处在同一个应用中的所有 <code>Activity</code> 访问。<code>Android</code> 提供了相关的 <code>API</code> 来处理这些数据而不需要程序员直接操作这些文件或者考虑数据同步问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 写入 SharedPreferences </span><br><span class="line">SharedPreferences preferences = getSharedPreferences(&quot;name&quot;, MODE_PRIVATE); </span><br><span class="line">Editor editor = preferences.edit(); </span><br><span class="line">editor.putBoolean(&quot;boolean_key&quot;, true); </span><br><span class="line">editor.putString(&quot;string_key&quot;, &quot;string_value&quot;); </span><br><span class="line">editor.commit(); </span><br><span class="line">        </span><br><span class="line">// 读取 SharedPreferences </span><br><span class="line">SharedPreferences preferences = getSharedPreferences(&quot;name&quot;, MODE_PRIVATE); </span><br><span class="line">preferences.getBoolean(&quot;boolean_key&quot;, false); </span><br><span class="line">preferences.getString(&quot;string_key&quot;, &quot;default_value&quot;);</span><br></pre></td></tr></table></figure>
+<h2 id="5-Activity-的-Intent-Filter"><a href="#5-Activity-的-Intent-Filter" class="headerlink" title="5. Activity 的 Intent Filter"></a>5. Activity 的 Intent Filter</h2><p><code>Action</code> 是一个用户定义的字符串，用于描述一个 <code>Android</code> 应用程序组件，一个 <code>Intent Filter</code> 可以包含多个 <code>Action</code>。在 <code>AndroidManifest.xml</code> 的 <code>Activity</code> 定义时可以在其 <code>&lt;intent-filter&gt;</code>节点指定一个 <code>Action</code> 列表用于标示 <code>Activity</code> 所能接受的“动作”，例如：</p>
+<p><code>Intent Filter</code> 描述了一个组件愿意接收什么样的 <code>Intent</code> 对象，<code>Android</code> 将其抽象为 <code>android.content.IntentFilter</code> 类。在 <code>Android</code> 的 <code>AndroidManifest.xml</code> 配置文件中可以通过 <code>&lt;intent-filter&gt;</code>节点为一个 <code>Activity</code> 指定其 <code>Intent Filter</code>，以便告诉系统该 <code>Activity</code> 可以响应什么类型的 <code>Intent</code>。</p>
+<p><img src="https://www.ibm.com/developerworks/cn/opensource/os-cn-android-actvt/image004.jpg" alt="Activity 种 Intent Filter 的匹配过程"></p>
+<p><code>Intent</code>的过滤器(<code>intent-filter</code>)按照以下优先关系查找：<code>action -&gt; data -&gt; category</code></p>
+<h2 id="5-1-Category-匹配"><a href="#5-1-Category-匹配" class="headerlink" title="5.1 Category 匹配"></a>5.1 Category 匹配</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.DEFAULT"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.TEST1"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.TEST2"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>一个<code>intent</code>对象也可以关联多个<code>category</code>。为了能让<code>intent</code>对象通过<code>intent-filter</code>的<code>category</code>测试，<code>intent</code>对象中的所有<code>category</code>都要在<code>intent-filter</code>中找到对应项。 </p>
+<p>这意味着以下的<code>intent</code>对象能够通过<code>category</code>测试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent();</span><br><span class="line">intent.addCategory(&quot;android.intent.category.TEST1&quot;);</span><br><span class="line">intent.addCategory(&quot;android.intent.category.TEST2&quot;);</span><br></pre></td></tr></table></figure>
+<p>此处需要特别说明的是，我们在上面的示例中，都给<code>Activity</code>的<code>intent-filter</code>添加了值为<code>android.intent.category.DEFAULT</code>的<code>category</code>，这是因为当我们把一个隐式的<code>intent</code>传递给<code>startActivity()</code>或<code>startActivityForResult()</code>方法时，<code>Android</code>会自动给该隐式<code>intent</code>添加值为<code>android.intent.category.DEFAULT</code>的<code>category</code>，所以为了能让<code>intent-filter</code>包含<code>intent</code>中全部的<code>category</code>，我们就需要在<code>Activity</code>的<code>intent-filter</code>中添加该<code>category</code>，在使用时需要特别注意。</p>
+<p>** <code>Android</code> 预定义了一系列的 <code>Action</code> 分别表示特定的系统动作。这些 <code>Action</code> 通过常量的方式定义在 <code>android.content.Intent</code>中</p>
+<h3 id="5-2-Action-匹配"><a href="#5-2-Action-匹配" class="headerlink" title="5.2 Action 匹配"></a>5.2 Action 匹配</h3><p><code>Action</code> 是一个用户定义的字符串，用于描述一个 <code>Android</code> 应用程序组件，一个 <code>Intent Filter</code> 可以包含多个 <code>Action</code>。在 <code>AndroidManifest.xml</code> 的 <code>Activity</code> 定义时可以在其 <code>&lt;intent-filter&gt;</code>节点指定一个 <code>Action</code> 列表用于标示 <code>Activity</code> 所能接受的“动作”，例如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".SecondActivity"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">intent-filter</span> &gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.DEFAULT"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"test"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果我们在启动一个 <code>Activity</code> 时使用这样的 <code>Intent</code> 对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intent intent =new Intent(); </span><br><span class="line">intent.setAction(&quot;test&quot;);</span><br></pre></td></tr></table></figure>
+<p>那么所有的 <code>Action</code> 列表中包含了<code>&quot;test&quot;</code>的 <code>Activity</code> 都将会匹配成功。</p>
+<h3 id="5-3-Data-匹配"><a href="#5-3-Data-匹配" class="headerlink" title="5.3 Data 匹配"></a>5.3 Data 匹配</h3><p>一个 <code>Intent</code> 可以通过 <code>URI</code> 携带外部数据给目标组件。在 <code>&lt;intent-filter&gt;</code>节点中，通过 <code>&lt;data/&gt;</code>节点匹配外部数据。</p>
+<p><code>mimeType</code> 属性指定携带外部数据的数据类型，<code>scheme</code> 指定协议，<code>host、port、path</code> 指定数据的位置、端口、和路径。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;data android:mimeType=&quot;mimeType&quot; android:scheme=&quot;scheme&quot; android:host=&quot;host&quot; android:port=&quot;port&quot; android:path=&quot;path&quot;/&gt;</span><br><span class="line">&lt;data android:mimeType=&quot;video/mpeg&quot; android:scheme=&quot;http://localhost:3000/path/&quot;  /&gt;</span><br></pre></td></tr></table></figure>
+<p>一个<code>intent-filter</code>下可以有多个<code>&lt;data/&gt;</code>标签，<code>intent</code>对象无需通过所有的<code>&lt;data/&gt;</code>标签测试，一般情况下，<code>intent</code>对象只需通过了其中一个<code>&lt;data/&gt;</code>标签的测试，那么该<code>intent</code>对象就通过了该<code>intent-filter</code>的<code>data</code>测试。 </p>
+<h2 id="6-一些关于-Activity-的技巧"><a href="#6-一些关于-Activity-的技巧" class="headerlink" title="6. 一些关于 Activity 的技巧"></a>6. 一些关于 Activity 的技巧</h2><h3 id="6-1-锁定-Activity-运行时的屏幕方向"><a href="#6-1-锁定-Activity-运行时的屏幕方向" class="headerlink" title="6.1 锁定 Activity 运行时的屏幕方向"></a>6.1 锁定 Activity 运行时的屏幕方向</h3><p><code>Android</code> 内置了方向感应器的支持。Android 会根据所处的方向自动在竖屏和横屏间切换。但是有时我们的应用程序仅能在横屏 / 竖屏时运行，比如某些游戏，此时我们需要锁定该 <code>Activity</code> 运行时的屏幕方向，<code>&lt;activity&gt;</code>节点的 <code>android:screenOrientation</code>属性可以完成该项任务，示例代码如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".EX01"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:screenOrientation</span>=<span class="string">"portrait"</span>&gt;</span> // 竖屏 , 值为 landscape 时为横屏</span><br><span class="line"> <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="6-2-全屏的-Activity"><a href="#6-2-全屏的-Activity" class="headerlink" title="6.2 全屏的 Activity"></a>6.2 全屏的 Activity</h3><p>要使一个 <code>Activity</code> 全屏运行，可以在其 <code>onCreate()</code>方法中添加如下代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 设置全屏模式</span><br><span class="line">getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); </span><br><span class="line">// 去除标题栏</span><br><span class="line">requestWindowFeature(Window.FEATURE_NO_TITLE);</span><br></pre></td></tr></table></figure>
+<h3 id="6-3-在-Activity-的-Title-中加入进度条-测试不通过"><a href="#6-3-在-Activity-的-Title-中加入进度条-测试不通过" class="headerlink" title="6.3 在 Activity 的 Title 中加入进度条 (测试不通过)"></a>6.3 在 Activity 的 Title 中加入进度条 (测试不通过)</h3><p>为了更友好的用户体验，在处理一些需要花费较长时间的任务时可以使用一个进度条来提示用户“不要着急，我们正在努力的完成你交给的任务”。</p>
+<p>在 <code>Activity</code> 的标题栏中显示进度条不失为一个好办法，下面是实现代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 不明确进度条</span><br><span class="line">requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); </span><br><span class="line">setContentView(R.layout.main); </span><br><span class="line">setProgressBarIndeterminateVisibility(true); </span><br><span class="line"> </span><br><span class="line">// 明确进度条</span><br><span class="line">requestWindowFeature(Window.FEATURE_PROGRESS); </span><br><span class="line">setContentView(R.layout.main); </span><br><span class="line">setProgress(5000);</span><br></pre></td></tr></table></figure>
+<h2 id="7-更多"><a href="#7-更多" class="headerlink" title="7. 更多"></a>7. 更多</h2><p>Intent 对象与 Intent Filter 过滤匹配过程详解：<a href="https://blog.csdn.net/iispring/article/details/48481793" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>详解 Activity 组件：<a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-android-actvt/index.html" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2019/08/20/android-activity/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/android/">
+              #android
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/05/18/safari_webrtc_api/" target="_self">Safari不同版本track接口行为差异总结</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/08/30/android-communication/" target="_self">Android指东：组件通信</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

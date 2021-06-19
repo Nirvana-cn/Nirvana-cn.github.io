@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>深入JavaScript中的精度丢失 | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,每天学一点,javascript,双精度浮点数,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>深入JavaScript中的精度丢失</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2018-06-13
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端-每天学一点/">
+            前端,每天学一点
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="loss-of-precision"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="1-引子"><a href="#1-引子" class="headerlink" title="1. 引子"></a>1. 引子</h2><p>众所周知<code>JavaScript</code>仅有<code>Number</code>这个数值类型，而<code>Number</code>采用的时<code>IEEE754</code>规范中<code>64</code>位双精度浮点数编码。于是出现了经典的 <code>0.1 + 0.2 === 0.30000000000000004</code> 问题。</p>
+<p>我们抱着知其然还要知其所以然的态度来推导一下 <code>0.1 + 0.2</code> 的计算过程。</p>
+<h2 id="2-进制转换"><a href="#2-进制转换" class="headerlink" title="2. 进制转换"></a>2. 进制转换</h2><p>首先我们需要了解如何将十进制小数转为二进制，方法如下：</p>
+<p>对小数点以后的数乘以2，取结果的整数部分（不是1就是0），然后再用小数部分再乘以2，再取结果的整数部分……以此类推，直到小数部分为0或者位数已经够了就OK了。然后把取的整数部分按先后次序排列。</p>
+<p>按照上面的方法，我们求取0.1的二进制数，结果发现0.1转换后的二进制数为：</p>
+<blockquote>
+<p>0.000110011001100110011（0011无限循环）……</p>
+</blockquote>
+<p>所以说，精度丢失并不是语言的问题，而是浮点数存储本身固有的缺陷。浮点数无法精确表示其数值范围内的所有数值，只能精确表示可用科学计数法 <code>m*2^e</code>表示的数值而已，比如0.5的科学计数法是<code>2^(-1)</code>，则可被精确存储；而0.1、0.2则无法被精确存储。</p>
+<p>那么对这种无限循环的二进制数应该怎样存储呢，总不能随便取一个截断长度吧。这个时候<code>IEEE754</code>规范的作用就体现出来了。</p>
+<h2 id="3-IEEE754规范"><a href="#3-IEEE754规范" class="headerlink" title="3. IEEE754规范"></a>3. IEEE754规范</h2><p><code>IEEE754</code>对于浮点数表示方式给出了一种定义。格式如下：</p>
+<blockquote>
+<p>(-1)^S x M x 2^E</p>
+</blockquote>
+<p>各符号的意思如下：S，是符号位，决定正负，0时为正数，1时为负数。M，是指有效位数，大于1小于2。E，是指数位。</p>
+<p>则0.1使用<code>IEEE754</code>规范表示就是：</p>
+<blockquote>
+<p>(-1)^0 x 1.100110011(0011)…… x 2^-4</p>
+</blockquote>
+<p>对于浮点数在计算机中的存储，<code>IEEE754</code>规范提供了单精度浮点数编码和双精度浮点数编码。<code>IEEE754</code>规定，对于32位的单精度浮点数，最高的1位是符号位S，接着的8位是指数E，剩下的23位为有效数字M。对于64位的双精度浮点数，最高的1位是符号位S，接着的11位是指数E，剩下的52位为有效数字M。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:center">位数</th>
+<th style="text-align:right">阶数</th>
+<th style="text-align:right">有效数字/尾数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单精度浮点数</td>
+<td style="text-align:center">32</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">23</td>
+</tr>
+<tr>
+<td>双精度浮点数</td>
+<td style="text-align:center">64</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">52</td>
+</tr>
+</tbody>
+</table>
+<p>我们以单精度浮点数为例，分析0.15625实际的存储方式。</p>
+<p><img src="https://segmentfault.com/img/remote/1460000011902480?w=500&amp;h=101" alt=""></p>
+<p>0.15625转换为二进制数是0.00101，用科学计数法表示就是 <code>1.01 x 2^(-3)</code>，所以符号位为0，表示该数为正。注意，接下来的8位并不直接存储指数-3，而是存储阶数，阶数定义如下：</p>
+<blockquote>
+<p>阶数 = 指数+偏置量</p>
+</blockquote>
+<p>对于单精度型数据其规定偏置量为127，而对于双精度来说，其规定的偏置量为1023。所以0.15625的阶数为124，用8位二进制数表示为01111100。再注意，存储有效数字时，将不会存储小数点前面的1(因为二进制有效数字的第一位肯定是1，省略)，所以这里存储的是01，不足23位，余下的用0补齐。</p>
+<p>当然，这里还有一个问题需要说明，对于0.1这种有效数字无限循环的数该如何截断，<code>IEEE754</code>默认的舍入模式是：</p>
+<blockquote>
+<p>Round to nearest, ties to even</p>
+</blockquote>
+<p>也就是说舍入到最接近且可以表示的值，当存在两个数一样接近时，取偶数值。</p>
+<h2 id="4-回到-0-1-0-2-的问题"><a href="#4-回到-0-1-0-2-的问题" class="headerlink" title="4. 回到 0.1 + 0.2 的问题"></a>4. 回到 0.1 + 0.2 的问题</h2><p><code>JavaScript</code>是以64位双精度浮点数存储所有<code>Number</code>类型值，按照<code>IEEE754</code>规范，0.1的二进制数只保留52位有效数字，即 <code>1.100110011001100110011001100110011001100110011001101 x 2^(-4)</code>。<br>我们以 <code>-</code> 来分割符号位、阶数位和有效数字位，则0.1实际存储时的位模式是<code>0 - 01111111011 - 1001100110011001100110011001100110011001100110011010</code>。</p>
+<p>同理，0.2的二进制数为<code>1.100110011001100110011001100110011001100110011001101 x 2^(-3)</code>，因此0.2实际存储时的位模式是<code>0 - 01111111100 - 1001100110011001100110011001100110011001100110011010</code>。</p>
+<p>将0.1和0.2按实际展开，末尾补零相加，结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> 0.00011001100110011001100110011001100110011001100110011010</span><br><span class="line">+0.00110011001100110011001100110011001100110011001100110100</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">=0.01001100110011001100110011001100110011001100110011001110</span><br></pre></td></tr></table></figure>
+<p>只保留52位有效数字，则<code>(0.1 + 0.2)</code>的结果的二进制数为 <code>1.001100110011001100110011001100110011001100110011010 x 2^(-2)</code>,省略尾数最后的0，即 <code>1.00110011001100110011001100110011001100110011001101 x 2^(-2)</code>，因此(0.1+0.2)实际存储时的位模式是 <code>0 - 01111111101 - 0011001100110011001100110011001100110011001100110100</code>。</p>
+<p><code>(0.1 + 0.2)</code>的结果的十进制数为<code>0.30000000000000004</code>，至此推导完成。我们可以在<code>chrome</code>上验证我们的推导过程是否和浏览器一致。<a href="https://c.runoob.com/front-end/58" target="_blank" rel="noopener">菜鸟工具</a>也提供了丰富的进制转换功能可以让我们验证结果的准确性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">0.1</span>).toString(<span class="string">'2'</span>)</span><br><span class="line"><span class="comment">// "0.0001100110011001100110011001100110011001100110011001101"</span></span><br><span class="line"></span><br><span class="line">(<span class="number">0.2</span>).toString(<span class="string">'2'</span>)</span><br><span class="line"><span class="comment">// "0.001100110011001100110011001100110011001100110011001101"</span></span><br><span class="line"></span><br><span class="line">(<span class="number">0.1</span>+<span class="number">0.2</span>).toString(<span class="string">'2'</span>)</span><br><span class="line"><span class="comment">// "0.0100110011001100110011001100110011001100110011001101"</span></span><br><span class="line"></span><br><span class="line">(<span class="number">0.3</span>).toString(<span class="string">'2'</span>)</span><br><span class="line"><span class="comment">// "0.010011001100110011001100110011001100110011001100110011"</span></span><br></pre></td></tr></table></figure>
+<h2 id="5-解决精度丢失的问题"><a href="#5-解决精度丢失的问题" class="headerlink" title="5. 解决精度丢失的问题"></a>5. 解决精度丢失的问题</h2><h3 id="5-1-类库"><a href="#5-1-类库" class="headerlink" title="5.1 类库"></a>5.1 类库</h3><p><code>NPM</code>上有许多支持<code>JavaScript</code>和<code>Node.js</code>的数学库，比如<code>math.js, decimal.js, D.js</code>等等。</p>
+<h3 id="5-2-原生方法"><a href="#5-2-原生方法" class="headerlink" title="5.2 原生方法"></a>5.2 原生方法</h3><p><code>toFixed()</code>方法可把<code>Number</code>四舍五入为指定小数位数的数字。但并代表该方法是可靠的。<code>chrome</code>上测试如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.35</span>.toFixed(<span class="number">1</span>) <span class="comment">// 1.4 正确</span></span><br><span class="line"><span class="number">1.335</span>.toFixed(<span class="number">2</span>) <span class="comment">// 1.33 错误</span></span><br><span class="line"><span class="number">1.3335</span>.toFixed(<span class="number">3</span>) <span class="comment">// 1.333 错误</span></span><br><span class="line"><span class="number">1.33335</span>.toFixed(<span class="number">4</span>) <span class="comment">// 1.3334 正确</span></span><br><span class="line"><span class="number">1.333335</span>.toFixed(<span class="number">5</span>)  <span class="comment">// 1.33333 错误</span></span><br><span class="line"><span class="number">1.3333335</span>.toFixed(<span class="number">6</span>) <span class="comment">// 1.333333 错误</span></span><br></pre></td></tr></table></figure>
+<p>我们可以把<code>toFix</code>重写一下来解决。通过判断最后一位是否大于等于5来决定需不需要进位，如果需要进位先把小数乘以倍数变为整数，加1之后，再除以倍数变为小数，这样就不用一位一位的进行判断。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>.prototype.toFixed = <span class="function"><span class="keyword">function</span>(<span class="params">len</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(len&gt;<span class="number">20</span> || len&lt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">RangeError</span>(<span class="string">'toFixed() digits argument must be between 0 and 20'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// .123转为0.123</span></span><br><span class="line">    <span class="keyword">var</span> number = <span class="built_in">Number</span>(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">isNaN</span>(number) || number &gt;= <span class="built_in">Math</span>.pow(<span class="number">10</span>, <span class="number">21</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> number.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> (len) == <span class="string">'undefined'</span> || len == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">Math</span>.round(number)).toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> result = number.toString(),</span><br><span class="line">        numberArr = result.split(<span class="string">'.'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(numberArr.length&lt;<span class="number">2</span>)&#123;</span><br><span class="line">        <span class="comment">//整数的情况</span></span><br><span class="line">        <span class="keyword">return</span> padNum(result);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> intNum = numberArr[<span class="number">0</span>], <span class="comment">//整数部分</span></span><br><span class="line">        deciNum = numberArr[<span class="number">1</span>],<span class="comment">//小数部分</span></span><br><span class="line">        lastNum = deciNum.substr(len, <span class="number">1</span>);<span class="comment">//最后一个数字</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(deciNum.length == len)&#123;</span><br><span class="line">        <span class="comment">//需要截取的长度等于当前长度</span></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(deciNum.length &lt; len)&#123;</span><br><span class="line">        <span class="comment">//需要截取的长度大于当前长度 1.3.toFixed(2)</span></span><br><span class="line">        <span class="keyword">return</span> padNum(result)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//需要截取的长度小于当前长度，需要判断最后一位数字</span></span><br><span class="line">    result = intNum + <span class="string">'.'</span> + deciNum.substr(<span class="number">0</span>, len);</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">parseInt</span>(lastNum, <span class="number">10</span>)&gt;=<span class="number">5</span>)&#123;</span><br><span class="line">        <span class="comment">//最后一位数字大于5，要进位</span></span><br><span class="line">        <span class="keyword">var</span> times = <span class="built_in">Math</span>.pow(<span class="number">10</span>, len); <span class="comment">//需要放大的倍数</span></span><br><span class="line">        <span class="keyword">var</span> changedInt = <span class="built_in">Number</span>(result.replace(<span class="string">'.'</span>,<span class="string">''</span>));<span class="comment">//截取后转为整数</span></span><br><span class="line">        changedInt++;<span class="comment">//整数进位</span></span><br><span class="line">        changedInt /= times;<span class="comment">//整数转为小数，注：有可能还是整数</span></span><br><span class="line">        result = padNum(changedInt+<span class="string">''</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">    <span class="comment">//对数字末尾加0</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">padNum</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> dotPos = num.indexOf(<span class="string">'.'</span>);</span><br><span class="line">        <span class="keyword">if</span>(dotPos === <span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="comment">//整数的情况</span></span><br><span class="line">            num += <span class="string">'.'</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">                num += <span class="string">'0'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> num;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//小数的情况</span></span><br><span class="line">            <span class="keyword">var</span> need = len - (num.length - dotPos - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j&lt;need;j++)&#123;</span><br><span class="line">                num += <span class="string">'0'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> num;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-3-ES6"><a href="#5-3-ES6" class="headerlink" title="5.3 ES6"></a>5.3 ES6</h3><p><code>ES6</code>在<code>Number</code>对象上新增了一个极小的常量——<code>Number.EPSILON</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>.EPSILON</span><br><span class="line"><span class="comment">// 2.220446049250313e-16</span></span><br><span class="line"><span class="built_in">Number</span>.EPSILON.toFixed(<span class="number">20</span>)</span><br><span class="line"><span class="comment">// "0.00000000000000022204"</span></span><br></pre></td></tr></table></figure>
+<p>引入一个这么小的量，目的在于为浮点数计算设置一个误差范围，如果误差能够小于<code>Number.EPSILON</code>，我们就可以认为结果是可靠的。</p>
+<p>误差检查函数（出自《<code>ES6</code>标准入门》-阮一峰 p.52）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">withinErrorMargin</span> (<span class="params">left, right</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.abs(left - right) &lt; <span class="built_in">Number</span>.EPSILON</span><br><span class="line">&#125;</span><br><span class="line">withinErrorMargin(<span class="number">0.1</span>+<span class="number">0.2</span>, <span class="number">0.3</span>)</span><br></pre></td></tr></table></figure>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2018/06/13/loss-of-precision/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/javascript/">
+              #javascript
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/双精度浮点数/">
+              #双精度浮点数
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2018/06/04/grammar-in-javascript/" target="_self">JavaScript中的语法</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2018/12/29/introduce-jest/" target="_self">Jest 入门指南</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

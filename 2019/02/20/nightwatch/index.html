@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>Nightwatch入门指南 | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,每天学一点,nightwatch,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>Nightwatch入门指南</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-02-20
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端-每天学一点/">
+            前端,每天学一点
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="nightwatch"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p></p>
+<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h2><h3 id="1-1-安装和初始化"><a href="#1-1-安装和初始化" class="headerlink" title="1.1 安装和初始化"></a>1.1 安装和初始化</h3><p>大多数情况下，为了执行命令或断言，<code>nightwatch</code>需要向<code>WebDriver</code>服务发起至少两次请求，第一次请求通过<code>css</code>选择器或<code>Xpath</code>表达式确定一个元素的位置，第二次请求才会在元素上执行实际的命令或断言。</p>
+<p>安装<code>WebDriver</code>服务可以通过直接下载二进制文件或使用<code>NPM</code>软件包来完成。</p>
+<p>可以选择使用<code>Selenium Standalone Server</code>来管理各种浏览器驱动程序和服务，但从<code>Nightwatch 1.0</code>开始不再需要，也不推荐使用，除非您针对旧浏览器（如<code>Internet Explorer</code>）进行测试。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"webdriver"</span> : &#123;</span><br><span class="line">    <span class="attr">"start_process"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"server_path"</span>: <span class="string">"node_modules/.bin/chromedriver"</span>,</span><br><span class="line">    <span class="attr">"port"</span>: <span class="number">9515</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>官方教程实在是造成了严重的误导，关键是你安装完<code>chromedriver</code>这个包后，<code>node_modules/.bin/chromedriver</code>目录下面确实有一个<code>chromedriver</code>文件，但是我们需要的是<code>chromedriver.exe</code>文件。</p>
+<p>我们可以通过<code>.path</code>属性获取包的安装路径（参考<code>demo-01</code>），也可以手动输入（参考<code>demo-05</code>）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> chromedriver = <span class="built_in">require</span>(<span class="string">'chromedriver'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = (<span class="function"><span class="keyword">function</span>(<span class="params">settings</span>) </span>&#123;</span><br><span class="line">  settings.test_workers = <span class="literal">false</span>;</span><br><span class="line">  settings.webdriver.server_path = chromedriver.path;</span><br><span class="line">  <span class="keyword">return</span> settings;</span><br><span class="line">&#125;)(<span class="built_in">require</span>(<span class="string">'./nightwatch.json'</span>));</span><br></pre></td></tr></table></figure>
+<p><code>chrome</code>端口号<code>9515</code>。</p>
+<p><code>firefox</code>端口号<code>4444</code>，特别说明：<code>firefox</code>需要传入<code>debug</code>参数才能运行，这个坑真是坑死我了😂😂😂。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"webdriver"</span>: &#123;</span><br><span class="line">    <span class="attr">"start_process"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"server_path"</span>: <span class="string">"./node_modules/geckodriver/geckodriver.exe"</span>,</span><br><span class="line">    <span class="attr">"log_path"</span>: <span class="string">"output"</span>,</span><br><span class="line">    <span class="attr">"port"</span>: <span class="number">4444</span>,</span><br><span class="line">    <span class="attr">"cli_args"</span>: [</span><br><span class="line">      <span class="string">"--log"</span>, <span class="string">"debug"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>** <code>window</code>下，<code>firefox</code> 默认寻找路径为<code>C:\Program Files\Mozilla Firefox</code>，如果安装在其它路径，需要指定<code>moz:firefoxOptions</code>属性或者使用<code>--binary PATH</code>命令，告诉<code>geckodriver</code>启动路径。</p>
+<p>当你想要关闭测试时，请记住始终调用<code>.end()</code>方法，以便正确关闭浏览器会话。</p>
+<h3 id="1-2-before-Each-and-after-Each-hooks"><a href="#1-2-before-Each-and-after-Each-hooks" class="headerlink" title="1.2 before[Each] and after[Each] hooks"></a>1.2 before[Each] and after[Each] hooks</h3><p>在测试中，<code>nightwatch</code>提供标准的<code>before/after</code>和<code>beforeEach/afterEach</code>的钩子。</p>
+<p><code>before</code>和<code>after</code>将分别在执行测试套件之前和之后运行，而<code>beforeEach</code>和<code>afterEach</code>分别在每个测试用例之前和之后运行（参见demo4-hooks）。</p>
+<h3 id="1-3-Asynchronous-hooks"><a href="#1-3-Asynchronous-hooks" class="headerlink" title="1.3 Asynchronous hooks"></a>1.3 Asynchronous hooks</h3><p>所有<code>before[Each] and after[Each]</code>都可以执行异步操作，只需要将回调函数作为第二个参数传入。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  beforeEach: <span class="function"><span class="keyword">function</span>(<span class="params">browser, done</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 执行一个异步操作</span></span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 完成异步任务</span></span><br><span class="line">      done();</span><br><span class="line">    &#125;, <span class="number">100</span>);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  afterEach: <span class="function"><span class="keyword">function</span>(<span class="params">browser, done</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 执行一个异步操作</span></span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 完成异步任务</span></span><br><span class="line">      done();</span><br><span class="line">    &#125;, <span class="number">200</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>注意：当异步操作完成后，回调函数<code>done</code>必需作为最后一个步骤被调用，否则会导致超时错误。默认的超时时间是10s，可以通过指定<code>asyncHookTimeout</code>属性修改默认超时时间。</p>
+<h2 id="2-运行测试"><a href="#2-运行测试" class="headerlink" title="2. 运行测试"></a>2. 运行测试</h2><p><code>nightwatch</code>提供命令行的方式来运行测试和生成测试报告，同时提供多种配置选项。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nightwatch [<span class="built_in">source</span>] [options]</span><br></pre></td></tr></table></figure>
+<h3 id="2-1-指定测试实例source"><a href="#2-1-指定测试实例source" class="headerlink" title="2.1 指定测试实例source"></a>2.1 指定测试实例source</h3><p>除了在<code>nightwatch.json</code>文件中配置<code>src_folders</code>来指定需要进行测试的实例，同样可以在命令行中直接传入测试实例。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 测试单个文件</span><br><span class="line">nightwatch tests/one/firstTest.js</span><br><span class="line"></span><br><span class="line">// 独立的多个测试</span><br><span class="line">nightwatch tests/one/firstTest.js tests/secondTest.js</span><br><span class="line"></span><br><span class="line">// 独立的测试和整个文件夹</span><br><span class="line">nightwatch tests/one/test.js tests/utils</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-命令行选项options"><a href="#2-2-命令行选项options" class="headerlink" title="2.2 命令行选项options"></a>2.2 命令行选项options</h3><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>简写</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>–config</td>
+<td>-c</td>
+<td>./nightwatch.json</td>
+<td>指定启动nightwatch的配置文件</td>
+</tr>
+<tr>
+<td>–output</td>
+<td>-o</td>
+<td>tests_output</td>
+<td>指定测试报告的输出路径</td>
+</tr>
+<tr>
+<td>–reporter</td>
+<td>-r</td>
+<td>junit</td>
+<td>预定义报告者的名称或要使用的自定义报告文件的路径。</td>
+</tr>
+<tr>
+<td>–env</td>
+<td>-e</td>
+<td>default</td>
+<td>指定nightwatch的测试环境</td>
+</tr>
+<tr>
+<td>–verbose</td>
+<td></td>
+<td></td>
+<td>在会话期间显示扩展的selenium命令日志记录</td>
+</tr>
+<tr>
+<td>–version</td>
+<td>-v</td>
+<td></td>
+<td>显示版本号</td>
+</tr>
+<tr>
+<td>–test</td>
+<td>-t</td>
+<td></td>
+<td>指定测试实例</td>
+</tr>
+<tr>
+<td>–testcase</td>
+<td></td>
+<td></td>
+<td>只与–test一起使用</td>
+</tr>
+<tr>
+<td>–group</td>
+<td>-g</td>
+<td></td>
+<td>指定测试组</td>
+</tr>
+<tr>
+<td>–skipgroup</td>
+<td>-s</td>
+<td></td>
+<td>指定需要跳过的测试组</td>
+</tr>
+<tr>
+<td>–filter</td>
+<td>-f</td>
+<td></td>
+<td>进行过滤操作</td>
+</tr>
+<tr>
+<td>–tag</td>
+<td>-a</td>
+<td></td>
+<td>通过标签进行过滤</td>
+</tr>
+<tr>
+<td>–skiptags</td>
+<td></td>
+<td></td>
+<td>跳过指定的标签</td>
+</tr>
+<tr>
+<td>–retries</td>
+<td></td>
+<td></td>
+<td>重试失败或错误的测试用例达到指定的次数。</td>
+</tr>
+<tr>
+<td>–suiteRetries</td>
+<td></td>
+<td></td>
+<td>重试失败或错误的测试套件（测试模块）达到指定的次数。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-3-Test-Environments"><a href="#2-3-Test-Environments" class="headerlink" title="2.3 Test Environments"></a>2.3 Test Environments</h3><p>你可以定义测试设置的多个环境，以便覆盖每个环境的特定值。</p>
+<p>默认<code>default</code>环境是必需的。所有其他环境都是从默认环境继承的，可以根据需要覆盖设置。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"test_settings"</span> : &#123;</span><br><span class="line">    <span class="attr">"default"</span> : &#123;</span><br><span class="line">      <span class="attr">"launch_url"</span> : <span class="string">"http://localhost"</span>,</span><br><span class="line">      <span class="attr">"globals"</span> : &#123;</span><br><span class="line">        <span class="attr">"myGlobalVar"</span> : <span class="string">"some value"</span>,</span><br><span class="line">        <span class="attr">"otherGlobal"</span> : <span class="string">"some other value"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">"integration"</span> : &#123;</span><br><span class="line">      <span class="attr">"launch_url"</span> : <span class="string">"http://staging.host"</span>,</span><br><span class="line">      <span class="attr">"globals"</span> : &#123;</span><br><span class="line">        <span class="attr">"myGlobalVar"</span> : <span class="string">"other value"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过指定<code>--env</code>参数，我们可以选取特定的测试环（参见<code>demo5-env</code>）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nightwatch --env integration</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-Test-Tags"><a href="#2-4-Test-Tags" class="headerlink" title="2.4 Test Tags"></a>2.4 Test Tags</h3><p>我们还可以选择性地将测试目标定位为基于标签运行，以便测试可以属于多个标签。</p>
+<p>标签可以通过将<code>@tags</code>属性添加到测试模块来完成：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="string">'@tags'</span>: [<span class="string">'login'</span>, <span class="string">'sanity'</span>],</span><br><span class="line">  <span class="string">'demo login test'</span>: <span class="function"><span class="keyword">function</span> (<span class="params">browser</span>) </span>&#123;</span><br><span class="line">     <span class="comment">// test code</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>通过命令行对测试标签进行控制：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 选择特定标签的测试模块</span><br><span class="line">nightwatch --tag login</span><br><span class="line"></span><br><span class="line">// 选择多个标签的测试模块</span><br><span class="line">nightwatch --tag login --tag something_else</span><br><span class="line"></span><br><span class="line">// 跳过指定标签</span><br><span class="line">nightwatch --skiptags login</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-Disabling-Tests"><a href="#2-5-Disabling-Tests" class="headerlink" title="2.5 Disabling Tests"></a>2.5 Disabling Tests</h3><p>要阻止测试模块运行，只需将该模块中的<code>disabled</code>属性设置为<code>true</code>，如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="string">'@disabled'</span>: <span class="literal">true</span>, <span class="comment">// 这会阻止测试模块运行</span></span><br><span class="line"></span><br><span class="line">  <span class="string">'sample test'</span>: <span class="function"><span class="keyword">function</span> (<span class="params">browser</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// test code</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="3-Page-Objects"><a href="#3-Page-Objects" class="headerlink" title="3. Page Objects"></a>3. Page Objects</h2><p>待续… </p>
+<p><a href="https://blog.csdn.net/qq_25324335/article/details/82052509" target="_blank" rel="noopener">https://blog.csdn.net/qq_25324335/article/details/82052509</a></p>
+<h2 id="4-更多"><a href="#4-更多" class="headerlink" title="4. 更多"></a>4. 更多</h2><p>本文demo源码地址：<a href="https://github.com/Nirvana-cn/Learning-nightwatch" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2019/02/20/nightwatch/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/nightwatch/">
+              #nightwatch
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/02/14/webpack-code-split/" target="_self">Webapck代码分离</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/04/12/node-proxy/" target="_self">前端跨域快到碗里来</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

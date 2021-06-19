@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>JavaScript中的小技巧和注意点（一） | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,每天学一点,javascript,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>JavaScript中的小技巧和注意点（一）</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2017-07-17
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端-每天学一点/">
+            前端,每天学一点
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="tips-in-javascript-1"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p></p>
+<h2 id="1-检查变量是否存在"><a href="#1-检查变量是否存在" class="headerlink" title="1.检查变量是否存在"></a>1.检查变量是否存在</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = <span class="string">""</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> somevar !== <span class="string">"undefined"</span>)&#123;</span><br><span class="line">    result = <span class="string">"yes"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这种情况下，<code>typeof</code> 返回的是一个字符串（先执行 <code>typeof</code> 再比较），这样就可以与字符串<code>&quot;undefined&quot;</code>进行直接比对，如果 <code>somevar</code> 这个变量存在，则执行<code>if</code>条件语句。实际上是在用 <code>typeof</code> 测试一个变量是否已经被初始化（或者说测试变量值是否为 <code>undefined</code> ）</p>
+<h2 id="2-parseInt"><a href="#2-parseInt" class="headerlink" title="2.parseInt()"></a>2.parseInt()</h2><p><code>parseInt()</code>会试图将其收到的任何输入值（通常是字符串）转换成整数类型输出。如果转换失败就返回<code>NaN</code>。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="string">'123'</span>);</span><br><span class="line"><span class="comment">// 123</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'1abc123'</span>);</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'abc123'</span>);</span><br><span class="line"><span class="comment">// NaN</span></span><br></pre></td></tr></table></figure></p>
+<p>除此之外，该函数还有个可选的第二参数：基数（<code>radix</code>），它负责设定函数所期望的数字类型——十进制、十六进制、二进制。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="string">'FF'</span>,<span class="number">10</span>);</span><br><span class="line"><span class="comment">// NaN</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'FF'</span>,<span class="number">16</span>);</span><br><span class="line"><span class="comment">// 255</span></span><br></pre></td></tr></table></figure></p>
+<p>在调用<code>parseInt</code>时没有指定第二参数，函数会将其默认为十进制，但有两种情况例外：<br>（1）如果首参数字符串是0x开头，第二参数就会被默认指定为16；<br>（2）如果首参数以0开头，第二参数就会被默认指定为8。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="string">'377'</span>);</span><br><span class="line"><span class="comment">// 377</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'0377'</span>);</span><br><span class="line"><span class="comment">// 255</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'0x377'</span>);</span><br><span class="line"><span class="comment">// 887</span></span><br></pre></td></tr></table></figure></p>
+<p>当然，为了保证程序的正确运行，明确指定<code>radix</code>值总是最安全的。值得一提的是，从<code>ES5</code>开始，在严格模式下，八进制数值就不再允许使用前缀0表示；<code>ES6</code>进一步明确，要使用前缀0o表示，并且将全局方法 <code>parseInt()</code>和 <code>parseFloat()</code>移植到了<code>Number</code>对象上，行为完全保持不变。当然在非严格模式下，前缀 0o 和 0 均可以表示八进制。</p>
+<h2 id="3-能重写自己的函数"><a href="#3-能重写自己的函数" class="headerlink" title="3.能重写自己的函数"></a>3.能重写自己的函数</h2><p>由于一个函数可以返回另一个函数，所以我们可以让函数从内部重写自己，比如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    alert(<span class="string">'A!'</span>);</span><br><span class="line">    a=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        alert(<span class="string">'B!'</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这项技术对于某些浏览器相关的操作会相当有用。因为在不同浏览器中，实现相同任务的技术可能是不同的，我们都知道浏览器的特性不可能因为函数调用而发生任何改变，因此，最好的选择就是让函数根据其当前所在的浏览器来重新定义自己，即”浏览器兼容性探测”技术。</p>
+<h2 id="4-函数对象的长度"><a href="#4-函数对象的长度" class="headerlink" title="4.函数对象的长度"></a>4.函数对象的长度</h2><p>函数对象中也有一个<code>length</code>属性，用于记录该函数声明时所决定的参数数量（<code>ES6</code>中函数参数可以指定默认值，指定了默认值以后函数<code>length</code>属性将返回没有指定默认值的参数的个数）。</p>
+<p><code>arguments.length</code>用于表示函数实际接受到的参数的个数，可用于模拟多态。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mufun</span>(<span class="params">a,b,c</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">arguments</span>.length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myfun.length</span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">myfun(<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="comment">// 2</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="5-call-和apply"><a href="#5-call-和apply" class="headerlink" title="5.call()和apply()"></a>5.call()和apply()</h1><p>在<code>JavaScript</code>中，每个函数都有<code>call()</code>和<code>apply()</code>两个方法，它们可以让一个对象去”借用”另一个对象的方法，并为己所用。这也是一种非常简单而实用的代码重用。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> some_obj = &#123;</span><br><span class="line">    name:<span class="string">'Jack'</span>,</span><br><span class="line">    say:<span class="function"><span class="keyword">function</span>(<span class="params">who</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'Hi '</span> + who + <span class="string">', I am '</span> + <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> my_obj = &#123;</span><br><span class="line">    name:<span class="string">'Rose'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">some_obj.say.call(my_obj,<span class="string">'Obama'</span>)</span><br><span class="line"><span class="comment">// "Hi Obama, I am Rose"</span></span><br></pre></td></tr></table></figure></p>
+<p>当调用<code>say()</code>函数的对象方法<code>call()</code>时，<code>this</code>自动指向传入的对象。另外，如果没有将对象传递给<code>call()</code>的首参数，或者传递给它的是<code>null</code>，它的调用对象将会被默认为全局对象，即<code>this</code>指向的是全局对象。</p>
+<p><code>apply()</code>的工作方式与<code>call()</code>基本相同，唯一的不同之处在于参数的传递形式，<code>apply()</code>所需要的参数都是通过一个数组来传递。所以下面两行代码的作用是等效的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">some_obj.say.call(my_obj,<span class="string">'Obama'</span>);</span><br><span class="line"></span><br><span class="line">some_obj.say.apply(my_obj,[<span class="string">'Obama'</span>]);</span><br></pre></td></tr></table></figure></p>
+<p><code>arguments</code>看上去像是一个数组，但它实际上是一个类数组对象，它和数组相似是因为其中也包含了索引元素和<code>length</code>属性。但相似之处也就到此为止了，因为<code>arguments</code>不提供一些像<code>sort()</code>、<code>slice()</code>这样的数组方法。但我们可以通过<code>call()</code>调用数组的各种方法，而不用重新编写对应的代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> args = [].slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    <span class="keyword">return</span> args.reverse();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>);</span><br><span class="line"><span class="comment">// [4,3,2,1]</span></span><br></pre></td></tr></table></figure></p>
+<p>这里的做法是新建一个空数组 <code>[ ]</code> ，再使用它的<code>slice</code>方法，当然，也可以通过<code>Array.prototype.slice</code>来调用同一个函数。</p>
+<p><code>call()</code>和<code>apply()</code>的另一个用法就是推断对象类型。</p>
+<p>在<code>JS</code>中是无法使用 <code>typeof</code> 区分对象和数组的，要想区分数组和对象，方法之一就是使用<code>Object</code>对象的<code>toString()</code>方法，这个方法会返回所创建对象的内部类名。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype.toString.call(&#123;&#125;);</span><br><span class="line"><span class="comment">// "[Object Object]"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString,call([]);</span><br><span class="line"><span class="comment">// "[Object Array]"</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.prototype.toString.call(<span class="built_in">arguments</span>);</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="comment">// "[Object Arguments]"</span></span><br></pre></td></tr></table></figure></p>
+<p>在这里，<code>toString()</code>方法必须要来自于<code>Object</code>构造器的<code>prototype</code>属性。直接调用<code>Array</code>的<code>toString()</code>方法是不行的，因为在<code>Array</code>对象中，这个方法已经出于其他目的被重写了。</p>
+<h2 id="6-枚举属性"><a href="#6-枚举属性" class="headerlink" title="6.枚举属性"></a>6.枚举属性</h2><p>如果想获得某个对象所有属性的列表，我们可以使用<code>for-in</code>循环，但并不是所有的属性都会在<code>for-in</code>循环中显示。例如数组的<code>length</code>属性和<code>constructor</code>属性就不会被显示。那些会显示的属性被称为可枚举的，我们可以通过各个对象所提供的<code>propertyIsEnumerable()</code>方法来判断对象的某个属性是否可枚举。</p>
+<p>在<code>for-in</code>循环中，原型链中的各个原型属性也会被显示出来，当然前提是它们是可枚举的。我们可以通过对象的<code>hasOwnProperty()</code>方法来判断一个属性是对象自身属性还是原型属性。对于所有的原型属性，<code>propertyIsEnumerable()</code>都会返回<code>false</code>，包括那些在<code>for-in</code>循环中可枚举的属性。如果<code>propertyIsEnumerable()</code>的调用是来自原型链上的某个对象，那么该对象的属性是可枚举的。</p>
+<p>同时，在<code>JavaScript</code>中使用<code>JSON</code>对对象进行序列化时，<code>JSON</code>不会转换不可枚举的属性，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj1=&#123;<span class="attr">a</span>:<span class="number">1</span>,<span class="attr">b</span>:<span class="number">2</span>&#125;;</span><br><span class="line"><span class="built_in">JSON</span>.stringify(obj1);</span><br><span class="line"><span class="comment">// "&#123;"a":1,"b":2&#125;"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj2=&#123;<span class="attr">a</span>:<span class="number">1</span>&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj2,<span class="string">'b'</span>,&#123;<span class="attr">value</span>:<span class="number">2</span>,<span class="attr">configurable</span>:<span class="literal">true</span>,<span class="attr">writable</span>:<span class="literal">true</span>,<span class="attr">enumerable</span>:<span class="literal">false</span>&#125;);</span><br><span class="line"><span class="built_in">JSON</span>.stringify(obj2)</span><br><span class="line"><span class="comment">// "&#123;"a":1&#125;"</span></span><br></pre></td></tr></table></figure>
+<p>这也就是为什么对数组进行<code>JSON</code>字符串化时不会出现<code>length</code>属性的原因。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="built_in">JSON</span>.stringify(arr);</span><br><span class="line"><span class="comment">// "[1,2,3]"</span></span><br></pre></td></tr></table></figure>
+<h2 id="7-原型陷阱"><a href="#7-原型陷阱" class="headerlink" title="7.原型陷阱"></a>7.原型陷阱</h2><p>在处理原型问题时，需要特别注意以下两种行为</p>
+<p>（1）对原型对象执行完全替换时，可能会触发原型链中某种异常；</p>
+<p>（2）<code>prototype.constructor</code>属性是不可靠的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dog</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.tail=<span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> benji = <span class="keyword">new</span> Dog();</span><br><span class="line"></span><br><span class="line">Dog.prototype.say=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="string">'Woof!'</span>;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line">benji.say()</span><br><span class="line"><span class="comment">// "Woof!"</span></span><br><span class="line"></span><br><span class="line">benji.constructor === Dog</span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"><span class="comment">//用一个自定义的新对象完全覆盖掉原有的原型对象</span></span><br><span class="line">Dog.prototype = &#123;</span><br><span class="line">   paws:<span class="number">4</span>,</span><br><span class="line">   hair:<span class="literal">true</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typeof</span> benji.paws</span><br><span class="line"><span class="comment">// "undefined"</span></span><br><span class="line"></span><br><span class="line">benji.say()</span><br><span class="line"><span class="comment">// "Woof!"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> benji.__proto__.say</span><br><span class="line"><span class="comment">// "function"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> benji.__proto__.paws</span><br><span class="line"><span class="comment">// "undefined"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> lucy = <span class="keyword">new</span> Dog();</span><br><span class="line">lucy.say()</span><br><span class="line"><span class="comment">// TypeError:lucy.say is not a function</span></span><br><span class="line"></span><br><span class="line">lucy.paws</span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="keyword">typeof</span> lucy.__proto__.say</span><br><span class="line"><span class="comment">// "undefined"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> lucy.__proto__.paws</span><br><span class="line"><span class="comment">// "number"</span></span><br><span class="line"></span><br><span class="line">lucy.constructor</span><br><span class="line"><span class="comment">// function Object()&#123;[native code]&#125;</span></span><br><span class="line"></span><br><span class="line">benji.constructor</span><br><span class="line"><span class="comment">// function Dog()&#123;this.tail=true;&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>事实证明，这会使原有对象不能访问原型的新增属性，它们依然可以通过<code>__proto__</code>与原有的原型对象保持联系。而之后创建的所有对象使用的都是被更新后的<code>prototype</code>对象，并且<code>__proto__</code>也指向了新的<code>prototype</code>对象。但这时候，新对象的<code>constructor</code>属性就不能再保持正确了，原本应该是<code>Dog()</code>的引用却指向了<code>Object()</code>。所以当我们重写某对象的<code>prototype</code>时，需要重置相应的<code>constructor</code>属性。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Dog.prototype.constructor = Dog</span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"><span class="keyword">new</span> Dog().constructor === Dog</span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">lucy.constructor</span><br><span class="line"><span class="comment">// function Dog() &#123;</span></span><br><span class="line"><span class="comment">//     this.tail=true;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure></p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2017/07/17/tips-in-javascript-1/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/javascript/">
+              #javascript
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2017/07/16/judge-an-array-in-javascript/" target="_self">JavaScript中判断一个对象是不是数组</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2017/08/02/pm2.5/" target="_self">空气中PM2.5问题的建模和分析</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

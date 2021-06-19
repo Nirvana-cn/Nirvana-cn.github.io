@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>Flutter Widget — Part 1 | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Flutter指南,flutter,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>Flutter Widget — Part 1</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-11-05
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/Flutter指南/">
+            Flutter指南
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="flutter-widgets-one"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>Flutter中有许多的Widget，有些很常用，比如Container、Row、Column；而有些就非常生僻，比如DraggableScrollableSheet 、ColorFiltered、ToggleButtons。因此在这里我们对Flutter中的一些Widget进行整理，介绍相关的用法和效果。</p>
+<p>本文是按照Flutter官方的视频教程<a href="https://www.youtube.com/playlist?list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG" target="_blank" rel="noopener">Flutter Widget of the Week</a>来介绍Flutter中的Widget。同时每一个Widget都编写了简单的示例，可以在<a href="https://github.com/Nirvana-cn/Flutter-widget-weekly" target="_blank" rel="noopener">Github</a>上获取示例源码。最后文章部分内容摘自wendux的《Flutter 实战》，在此对作者表示感谢。</p>
+<h2 id="2-SafeArea"><a href="#2-SafeArea" class="headerlink" title="2. SafeArea"></a>2. SafeArea</h2><p>在当前手机屏幕不再是规整的矩形，比如iPhone X的刘海屏和圆角边框，这种不规则的造型可能会影响我们页面内容的显示。</p>
+<p>SafeArea通过MediaQuery方法对我们的手机屏幕尺寸进行检查，避免需要显示的内容被边框遮挡。如下图所示，左图中部分背景色被刘海屏所遮挡，右图应用SafeArea后，顶部的刘海部分没有作为有效的渲染区域。</p>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/SafeArea.jpg" alt="safeArea"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SafeArea(</span><br><span class="line">  child: SizedBox.expand(</span><br><span class="line">    child: Container(</span><br><span class="line">      color: Colors.red,</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>我们甚至可以指定需要安全显示内容的方向。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SafeArea(</span><br><span class="line">  child: SizedBox.expand(</span><br><span class="line">    child: Container(</span><br><span class="line">      color: Colors.red,</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">  top: true,</span><br><span class="line">  bottom: true,</span><br><span class="line">  left: false,</span><br><span class="line">  right: false,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="3-Expanded"><a href="#3-Expanded" class="headerlink" title="3. Expanded"></a>3. Expanded</h2><p>Expanded组件必须作为Column、Row、Flex的子元素使用，当容易具有额外空间时，Expanded组件可以让子元素自动填充剩余的空间。</p>
+<p>我们也可以指定flex属性，对剩余未使用的空间进行按比例分配。flex属性的值是一个整数。</p>
+<p>** Expanded会”强制”子元素填充父元素的剩余空间，这会造成子元素的布局约束失效。与之相对的是Align（详见第26小节），Align会继续让它的子元素保持自己的属性（Thanks, Align 😘）。</p>
+<h2 id="4-Wrap"><a href="#4-Wrap" class="headerlink" title="4. Wrap"></a>4. Wrap</h2><p>我们通常会使用row或column来进行布局，这非常方便，但是有些时候布局可能会超出尺寸。</p>
+<p>wrap会像row和column一样排列children，但是当children超出容器时（如下图所示），wrap会进行自动换行来保证元素没有超出容器大小。</p>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/flex_out.png" alt="flex-out"></p>
+<p>使用wrap后，超出的部分会自动进行换行，就没有溢出边框的风险了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Wrap(</span><br><span class="line">  direction: Axis.horizontal,</span><br><span class="line">  spacing: 10,</span><br><span class="line">  runSpacing: 0,</span><br><span class="line">  children: &lt;Widget&gt;[</span><br><span class="line">      OutlineButton(</span><br><span class="line">        child: Text(&quot;A&quot;),</span><br><span class="line">      ),            </span><br><span class="line">      OutlineButton(</span><br><span class="line">        child: Text(&quot;B&quot;),</span><br><span class="line">      ),</span><br><span class="line">      OutlineButton(</span><br><span class="line">        child: Text(&quot;C&quot;),</span><br><span class="line">      ),</span><br><span class="line">      OutlineButton(</span><br><span class="line">        child: Text(&quot;D&quot;),</span><br><span class="line">      ),     </span><br><span class="line">      OutlineButton(</span><br><span class="line">        child: Text(&quot;E&quot;),</span><br><span class="line">      ),     </span><br><span class="line">    ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/wrap.png" alt="wrap"></p>
+<p>常用的wrap参数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Wrap(&#123;</span><br><span class="line">  ...</span><br><span class="line">  this.direction = Axis.horizontal,</span><br><span class="line">  this.alignment = WrapAlignment.start, // 子元素在主轴上的对齐方式</span><br><span class="line">  this.runAlignment = WrapAlignment.start, // 各行（列）在交叉轴上的对齐方式</span><br><span class="line">  this.spacing = 0.0, // 主轴上子元素间隔</span><br><span class="line">  this.runSpacing = 0.0, // 交叉轴上各行（列）间隔</span><br><span class="line">  this.crossAxisAlignment = WrapCrossAlignment.start, // 当同一行（列）的子元素宽高不一致时，子元素之间如何对齐</span><br><span class="line">  this.textDirection,</span><br><span class="line">  this.verticalDirection = VerticalDirection.down, // 子元素排列的方式，默认是自上而下，值为 up 时自下而上</span><br><span class="line">  List&lt;Widget&gt; children = const &lt;Widget&gt;[],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>可以认为Wrap和Flex（包括Row和Column）除了超出显示范围后Wrap会折行外，其它行为基本相同。</p>
+<p>许多开发者可能会误把crossAxisAlignment作为交叉轴上的对齐方式，这是不正确的，定义wrap元素在交叉轴上的属性实际上是runAlignment，crossAxisAlignment被用来确定子元素的对齐方式。</p>
+<p>当runAlignment: WrapAlignment.start 时</p>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/runAlignment_center.png" alt="竖直居中"></p>
+<p>当runAlignment: WrapAlignment.spaceEvenly 时</p>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/runAlignment_spaceEvenly.png" alt="均匀分配"></p>
+<h2 id="5-AnimatedContainer"><a href="#5-AnimatedContainer" class="headerlink" title="5. AnimatedContainer"></a>5. AnimatedContainer</h2><p>顾名思义，AnimatedContainer提供了隐含的动画效果。这些动画效果可用于尺寸、颜色、形状、阴影、变形等等…</p>
+<p>AnimatedContainer的属性与Container（详见第55小节）基本一致，不同的地方在于可以通过Duration duration属性控制动画的过渡时长。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Color _color = Colors.red;</span><br><span class="line">double _height = 200;</span><br><span class="line"></span><br><span class="line">AnimatedContainer(</span><br><span class="line">  width: 200,</span><br><span class="line">  height: _height,</span><br><span class="line">  color: _color,</span><br><span class="line">  duration: Duration(seconds: 2),</span><br><span class="line">  child: FlatButton(</span><br><span class="line">    child: Text(</span><br><span class="line">      &quot;Click me&quot;,</span><br><span class="line">      style: TextStyle(</span><br><span class="line">        color: Colors.white,</span><br><span class="line">      ),</span><br><span class="line">    ),</span><br><span class="line">    onPressed: () &#123;</span><br><span class="line">      setState(() &#123;</span><br><span class="line">        _height = 100;</span><br><span class="line">        _color = Colors.green;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="6-Opacity"><a href="#6-Opacity" class="headerlink" title="6. Opacity"></a>6. Opacity</h2><p>当你希望一个元素不可见而依然占据布局空间时，透明度Opacity就派上用场了。使用起来非常简单，只需要将元素用Opacity包裹，将opacity属性设置为0，就可以隐藏该元素了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Opacity(</span><br><span class="line">  opacity: 0.0,</span><br><span class="line">  child: Container(</span><br><span class="line">    margin: EdgeInsets.only(top: 100),</span><br><span class="line">    width: 100,</span><br><span class="line">    height: 100,</span><br><span class="line">    color: Colors.red,</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>与此同时，Flutter还提供了AnimatedOpacity（详见第51小节）组件，当透明度改变时会产生一个过渡的动画效果。用法与第5小节中的AnimatedContainer一致，通过duration属性设置过渡动画的时长。</p>
+<p>** Offstage同样可以使得元素不可见，同时元素也不再占据布局空间。类似于前端布局中display: none。</p>
+<h2 id="7-FutureBuilder"><a href="#7-FutureBuilder" class="headerlink" title="7. FutureBuilder"></a>7. FutureBuilder</h2><p>很多时候我们会依赖一些异步数据来动态更新UI，比如在打开一个页面时我们需要先从互联网上获取数据，在获取数据的过程中我们显示一个加载框，等获取到数据时我们再渲染页面。因此Flutter专门提供了FutureBuilder和StreamBuilder（详见第15小节）两个组件来快速实现这种功能。</p>
+<p>FutureBuilder的构造函数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const FutureBuilder(&#123;</span><br><span class="line">  Key key,</span><br><span class="line">  this.future,</span><br><span class="line">  this.initialData,</span><br><span class="line">  @required this.builder,</span><br><span class="line">&#125;) : assert(builder != null),</span><br><span class="line">super(key: key);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>future: 参数类型为Future\<t\>，泛型与snapshot.data相对应。这个参数建议在 initState()里初始化，切记不要在 build 方法里初始化，这样的话会一直rebuild；</t\></li>
+<li>initialData: 初始化的数据。当future尚未完成时，通过该属性可以初始化snapshot.data的值。一旦future完成，initialData将不起作用;</li>
+<li>builder: Widget构建器；该构建器会在future执行的不同阶段被多次调用。</li>
+</ul>
+<p>builder构建器签名如下：</p>
+<blockquote>
+<p>Function (BuildContext context, AsyncSnapshot snapshot)</p>
+</blockquote>
+<p>snapshot会包含当前异步任务的状态信息及结果信息 ，比如我们可以通过snapshot.connectionState获取异步任务的状态信息（FutureBuilder没有ConnectionState.active状态）、通过snapshot.hasError判断异步任务是否有错误等等。</p>
+<p>现在我们使用FutureBuilder模拟一个异步过程，间隔3秒后返回一个字符串。代码和实现效果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;String&gt; _future;</span><br><span class="line"></span><br><span class="line">Future&lt;String&gt; mockNetworkData() async &#123;</span><br><span class="line">  return Future.delayed(Duration(seconds: 2), () =&gt; &apos;我是异步获取的数据。&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@override</span><br><span class="line">Widget build(BuildContext context) &#123;</span><br><span class="line">  return Scaffold(</span><br><span class="line">    appBar: AppBar(</span><br><span class="line">      title: Text(widget.title),</span><br><span class="line">    ),</span><br><span class="line">    body: Center(</span><br><span class="line">      child: FutureBuilder(</span><br><span class="line">        future: _future,</span><br><span class="line">        initialData: &quot;Initial data&quot;,</span><br><span class="line">        builder: (context, snapshot) &#123;</span><br><span class="line">          switch (snapshot.connectionState) &#123;</span><br><span class="line">            case ConnectionState.none:</span><br><span class="line">              return Center(</span><br><span class="line">                child: Text(&apos;None: $&#123;snapshot.data&#125;&apos;),</span><br><span class="line">              );</span><br><span class="line">            case ConnectionState.active:</span><br><span class="line">            case ConnectionState.waiting:</span><br><span class="line">              return Center(</span><br><span class="line">                child: Column(</span><br><span class="line">                  mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">                  children: &lt;Widget&gt;[</span><br><span class="line">                    CircularProgressIndicator(),</span><br><span class="line">                    Text(&quot; Waiting: $&#123;snapshot.data&#125;&quot;),</span><br><span class="line">                  ],</span><br><span class="line">                ),</span><br><span class="line">              );</span><br><span class="line">            case ConnectionState.done:</span><br><span class="line">              if (snapshot.hasError) &#123;</span><br><span class="line">                return Center(</span><br><span class="line">                  child: Text(&apos;异步请求出错&apos;),</span><br><span class="line">                );</span><br><span class="line">              &#125;</span><br><span class="line">              return Center(</span><br><span class="line">                child: Text(&quot;Done: $&#123;snapshot.data&#125;&quot;),</span><br><span class="line">              );</span><br><span class="line">          &#125;</span><br><span class="line">          return null;</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">    ),</span><br><span class="line">    floatingActionButton: FloatingActionButton(</span><br><span class="line">      onPressed: () &#123;</span><br><span class="line">        setState(() &#123;</span><br><span class="line">          _future = mockNetworkData();</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;,</span><br><span class="line">      child: Icon(Icons.add),</span><br><span class="line">    ),</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>Tips: future不要在 build 方法里初始化，这样的话会一直rebuild？</p>
+<p>为什么呢，我们查看 didUpdateWidget 源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@override</span><br><span class="line">void didUpdateWidget(FutureBuilder&lt;T&gt; oldWidget) &#123;</span><br><span class="line">  super.didUpdateWidget(oldWidget);</span><br><span class="line">  if (oldWidget.future != widget.future) &#123;</span><br><span class="line">    if (_activeCallbackIdentity != null) &#123;</span><br><span class="line">      _unsubscribe();</span><br><span class="line">      _snapshot = _snapshot.inState(ConnectionState.none);</span><br><span class="line">    &#125;</span><br><span class="line">    _subscribe();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出来这里是判断了 future 这个字段，所以我们一定不要在 build 方法里初始化 future 参数！</p>
+<hr>
+<h2 id="8-FadeTransition"><a href="#8-FadeTransition" class="headerlink" title="8. FadeTransition"></a>8. FadeTransition</h2><p>当组件透明度发生变化时，FadeTransition可以为该组件增加一个淡入淡出的动画效果。</p>
+<p>FadeTransition只针对单个组件，如果你希望切换两个子组件时增加一些淡入淡出的效果，请参见AnimatedCrossFade（详见第60小节）。</p>
+<p>FadeTransition的构造函数如下，我们需要为opacity提供一个Animation<double>类型的值，而不仅仅是double。</double></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FadeTransition(&#123;</span><br><span class="line">  Key key,</span><br><span class="line">  @required Animation&lt;double&gt; opacity,</span><br><span class="line">  bool alwaysIncludeSemantics,</span><br><span class="line">  Widget child,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>Flutter中的动画系统基于Animation对象的，widget可以在build函数中读取Animation对象的当前值， 并且可以监听动画的状态改变（更多内容需要自行阅读官方教程 <a href="https://flutterchina.club/tutorials/animation/" target="_blank" rel="noopener">Flutter中的动画</a>）。</p>
+<p>Tween是一种补间动画。在补间动画中，定义了开始点和结束点、时间线以及定义转换时间和速度的曲线。然后由框架计算如何从开始点过渡到结束点。简单来说，就是向开始点和结束点之间插入一系列连续的值，使得转换效果更为顺畅。</p>
+<p>Flutter中的Animation对象是一个在一段时间内依次生成一个区间之间值的类。Animation对象的输出可以是线性的、曲线的、一个步进函数或者任何其他可以设计的映射。根据Animation对象的控制方式，动画可以反向运行，甚至可以在中间切换方向。</p>
+<p>Animation还可以生成除double之外的其他类型值，如：Animation\<color\> 或 Animation\<size\>。Animation对象有状态。可以通过访问其value属性获取动画的当前值。</size\></color\></p>
+<p>一个Animation对象可以拥有Listeners和StatusListeners监听器，可以用addListener()和addStatusListener()来添加。 只要动画的值发生变化，就会调用监听器。一个Listener最常见的行为是调用setState()来触发UI重建。动画开始、结束、向前移动或向后移动（如AnimationStatus所定义）时会调用StatusListener。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">AnimationController _controller;</span><br><span class="line">Animation&lt;double&gt; _animation;</span><br><span class="line"></span><br><span class="line">@override</span><br><span class="line">void initState() &#123;</span><br><span class="line">  super.initState();</span><br><span class="line">  _controller = AnimationController(</span><br><span class="line">    vsync: this,</span><br><span class="line">    duration: Duration(seconds: 2),</span><br><span class="line">  );</span><br><span class="line">  _animation = Tween(begin: 0.2, end: 1.0).animate(_controller)</span><br><span class="line">    ..addListener(() &#123;</span><br><span class="line">      if (_animation.value == 1) &#123;</span><br><span class="line">        _controller.reverse(); // 结束时反向运行</span><br><span class="line">      &#125;</span><br><span class="line">      if (_animation.value == 0.2) &#123;</span><br><span class="line">        _controller.forward(); // 回到开始状态时，重新开始</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CurvedAnimation则可以将动画过程定义为一个非线性曲线。Curves类定义了许多常用的曲线，也可以创建自己的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">AnimationController _controller;</span><br><span class="line">Animation&lt;double&gt; _animation;</span><br><span class="line"></span><br><span class="line">@override</span><br><span class="line">void initState() &#123;</span><br><span class="line">  super.initState();</span><br><span class="line">  _controller = AnimationController(</span><br><span class="line">    vsync: this,</span><br><span class="line">    duration: Duration(seconds: 2),</span><br><span class="line">  );</span><br><span class="line">  final CurvedAnimation curve = CurvedAnimation(</span><br><span class="line">    parent: _controller,</span><br><span class="line">    curve: Curves.easeIn,</span><br><span class="line">  );</span><br><span class="line">  _animation = Tween(begin: 0.2, end: 1.0).animate(curve)</span><br><span class="line">    ..addListener(() &#123;</span><br><span class="line">      if (_animation.value == 1) &#123;</span><br><span class="line">        _controller.reverse();</span><br><span class="line">      &#125;</span><br><span class="line">      if (_animation.value == 0.2) &#123;</span><br><span class="line">        _controller.forward();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>动画不会自己自动执行，需要主动调用<code>controller.forward()</code>。还有当页面被销毁时记得调用<code>controller.dispose()</code>进行释放。最终实现的效果如下：</p>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/FadeTransition.gif" alt=""></p>
+<h2 id="9-FloatingActionButton"><a href="#9-FloatingActionButton" class="headerlink" title="9. FloatingActionButton"></a>9. FloatingActionButton</h2><p>Flutter中添加FloatingActionButton（FAB）特别简单，按照如下代码，就可以很方便快捷地在Scaffold下生成一个FAB。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Scaffold(</span><br><span class="line">  floatingActionButton: FloatingActionButton(</span><br><span class="line">    onPressed: ()&#123;&#125;,</span><br><span class="line">    child: Icon(Icons.add),</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>但是，当你有一个底部导航栏bottomNavigationBar，希望FAB嵌入时该怎么解决？在Flutter中这个问题很简单，只需要设置floatingActionButtonLocation属性即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Scaffold(</span><br><span class="line">  floatingActionButton: FloatingActionButton(</span><br><span class="line">    onPressed: () &#123;&#125;,</span><br><span class="line">    child: Icon(Icons.add),</span><br><span class="line">  ),</span><br><span class="line">  floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,</span><br><span class="line">  bottomNavigationBar: BottomAppBar(</span><br><span class="line">    shape: CircularNotchedRectangle(),</span><br><span class="line">    notchMargin: 4.0,</span><br><span class="line">    color: Colors.yellow.shade800,</span><br><span class="line">    child: Container(</span><br><span class="line">      height: 50,</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/FloatingActionButton.png" alt=""></p>
+<p>嵌入在尾部不满意？没关系，FloatingActionButtonLocation还提供了其它可选项，嵌入或悬浮都可以满足。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,</span><br><span class="line">floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>FloatingActionButton.extended 还提供了一个较宽的FAB，它可以包含一个icon和一个label。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FloatingActionButton.extended(</span><br><span class="line">  onPressed: () &#123;&#125;,</span><br><span class="line">  icon: Icon(Icons.save),</span><br><span class="line">  label: Text(&quot;Save&quot;),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<p>有关FloatingActionButton更加详细的说明和使用示例可以参考Medium上的一篇博客 <a href="https://proandroiddev.com/a-deep-dive-into-floatingactionbutton-in-flutter-bf95bee11627" target="_blank" rel="noopener">A Deep Dive Into FloatingActionButton</a></p>
+<h2 id="10-PageView"><a href="#10-PageView" class="headerlink" title="10. PageView"></a>10. PageView</h2><p>PageView创建一个可“逐页”滚动的列表。PageView的每个子元素会被强制保持与视口大小相同。</p>
+<p>可以使用PageController来控制哪个页面在视图中可见。PageController也可以用于控制PageController.initialPage和PageController.viewportFraction，前者确定第一次构造PageView时显示哪个页面，后者确定页面大小（视口大小的一部分）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">class _MyHomePageState extends State&lt;MyHomePage&gt; &#123;</span><br><span class="line">  final _controller = PageController(initialPage: 0,  viewportFraction: 1.0);</span><br><span class="line"></span><br><span class="line">  @override</span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    return Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: Text(widget.title),</span><br><span class="line">      ),</span><br><span class="line">      body: PageView(</span><br><span class="line">        scrollDirection: Axis.horizontal,</span><br><span class="line">        controller: _controller,</span><br><span class="line">        pageSnapping: true, // 设置页面是否滚动到整数位置</span><br><span class="line">        children: &lt;Widget&gt;[</span><br><span class="line">          Container(</span><br><span class="line">            color: Colors.blue,</span><br><span class="line">          ),</span><br><span class="line">          Container(</span><br><span class="line">            color: Colors.green,</span><br><span class="line">          ),</span><br><span class="line">          Container(</span><br><span class="line">            color: Colors.amber,</span><br><span class="line">          ),</span><br><span class="line">        ],</span><br><span class="line">        onPageChanged: (int page) &#123;</span><br><span class="line">          print(&quot;Current Page: &quot; + page.toString());</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/flutter-week/PageView.gif" alt=""></p>
+<p>PageView的默认构造函数适用于比较少的子Widget，PageView.builder则用于创建大量或无限的子控件。有关PageView更加详细的说明和使用示例可以参考Medium上的一篇博客 <a href="https://medium.com/flutter-community/a-deep-dive-into-pageview-in-flutter-with-custom-transitions-581d9ea6dded" target="_blank" rel="noopener">A Deep Dive Into PageView</a>。</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p>完整代码仓库地址: <a href="https://github.com/Nirvana-cn/Flutter-widget-weekly" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2019/11/05/flutter-widgets-one/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/flutter/">
+              #flutter
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/08/30/android-communication/" target="_self">Android指东：组件通信</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/12/15/wechat-custom-navigation-bar/" target="_self">微信小程序自定义导航栏</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

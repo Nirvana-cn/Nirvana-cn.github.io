@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>Jest 入门指南 | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,每天学一点,jest,unit test,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>Jest 入门指南</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2018-12-29
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端-每天学一点/">
+            前端,每天学一点
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="introduce-jest"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Jest</code>是<code>Facebook</code>开源的一个前端测试框架，主要用于<code>React</code>和<code>React Native</code>的单元测试（同样也可以进行<code>JavaScript</code>测试），已被集成在<code>create-react-app</code>中。</p>
+<p><code>Jest</code>特点：</p>
+<ol>
+<li>易用性：基于<code>Jasmine</code>，提供断言库，支持多种测试风格</li>
+<li>适应性：<code>Jest</code>是模块化、可扩展和可配置的</li>
+<li>沙箱和快照：<code>Jest</code>内置了<code>JSDOM</code>，能够模拟浏览器环境，并且并行执行</li>
+<li>快照测试：<code>Jest</code>能够对<code>React</code>组件树进行序列化，生成对应的字符串快照，通过比较字符串提供高性能的UI检测</li>
+<li><code>Mock</code>系统：<code>Jest</code>实现了一个强大的<code>Mock</code>系统，支持自动和手动<code>mock</code></li>
+<li>支持异步代码测试：支持<code>Promise</code>和<code>async/await</code></li>
+<li>自动生成静态分析结果：内置<code>Istanbul</code>，测试代码覆盖率，并生成对应的报告</li>
+</ol>
+<p>(非必须) <code>Jest</code>环境配置，在<code>package.json</code>中的<code>script</code>中增加 <code>&quot;test: jest --config .jest.js&quot;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  setupFiles: [</span><br><span class="line">    <span class="string">'./test/setup.js'</span>,</span><br><span class="line">  ],</span><br><span class="line">  moduleFileExtensions: [</span><br><span class="line">    <span class="string">'js'</span>,</span><br><span class="line">    <span class="string">'jsx'</span>,</span><br><span class="line">  ],</span><br><span class="line">  testPathIgnorePatterns: [</span><br><span class="line">    <span class="string">'/node_modules/'</span>,</span><br><span class="line">  ],</span><br><span class="line">  testRegex: <span class="string">'.*\\.test\\.js$'</span>,</span><br><span class="line">  collectCoverage: <span class="literal">false</span>,</span><br><span class="line">  collectCoverageFrom: [</span><br><span class="line">    <span class="string">'src/components/**/*.&#123;js&#125;'</span>,</span><br><span class="line">  ],</span><br><span class="line">  moduleNameMapper: &#123;</span><br><span class="line">    <span class="string">"\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$"</span>: <span class="string">"&lt;rootDir&gt;/__mocks__/fileMock.js"</span>,</span><br><span class="line">    <span class="string">"\\.(css|less|scss)$"</span>: <span class="string">"&lt;rootDir&gt;/__mocks__/styleMock.js"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  transform: &#123;</span><br><span class="line">    <span class="string">"^.+\\.js$"</span>: <span class="string">"babel-jest"</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>配置说明：</p>
+<ul>
+<li><code>setupFiles</code>：配置文件，在运行测试案例代码之前，<code>Jest</code>会先运行这里的配置文件来初始化指定的测试环境</li>
+<li><code>moduleFileExtensions</code>：代表支持加载的文件名</li>
+<li><code>testPathIgnorePatterns</code>：用正则来匹配不用测试的文件</li>
+<li><code>testRegex</code>：正则表示的测试文件，测试文件的格式为<code>xxx.test.js</code></li>
+<li><code>collectCoverage</code>：是否生成测试覆盖报告，如果开启，会增加测试的时间</li>
+<li><code>collectCoverageFrom</code>：生成测试覆盖报告是检测的覆盖文件</li>
+<li><code>moduleNameMapper</code>：代表需要被<code>Mock</code>的资源名称</li>
+<li><code>transform</code>：用<code>babel-jest</code>来编译文件，生成<code>ES6/7</code>的语法</li>
+</ul>
+<p>** <code>ES6</code>提供的 <code>import</code> 来导入模块的方式，<code>Jest</code>本身是不支持的,可以通过安装<code>babel-jest、babel-core、babel-preset-env、babel-plugin-transform-runtime</code>这几个依赖让我们可以使用<code>ES6</code>的语法特性进行单元测试。<br>在项目的根目录下添加<code>.babelrc</code>文件，并在文件复制如下内容:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;presets&quot;: [&quot;env&quot;],</span><br><span class="line">  &quot;plugins&quot;: [&quot;transform-runtime&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Globals-API"><a href="#Globals-API" class="headerlink" title="Globals  API"></a>Globals  API</h2><ul>
+<li><code>describe(name, fn)</code>：描述块，讲一组功能相关的测试用例组合在一起</li>
+<li><code>test(name, fn, timeout)</code>：别名it，用来放测试用例</li>
+<li><code>afterAll(fn, timeout)</code>：所有测试用例跑完以后执行的方法</li>
+<li><code>beforeAll(fn, timeout)</code>：所有测试用例执行之前执行的方法</li>
+<li><code>afterEach(fn)</code>：在每个测试用例执行完后执行的方法</li>
+<li><code>beforeEach(fn)</code>：在每个测试用例执行之前需要执行的方法</li>
+</ul>
+<p>全局和<code>describe</code>都可以有上面四个周期函数，<code>describe</code>的<code>after</code>函数优先级要高于全局的<code>after</code>函数，<code>describe</code>的<code>before</code>函数优先级要低于全局的<code>before</code>函数，完整的例子见Example.4。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myBeverage = &#123;</span><br><span class="line">    delicious: <span class="literal">true</span>,</span><br><span class="line">    sour: <span class="literal">false</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">beforeAll(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'global before all'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">beforeEach(<span class="function"><span class="params">()</span> =&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'global before each'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">describe(<span class="string">'my beverage'</span>, () =&gt; &#123;</span><br><span class="line">    beforeAll(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'inner test before all'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    beforeEach(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'inner test before each'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    test(<span class="string">'is delicious'</span>, () =&gt; &#123;</span><br><span class="line">        expect(myBeverage.delicious).toBeTruthy();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    test(<span class="string">'is not sour'</span>, () =&gt; &#123;</span><br><span class="line">        expect(myBeverage.sour).toBeFalsy();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// console.log describe.test.js:7</span></span><br><span class="line"><span class="comment">// global before all</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// console.log describe.test.js:16</span></span><br><span class="line"><span class="comment">// inner test before all</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// console.log describe.test.js:11</span></span><br><span class="line"><span class="comment">// global before each</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// console.log describe.test.js:20</span></span><br><span class="line"><span class="comment">// inner test before each</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// console.log describe.test.js:11</span></span><br><span class="line"><span class="comment">// global before each</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// console.log describe.test.js:20</span></span><br><span class="line"><span class="comment">// inner test before each</span></span><br></pre></td></tr></table></figure>
+<h4 id="describe和test的执行顺序"><a href="#describe和test的执行顺序" class="headerlink" title="describe和test的执行顺序"></a>describe和test的执行顺序</h4><p><code>Jest</code>在执行任何实际<code>test</code>之前，会首先执行文件中所有<code>describe</code>块的处理程序。这是在<code>before*</code>和<code>after*</code>中进行设置，而不是在<code>describe</code>块中进行设置的另一个原因。默认情况下，<code>describe</code>块执行完成后，<code>Jest</code>按照在收集阶段遇到的顺序连续运行所有<code>test</code>，等待每个<code>test</code>完成并在继续之前进行整理。实例见Example.7。</p>
+<h2 id="常见断言"><a href="#常见断言" class="headerlink" title="常见断言"></a>常见断言</h2><ol>
+<li><code>expect(value)</code>：要测试一个值进行断言的时候，要使用<code>expect</code>对值进行包裹</li>
+<li><code>toBe(value)</code>：使用<code>Object.is</code>来进行比较，如果进行浮点数的比较，要使用<code>toBeCloseTo</code></li>
+<li><code>not</code>：用来取反</li>
+<li><code>toEqual(value)</code>：用于对象的深比较</li>
+<li><code>toMatch(regexpOrString)</code>：用来检查字符串是否匹配，可以是正则表达式或者字符串</li>
+<li><code>toContain(item)</code>：用来判断<code>item</code>是否在一个数组中，也可以用于字符串的判断</li>
+<li><code>toBeNull(value)</code>：只匹配<code>null</code></li>
+<li><code>toBeUndefined(value)</code>：只匹配<code>undefined</code></li>
+<li><code>toBeDefined(value)</code>：与<code>toBeUndefined</code>相反</li>
+<li><code>toBeTruthy(value)</code>：匹配任何使<code>if</code>语句为真的值</li>
+<li><code>toBeFalsy(value)</code>：匹配任何使<code>if</code>语句为假的值</li>
+<li><code>toBeGreaterThan(number)</code>： 大于</li>
+<li><code>toBeGreaterThanOrEqual(number)</code>：大于等于</li>
+<li><code>toBeLessThan(number)</code>：小于</li>
+<li><code>toBeLessThanOrEqual(number)</code>：小于等于</li>
+<li><code>toBeInstanceOf(class)</code>：判断是不是<code>class</code>的实例</li>
+<li><code>anything(value)</code>：匹配除了<code>null</code>和<code>undefined</code>以外的所有值</li>
+<li><code>resolves</code>：用来取出<code>promise</code>为<code>fulfilled</code>时包裹的值，支持链式调用</li>
+<li><code>rejects</code>：用来取出<code>promise</code>为<code>rejected</code>时包裹的值，支持链式调用</li>
+<li><code>toHaveBeenCalled()</code>：用来判断<code>mock function</code>是否被调用过</li>
+<li><code>toHaveBeenCalledTimes(number)</code>：用来判断<code>mock function</code>被调用的次数</li>
+<li><code>assertions(number)</code>：验证在一个测试用例中有<code>number</code>个断言被调用</li>
+<li><code>extend(matchers)</code>：自定义一些断言</li>
+</ol>
+<h2 id="异步函数测试"><a href="#异步函数测试" class="headerlink" title="异步函数测试"></a>异步函数测试</h2><p>对于异步函数的测试，官方文档提供了四种方法，分别为<code>callback、promise、resolve/reject</code>和<code>async/await</code>函数，相比于callback，后三者语义上无疑更清晰，在Example.3中，我们分别演示了后三者。我们使用axios发起异步请求，等待响应数据。<code>expect.assertions(n)</code>验证在测试期间是否调用了一定数量的断言。这在测试异步代码时通常很有用，以确保实际调用异步中的断言。</p>
+<p>比如，我们发起两次异步请求，但是设置<code>expect.assertions(1)</code>或<code>expect.assertions(3)</code>，这个时候就会报错，造成测试无法通过，因为实际异步请求返回应该2次。所以需要<code>expect.assertions()</code>来确保异步请求响应次数与我们的期望一致。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">'async test'</span>, () =&gt; &#123;</span><br><span class="line"></span><br><span class="line">    test(<span class="string">'method three'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">        expect.assertions(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">let</span> data = <span class="keyword">await</span> fetch()</span><br><span class="line">        expect(data.name).toMatch(<span class="regexp">/ham/</span>)</span><br><span class="line">        <span class="keyword">let</span> data2 = <span class="keyword">await</span> fetch()</span><br><span class="line">        expect(data2.username).toMatch(<span class="regexp">/Bret/</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Expected one assertion to be called but received two assertion calls.</span></span><br></pre></td></tr></table></figure>
+<h2 id="Mock-Function"><a href="#Mock-Function" class="headerlink" title="Mock Function"></a>Mock Function</h2><p>在项目中，一个模块的方法内常常会去调用另外一个模块的方法。在单元测试中，我们可能并不需要关心内部调用的方法的执行过程和结果，只想知道它是否被正确调用即可，甚至会指定该函数的返回值。此时，使用<code>Mock</code>函数是十分有必要。</p>
+<p><code>Mock</code>函数提供的以下三种特性，在我们写测试代码时十分有用：</p>
+<ul>
+<li>捕获函数调用情况</li>
+<li>设置函数返回值</li>
+<li>改变函数的内部实现</li>
+</ul>
+<p><code>Mock</code>函数常用方法：</p>
+<p>1.<code>mockFn.mockName(value)</code>：设置<code>mock</code>函数的名字</p>
+<p>2.<code>mockFn.getMockName()</code>： 返回<code>mockFn.mockName(value)</code>中设置的名字</p>
+<p>3.<code>mockFn.mock.calls</code>：<code>mock</code>函数的调用信息</p>
+<p><code>mockFn.mock.calls</code>返回一个数组，数组中的每一个元素又是一个数组，包含<code>mock</code>函数的调用信息。比如，一个被调用两次的模拟函数f，参数为<code>f(&#39;arg1&#39;，&#39;arg2&#39;)</code>，然后使用参数<code>f(&#39;arg3&#39;，&#39;arg4&#39;)</code>，<code>mockFn.mock.calls</code>返回的数组形式如下：</p>
+<blockquote>
+<p>[[‘arg1’, ‘arg2’], [‘arg3’, ‘arg4’]]</p>
+</blockquote>
+<p>因此，<code>mockFn.mock.calls.length</code>代表<code>mock</code>函数被调用次数，<code>mockFn.mock.calls[0][0]</code>代表第一次调用传入的第一个参数，以此类推。</p>
+<p>4.<code>mockFn.mock.results</code>：<code>mock</code>函数的<code>return</code>值，以数组存储</p>
+<p>5.<code>mockFn.mock.instances</code>：<code>mock</code>函数实例</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mockFn = jest.fn();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> a = <span class="keyword">new</span> mockFn();</span><br><span class="line"><span class="keyword">const</span> b = <span class="keyword">new</span> mockFn();</span><br><span class="line"></span><br><span class="line">mockFn.mock.instances[<span class="number">0</span>] === a; <span class="comment">// true</span></span><br><span class="line">mockFn.mock.instances[<span class="number">1</span>] === b; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>6.<code>mockFn.mockImplementation(fn)</code>：创建一个<code>mock</code>函数</p>
+<p>注意：<code>jest.fn(implementation)</code>是<code>jest.fn().mockImplementation(implementation)</code>的简写。</p>
+<p>7.<code>mockFn.mockImplementationOnce(fn)</code>：创建一个<code>mock</code>函数</p>
+<p>该函数将用作对<code>mocked</code>函数的一次调用的<code>mock</code>的实现。可以链式调用，以便多个函数调用产生不同的结果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMockFn = jest</span><br><span class="line">  .fn()</span><br><span class="line">  .mockImplementationOnce(<span class="function"><span class="params">cb</span> =&gt;</span> cb(<span class="literal">null</span>, <span class="literal">true</span>))</span><br><span class="line">  .mockImplementationOnce(<span class="function"><span class="params">cb</span> =&gt;</span> cb(<span class="literal">null</span>, <span class="literal">false</span>));</span><br><span class="line"></span><br><span class="line">myMockFn(<span class="function">(<span class="params">err, val</span>) =&gt;</span> <span class="built_in">console</span>.log(val)); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">myMockFn(<span class="function">(<span class="params">err, val</span>) =&gt;</span> <span class="built_in">console</span>.log(val)); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>当<code>mocked</code>函数用完使用<code>mockImplementationOnce</code>定义的实现时，如果调用它们，它将使用<code>jest.fn(()=&gt; defaultValue)</code>或<code>.mockImplementation(()=&gt; defaultValue)</code>执行默认实现集：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMockFn = jest</span><br><span class="line">  .fn(<span class="function"><span class="params">()</span> =&gt;</span> <span class="string">'default'</span>)</span><br><span class="line">  .mockImplementationOnce(<span class="function"><span class="params">()</span> =&gt;</span> <span class="string">'first call'</span>)</span><br><span class="line">  .mockImplementationOnce(<span class="function"><span class="params">()</span> =&gt;</span> <span class="string">'second call'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 'first call', 'second call', 'default', 'default'</span></span><br><span class="line"><span class="built_in">console</span>.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());</span><br></pre></td></tr></table></figure></p>
+<p>8.<code>mockFn.mockReturnThis()</code>：<code>jest.fn()</code>的语法糖</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jest.fn(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>9.<code>mockFn.mockReturnValue(value)</code>：接受一个值作为调用<code>mock</code>函数时的返回值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mock = jest.fn();</span><br><span class="line">mock.mockReturnValue(<span class="number">42</span>);</span><br><span class="line">mock(); <span class="comment">// 42</span></span><br><span class="line">mock.mockReturnValue(<span class="number">43</span>);</span><br><span class="line">mock(); <span class="comment">// 43</span></span><br></pre></td></tr></table></figure>
+<p>10.<code>mockFn.mockReturnValueOnce(value)</code>：接受一个值作为调用<code>mock</code>函数时的返回值，可以链式调用，以便产生不同的结果。</p>
+<p>当不再使用<code>mockReturnValueOnce</code>值时，调用将返回<code>mockReturnValue</code>指定的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMockFn = jest</span><br><span class="line">  .fn()</span><br><span class="line">  .mockReturnValue(<span class="string">'default'</span>)</span><br><span class="line">  .mockReturnValueOnce(<span class="string">'first call'</span>)</span><br><span class="line">  .mockReturnValueOnce(<span class="string">'second call'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 'first call', 'second call', 'default', 'default'</span></span><br><span class="line"><span class="built_in">console</span>.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());</span><br></pre></td></tr></table></figure>
+<p>11.<code>mockFn.mockResolvedValue(value)</code>：<code>mock</code>异步函数的语法糖</p>
+<p>实现上类似于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jest.fn().mockImplementation(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Promise</span>.resolve(value));</span><br></pre></td></tr></table></figure>
+<p>用于在<code>test</code>中模拟异步函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">test(<span class="string">'async test'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> asyncMock = jest.fn().mockResolvedValue(<span class="number">43</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// 43</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>12.<code>mockFn.mockResolvedValueOnce(value)</code>：语法糖</p>
+<p>实现上类似于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jest.fn().mockImplementationOnce(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Promise</span>.resolve(value));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">test(<span class="string">'async test'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> asyncMock = jest</span><br><span class="line">    .fn()</span><br><span class="line">    .mockResolvedValue(<span class="string">'default'</span>)</span><br><span class="line">    .mockResolvedValueOnce(<span class="string">'first call'</span>)</span><br><span class="line">    .mockResolvedValueOnce(<span class="string">'second call'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// first call</span></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// second call</span></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// default</span></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// default</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>13.<code>mockFn.mockRejectedValue(value)</code>：语法糖</p>
+<p>实现上类似于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jest.fn().mockImplementation(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Promise</span>.reject(value));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">test(<span class="string">'async test'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> asyncMock = jest.fn().mockRejectedValue(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Async error'</span>));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// throws "Async error"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>14.<code>mockFn.mockRejectedValueOnce(value)</code>：语法糖</p>
+<p>实现上类似于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jest.fn().mockImplementationOnce(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Promise</span>.reject(value));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">test(<span class="string">'async test'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> asyncMock = jest</span><br><span class="line">    .fn()</span><br><span class="line">    .mockResolvedValueOnce(<span class="string">'first call'</span>)</span><br><span class="line">    .mockRejectedValueOnce(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Async error'</span>));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// first call</span></span><br><span class="line">  <span class="keyword">await</span> asyncMock(); <span class="comment">// throws "Async error"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>15.<code>mockFn.mockClear()</code>：重置所有存储在<code>mockFn.mock.calls</code> 和 <code>mockFn.mock.instances</code>数组中的信息</p>
+<p>当你想要清除两个断言之间的模拟使用数据时，这通常很有用。</p>
+<p>16.<code>mockFn.mockReset()</code>：完成<code>mockFn.mockClear()</code>所做的所有事情，还删除任何模拟的返回值或实现</p>
+<p>当你想要将模拟完全重置回其初始状态时，这非常有用。（请注意，重置<code>spy</code>将导致函数没有返回值）。</p>
+<p>17.<code>mockFn.mockRestore()</code>：完成<code>mockFn.mockReset()</code>所做的所有事情，并恢复原始（非模拟）实现</p>
+<p>当你想在某些测试用例中模拟函数并在其他测试用例中恢复原始实现时，这非常有用。</p>
+<h2 id="jest-mock-and-jest-spyOn"><a href="#jest-mock-and-jest-spyOn" class="headerlink" title="jest.mock and jest.spyOn"></a>jest.mock and jest.spyOn</h2><p><code>jest</code>对象上有<code>fn,mock,spyOn</code>三个方法，在实际项目的单元测试中，<code>jest.fn()</code>常被用来进行某些有回调函数的测试；<code>jest.mock()</code>可以<code>mock</code>整个模块中的方法，当某个模块已经被单元测试100%覆盖时，使用<code>jest.mock()</code>去<code>mock</code>该模块，节约测试时间和测试的冗余度是十分必要；当需要测试某些必须被完整执行的方法时，常常需要使用<code>jest.spyOn()</code>。</p>
+<p>如Example.8中所示，<code>event.js</code>中调用了<code>fetch.js</code>的方法，<code>fetch.js</code>文件夹中封装的请求方法可能我们在其他模块被调用的时候，并不需要进行实际的请求（请求方法已经通过单侧或需要该方法返回非真实数据）。此时，使用<code>jest.mock()</code>去<code>mock</code>整个模块是十分有必要的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// event.test.js</span></span><br><span class="line"><span class="keyword">import</span> events <span class="keyword">from</span> <span class="string">'./event'</span>;</span><br><span class="line"><span class="keyword">import</span> fetch <span class="keyword">from</span> <span class="string">'./fetch'</span>;</span><br><span class="line"></span><br><span class="line">jest.mock(<span class="string">'./fetch.js'</span>);</span><br><span class="line"></span><br><span class="line">test(<span class="string">'mock 整个 fetch.js模块'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">    expect.assertions(<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">await</span> events.getPostList();</span><br><span class="line">    expect(fetch.fetchPostsList).toHaveBeenCalled();</span><br><span class="line">    expect(fetch.fetchPostsList).toHaveBeenCalledTimes(<span class="number">1</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>jest.spyOn()</code>方法同样创建一个<code>mock</code>函数，但是该<code>mock</code>函数不仅能够捕获函数的调用情况，还可以正常的执行被<code>spy</code>的函数。实际上，<code>jest.spyOn()</code>是<code>jest.fn()</code>的语法糖，它创建了一个和被<code>spy</code>的函数具有相同内部代码的<code>mock</code>函数。</p>
+<p><code>event.test.js</code>是j<code>est.mock()</code>的示例代码，从控制台中可以看到<code>console.log(&#39;fetchPostsList be called!&#39;)</code>;这行代码并没有被打印，这是因为通过<code>jest.mock()</code>后，模块内的方法是不会被<code>jest</code>所实际执行的。这时我们就需要使用<code>jest.spyOn()</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// event2.test.js</span></span><br><span class="line"><span class="keyword">import</span> events <span class="keyword">from</span> <span class="string">'./event'</span>;</span><br><span class="line"><span class="keyword">import</span> fetch <span class="keyword">from</span> <span class="string">'./fetch'</span>;</span><br><span class="line"></span><br><span class="line">test(<span class="string">'使用jest.spyOn()监控fetch.fetchPostsList被正常调用'</span>, <span class="keyword">async</span>() =&gt; &#123;</span><br><span class="line">    expect.assertions(<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">const</span> spyFn = jest.spyOn(fetch, <span class="string">'fetchPostsList'</span>);</span><br><span class="line">    <span class="keyword">await</span> events.getPostList();</span><br><span class="line">    expect(spyFn).toHaveBeenCalled();</span><br><span class="line">    expect(spyFn).toHaveBeenCalledTimes(<span class="number">1</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>执行测试之后，可以看到控制台中的打印信息，说明通过<code>jest.spyOn()</code>，<code>fetchPostsList</code>被正常的执行了。</p>
+<blockquote>
+<p>TIPS：在jest中如果想捕获函数的调用情况，则该函数必须被mock或者spyOn！</p>
+</blockquote>
+<h2 id="Timer-Mock"><a href="#Timer-Mock" class="headerlink" title="Timer Mock"></a>Timer Mock</h2><p><code>jest</code>可以模拟定时器从而允许自主控制时间流逝。模拟定时器运行可以方便测试，比如不必等待一个很长的延时而是直接获取结果。</p>
+<p><code>jest</code>对象上与<code>timer mock</code>相关的方法主要有以下个：</p>
+<ol>
+<li><code>jest.useFakeTimers()</code>：指示<code>Jest</code>使用标准计时器函数的假版本（<code>setTimeout，setInterval，clearTimeout，clearInterval，nextTick，setImmediate和clearImmediate</code>）。</li>
+<li><code>jest.useRealTimers()</code>：指示<code>Jest</code>使用标准计时器功能的真实版本。</li>
+<li><code>jest.clearAllTimers()</code>：从计时器系统中清除任何等待的计时器。</li>
+<li><code>jest.runAllTicks()</code>：执行微任务队列中的所有任务（通常通过<code>process.nextTick</code>在节点中连接）。</li>
+<li><code>jest.runAllTimers()</code>：执行宏任务队列中的所有任务。</li>
+<li><code>jest.runAllImmediates()</code>：通过<code>setImmediate()</code>执行任务队列中的所有任务。</li>
+<li><code>jest.advanceTimersByTime(n)</code>：执行宏任务队列中的所有任务，当该<code>API</code>被调用时，所有定时器被提前 <code>n</code> 秒。</li>
+<li><code>jest.runOnlyPendingTimers()</code>：仅执行宏任务中当前正在等待的任务。</li>
+</ol>
+<p>举例来说(见Example.5):</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// timer.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">timerGame</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Ready....go!'</span>);</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'Times up -- stop!'</span>);</span><br><span class="line">        callback &amp;&amp; callback();</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = timerGame;</span><br></pre></td></tr></table></figure>
+<p>我们在<code>timer.js</code>中设定了一个1s钟之后才会执行的定时器，但是测试代码是同步执行，通过<code>timer mock</code>，我们不必等待定时器执行完成就可以完成测试。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> timer = <span class="built_in">require</span>(<span class="string">'./timer'</span>);</span><br><span class="line"><span class="keyword">const</span> callback = jest.fn();</span><br><span class="line"></span><br><span class="line">jest.useFakeTimers();</span><br><span class="line"></span><br><span class="line">test(<span class="string">'calls the callback after 1 second'</span>, () =&gt; &#123;</span><br><span class="line">    timer(callback);</span><br><span class="line"></span><br><span class="line">    expect(callback).not.toBeCalled();</span><br><span class="line"></span><br><span class="line">    expect(setTimeout).toHaveBeenCalledTimes(<span class="number">1</span>);</span><br><span class="line">    expect(setInterval).toHaveBeenCalledTimes(<span class="number">0</span>);</span><br><span class="line">    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(<span class="built_in">Function</span>), <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    jest.runAllTimers();</span><br><span class="line"></span><br><span class="line">    expect(callback).toBeCalled();</span><br><span class="line">    expect(callback).toHaveBeenCalledTimes(<span class="number">1</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，我们已经在第四行声明使用假时间，在<code>test</code>块中，虽然<code>setTimeout</code>尚未执行完毕，但是测试已经完成，<code>setTimeout</code>执行一次，没有<code>setInterval</code>执行，这与期望一致。接下来调用<code>jest.runAllTimers()</code>使得所有定时器立即执行完毕，控制台打印定时器中的输出。</p>
+<p>对于递归定时器的情况，如果使用<code>jest.runAllTimers()</code>，所有的定时器就无限循环了，这个时候就需要用到<code>jest.runOnlyPendingTimers()</code>了，因为<code>runOnlyPendingTimers</code>的过程中不会产生新的定时器，从而避免了无限循环的问题，如Example.5 中<code>pendingTimer</code>所示。</p>
+<p><code>jest.advanceTimersByTime(n)</code>也很容易理解，就是将所有定时器提前<code>n</code>秒执行。如下所示，在未调用<code>jest.advanceTimersByTime(n)</code>之前，<code>callback</code>还没有被调用，然后通过<code>jest.advanceTimersByTime(1000)</code>让定时器提前<code>1s</code>执行，因此接下来的断言不会报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// timer3.test.js</span></span><br><span class="line"><span class="keyword">const</span> timerGame = <span class="built_in">require</span>(<span class="string">'./timer'</span>);</span><br><span class="line"><span class="keyword">const</span> callback = jest.fn();</span><br><span class="line">jest.useFakeTimers();</span><br><span class="line"></span><br><span class="line">test(<span class="string">'calls the callback after 1 second via advanceTimersByTime'</span>, () =&gt; &#123;</span><br><span class="line">    timerGame(callback);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// At this point in time, the callback should not have been called yet</span></span><br><span class="line">    expect(callback).not.toBeCalled();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Fast-forward until all timers have been executed</span></span><br><span class="line">    jest.advanceTimersByTime(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Now our callback should have been called!</span></span><br><span class="line">    expect(callback).toBeCalled();</span><br><span class="line">    expect(callback).toHaveBeenCalledTimes(<span class="number">1</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>同样的，如果使用<code>jest.advanceTimersByTime(500)</code>提前<code>0.5s</code>，上面的测试可以进行如下修改。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jest.advanceTimersByTime(<span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">expect(callback).not.toBeCalled();</span><br><span class="line">expect(callback).toHaveBeenCalledTimes(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="Manual-Mock"><a href="#Manual-Mock" class="headerlink" title="Manual Mock"></a>Manual Mock</h2><p><code>Manual Mock</code>用于存储模拟数据的功能。例如，您可能希望创建一个允许您使用虚假数据的手动模拟，而不是访问网站或数据库等远程资源。这可以确保您的测试快速且稳定。</p>
+<p>通过在紧邻模块的<code>__mocks __</code>子目录中编写模块来定义手动模拟。例如，要在<code>models</code>目录中模拟一个名为<code>user</code>的模块(如Example.9 所示)，请创建一个名为<code>user.js</code>的文件并将其放在<code>models / __ mocks__</code>目录中。同时请注意<code>__mocks__</code>文件夹区分大小写。</p>
+<p>** 注意比较Example.8 和 Example.9 中<code>jest.mock</code>的不同，由于Example.8中没有<code>__mocks__</code>文件夹，所以<code>mock</code>并不会真正运行，而在Example.9中会使用<code>__mocks__</code>下的同名文件进行替换。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// userMocked.test.js</span></span><br><span class="line"><span class="keyword">import</span> user <span class="keyword">from</span> <span class="string">'./models/user'</span>;</span><br><span class="line"></span><br><span class="line">jest.mock(<span class="string">'./models/user'</span>);</span><br><span class="line"></span><br><span class="line">test(<span class="string">'if user model is mocked'</span>, () =&gt; &#123;</span><br><span class="line">    expect(user.getAuthenticated()).toEqual(&#123;<span class="attr">age</span>: <span class="number">622</span>, <span class="attr">name</span>: <span class="string">'Mock name'</span>&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果您正在模拟的模块是<code>Node</code>模块（例如：<code>lodash</code>），则<code>mock</code>应放在与<code>node_modules</code>相邻的<code>__mocks__</code>目录中，并将自动模拟。没有必要显式调用<code>jest.mock(&#39;module_name&#39;)</code>。但是如果想模拟<code>Node</code>的核心模块（例如：<code>fs</code>或<code>path</code>），那么明确地调用例如： <code>jest.mock(&#39;path&#39;)</code>是必需的，因为默认情况下不会模拟核心<code>Node</code>模块。</p>
+<p>如果您正在使用<code>ES6</code>模块导入，那么您通常倾向于将导入语句放在测试文件的顶部。但是通常你需要指示<code>Jest</code>在模块使用它之前使用模拟。出于这个原因，<code>Jest</code>会自动将<code>jest.mock</code>调用提升到模块的顶部（在任何导入之前）。</p>
+<h2 id="ES6-Class-Mock"><a href="#ES6-Class-Mock" class="headerlink" title="ES6 Class Mock"></a>ES6 Class Mock</h2><p>如Example.6中所示，分别有<code>SoundPlayer</code>类和使用该类的<code>SoundPlayerConsumer</code>类。我们将在<code>SoundPlayerConsumer</code>的测试中模拟<code>SoundPlayer</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sound-player.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">SoundPlayer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.foo = <span class="string">'bar'</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  playSoundFile(fileName) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Playing sound file '</span> + fileName);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sound-player-consumer.js</span></span><br><span class="line"><span class="keyword">import</span> SoundPlayer <span class="keyword">from</span> <span class="string">'./sound-player'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">SoundPlayerConsumer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.soundPlayer = <span class="keyword">new</span> SoundPlayer();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  playSomethingCool() &#123;</span><br><span class="line">    <span class="keyword">const</span> coolSoundFileName = <span class="string">'song.mp3'</span>;</span><br><span class="line">    <span class="keyword">this</span>.soundPlayer.playSoundFile(coolSoundFileName);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分别有4种方法可以创建<code>ES6</code>类的模拟：</p>
+<p>1.Automatic mock</p>
+<p>使用该方法，类中的所有方法调用状态保存在<code>theAutomaticMock.mock.instances[index].methodName.mock.calls</code>中。同时，如果您在类中使用了箭头函数，它们将不会成为模拟的一部分。因为箭头函数不存在于对象的原型上，它们只是包含对函数的引用的属性。</p>
+<p>** 注：由于Example.6中同时存在<code>Automatic mock和Manual mock</code>，所以在使用该方法时需要把<code>__mocks__</code>文件夹改个名。</p>
+<p>2.Manual mock</p>
+<p>在相邻的<code>__mocks__</code>文件夹下生成同名文件从而进行替换模拟。</p>
+<p>** 注意：使用<code>manual mock</code>时确保<code>__mocks__</code>文件夹命名正确。</p>
+<p>3.Calling jest.mock() with the module factory parameter</p>
+<p>使用此种方法就是在<code>jest.mock()</code>中添加一个参数：<code>jest.mock(path，moduleFactory)</code>接受<code>moduleFactory</code>参数，<code>moduleFactory</code>返回一个模拟的函数。为了模拟构造函数，<code>moduleFactory</code>必须返回构造函数，换句话说，模块工厂必须是返回函数的函数。</p>
+<p>4.Replacing the mock using mockImplementation() or mockImplementationOnce()</p>
+<p>对<code>jest.mock</code>的调用会被提升到代码的顶部。 您通过在现有<code>mock</code>上调用<code>mockImplementation()</code>（或<code>mockImplementationOnce()</code>）而不是使用<code>factory</code>参数，从而稍后指定模拟（例如，在<code>beforeAll()</code>），或者在测试之间更改模拟。</p>
+<h2 id="Bypassing-Module-Mock"><a href="#Bypassing-Module-Mock" class="headerlink" title="Bypassing Module Mock"></a>Bypassing Module Mock</h2><p><code>Jest</code>允许您模拟测试中的整个模块，这有助于测试代码是否正确，函数调用是否正确。但是，有时您可能希望在测试文件中使用模拟模块的一部分，在这种情况下，您希望访问原始实现，而不是模拟版本。<code>jest.requireActual()</code>允许你导入实际的版本，而不是模拟的版本。</p>
+<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p>使用Jest测试JavaScript (入门篇)：<a href="https://segmentfault.com/a/1190000016232248" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>使用Jest测试JavaScript(Mock篇)：<a href="https://segmentfault.com/a/1190000016717356" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>顶级测试框架Jest指南：<a href="https://segmentfault.com/a/1190000016399447" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>Jest cheat sheet：<a href="https://github.com/sapegin/jest-cheat-sheet" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>Jest官方demo地址：<a href="https://github.com/facebook/jest/tree/master/examples" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>本文源码地址：<a href="https://github.com/Nirvana-cn/Unit_Testing_with_Jest" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2018/12/29/introduce-jest/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/jest/">
+              #jest
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/unit-test/">
+              #unit test
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2018/06/13/loss-of-precision/" target="_self">深入JavaScript中的精度丢失</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/01/18/git-and-ssh/" target="_self">git配置多个ssh key</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

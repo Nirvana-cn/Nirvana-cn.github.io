@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>WebRTC学习总结 | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,每天学一点,webrtc,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>WebRTC学习总结</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2018-04-16
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端-每天学一点/">
+            前端,每天学一点
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="summary-for-webrtc"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>首先我们先看《<code>WebRTC</code>权威指南》上给出的流程图，从这张图，我们要明确两件事：</p>
+<ul>
+<li>第一，通信双方需要先通过服务器交换一些信息</li>
+<li>第二，完成信息交换后，通信双方将直接进行连接以传输数据</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p12.png" alt=""></p>
+<p>然后我们再介绍一下<code>WebRTC</code>中的专有名词，方便读者对下文的理解。</p>
+<ul>
+<li><code>RTCPeerConnection</code>：核心对象，每一个连接对象都需要新建该对象</li>
+<li><code>SDP</code>(<code>Session Description Protocol</code>，会话描述协议)：包含建立连接的一些必要信息，比如<code>IP</code>地址等，<code>sdp</code>由<code>RTCPeerConnection</code>对象方法创建，我们目前不需要知道该对象中的具体内容，使用黑盒传输即可</li>
+<li><code>ICE</code>(<code>Interactive Connectivity Establishment</code>，交互式连接建立技术)：用户之间建立连接的方式，用来选取用户之间最佳的连接方式</li>
+</ul>
+<h2 id="2-WebRTC实现流程"><a href="#2-WebRTC实现流程" class="headerlink" title="2. WebRTC实现流程"></a>2. WebRTC实现流程</h2><p>以下代码不能直接运行，因为我这里并没有实现信令服务器，如何实现信令服务器可自由选择（比如，socket.io、websocket等）。</p>
+<p>首先发起方获取视频流，如果成功，则新建<code>RTCPeerConnection</code>对象，然后创建<code>offer</code>，并发送给应答方。</p>
+<ul>
+<li><code>addStream</code>方法将<code>getUserMedia</code>方法中获取的流(<code>stream</code>)添加到<code>RTCPeerConnection</code>对象中，以进行传输</li>
+<li><code>onaddStream</code>事件用来监听通道中新加入的流，通过<code>e.stream</code>获取</li>
+<li><code>onicecandidate</code>事件用来寻找合适的<code>ICE</code></li>
+<li><code>createOffer()</code>是<code>RTCPeerConnection</code>对象自带的方法，用来创建<code>offer</code>，创建成功后调用<code>setLocalDescription</code>方法将<code>localDescription</code>设置为<code>offer</code>，<code>localDescription</code>即为我们需要发送给应答方的<code>sdp</code></li>
+<li><code>sendOffer</code>和<code>sendCandidate</code>方法是自定义方法，用来将数据发送给服务器</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入&lt;script src="https://webrtc.github.io/adapter/adapter-latest.js"&gt;&lt;/script&gt;脚本</span></span><br><span class="line"><span class="comment">// 提升浏览器兼容性</span></span><br><span class="line"><span class="keyword">var</span> localConnection</span><br><span class="line"><span class="keyword">var</span> constraints=&#123;</span><br><span class="line">    audio:<span class="literal">false</span>,</span><br><span class="line">    video:<span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line">navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleSuccess</span>(<span class="params">stream</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">"video"</span>).srcObject = stream</span><br><span class="line">  localConnection=<span class="keyword">new</span> RTCPeerConnection()</span><br><span class="line">  localConnection.addStream(stream)</span><br><span class="line">  localConnection.onaddstream=<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'获得应答方的视频流'</span> + e.stream)</span><br><span class="line">  &#125;</span><br><span class="line">  localConnection.onicecandidate=<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(event.candidate)&#123;</span><br><span class="line">        sendCandidate(event.candidate)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  localConnection.createOffer().then(<span class="function">(<span class="params">offer</span>)=&gt;</span>&#123;</span><br><span class="line">    localConnection.setLocalDescription(offer).then(sendOffer)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样的，接收方也需要新建一个<code>RTCPeerConnection</code>对象<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> remoteConnection</span><br><span class="line"><span class="keyword">var</span> constraints=&#123;</span><br><span class="line">    audio:<span class="literal">false</span>,</span><br><span class="line">    video:<span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleSuccess</span>(<span class="params">stream</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">"video"</span>).srcObject = stream</span><br><span class="line">  remoteConnection=<span class="keyword">new</span> RTCPeerConnection()</span><br><span class="line">  remoteConnection.addStream(stream)</span><br><span class="line">  remoteConnection.onaddstream=<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'获得发起方的视频流'</span> + e.stream)</span><br><span class="line">  &#125;</span><br><span class="line">  remoteConnection.onicecandidate=<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(event.candidate)&#123;</span><br><span class="line">          sendCandidate(event.candidate)</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当应答方收到发起方发送的<code>offer</code>之后，调用<code>setRemoteDescription</code>设置<code>RTCPeerConnection</code>对象的<code>remoteDescription</code>属性，设置成功之后调用<code>createAnswer</code>方法，创建<code>answer</code>成功之后将其设置为<code>localDescription</code>，然后把<code>answer</code>发送给服务器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> desc=<span class="keyword">new</span> RTCSessionDescription(sdp)</span><br><span class="line">remoteConnection.setRemoteDescription(desc).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    remoteConnection.createAnswer().then(<span class="function">(<span class="params">answer</span>)=&gt;</span>&#123;</span><br><span class="line">        remoteConnection.setLocalDescription(answer).then(sendAnswer)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>当发起方收到应答方发送的<code>answer</code>之后，将其设置为<code>remoteDescription</code>，至此<code>WebRTC</code>连接完成。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> desc=<span class="keyword">new</span> RTCSessionDescription(sdp)</span><br><span class="line">localConnection.setRemoteDescription(desc).then(<span class="function"><span class="params">()</span>=&gt;</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Peer Connection Success'</span>)&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>此时虽然<code>WebRTC</code>连接已经完成，但是通信双方还不能直接通信，因为发送的<code>ICE</code>还没有处理，通信双方还没有确定最优的连接方式。</p>
+<p>应答方收到发起方发送的<code>ICE</code>数据时，调用<code>RTCPeerConnection</code>对象的<code>addIceCandidate</code>方法。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remoteConnection.addIceCandidate(<span class="keyword">new</span> RTCIceCandidate(ice))</span><br></pre></td></tr></table></figure></p>
+<p>发起方收到应答方发送的<code>ICE</code>数据时，同样调用<code>RTCPeerConnection</code>对象的<code>addIceCandidate</code>方法。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">localConnection.addIceCandidate(<span class="keyword">new</span> RTCIceCandidate(ice))</span><br></pre></td></tr></table></figure></p>
+<p>至此，一个最简单的<code>WebRTC</code>连接已经建立完成。</p>
+<h2 id="3-数据通道"><a href="#3-数据通道" class="headerlink" title="3. 数据通道"></a>3. 数据通道</h2><p><code>WebRTC</code>擅长进行数据传输，不仅仅是音频和视频流，还包括我们希望的任何数据类型，相比于复杂的数据交换过程，创建一个数据通道这个主要功能已经在<code>RTCDataConnection</code>对象中实现了：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> peerConnection = <span class="keyword">new</span> RTCPeerConnection();</span><br><span class="line"><span class="keyword">var</span> dataChannel = peerConnection.createDataChannel(<span class="string">"label"</span>,dataChannelOptions);</span><br></pre></td></tr></table></figure>
+<p><code>WebRTC</code>会处理好所有的事情，包括浏览器内部层。浏览器通过一系列的事件来通知应用程序，当前数据通道所处的状态。<code>ondatachannel</code>事件会通知<code>RTCPeerConnection</code>对象，<code>RTCDataChannel</code>对象本身在开启、关闭、发生错误或者接收到消息时会触发对应的事件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">dataChannel.onerror = <span class="function"><span class="keyword">function</span> (<span class="params">error</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dataChannel.onmessage = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event.data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dataChannel.onopen = <span class="function"><span class="keyword">function</span> (<span class="params">error</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'data channel opened'</span>)</span><br><span class="line">    <span class="comment">// 当创建一个数据通道后，你必须等onopen事件触发后才能发送消息</span></span><br><span class="line">    dataChannel.send(<span class="string">'Hello world'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dataChannel.onclose = <span class="function"><span class="keyword">function</span> (<span class="params">error</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'data channel closed'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>数据通道<code>datachannel</code>建立的过程略微不同于建立视频流或音频流双向连接，<code>offer、answer、ice</code>处理完毕之后，由一方发起请求即可。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">localConnection = <span class="keyword">new</span> RTCPeerConnection();</span><br><span class="line"></span><br><span class="line">sendChannel = localConnection.createDataChannel(<span class="string">"sendChannel"</span>);</span><br><span class="line">sendChannel.onopen = handleSendChannelStatusChange;</span><br><span class="line">sendChannel.onclose = handleSendChannelStatusChange;</span><br></pre></td></tr></table></figure>
+<p>接收方此时并不需要再次调用<code>createDataChannel</code>方法，只需要监听<code>RTCPeerConnection</code>实例对象上的<code>ondatachannel</code>事件就可以在回调中拿到发送方的请求，数据通道就建立起来了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">remoteConnection = <span class="keyword">new</span> RTCPeerConnection();</span><br><span class="line">remoteConnection.ondatachannel = receiveChannelCallback;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">receiveChannelCallback</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">    receiveChannel = event.channel;</span><br><span class="line">    receiveChannel.onmessage = handleReceiveMessage;</span><br><span class="line">    receiveChannel.onopen = handleReceiveChannelStatusChange;</span><br><span class="line">    receiveChannel.onclose = handleReceiveChannelStatusChange;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><code>dataChannelOptions</code>传入的配置项是可选的，并且是一个普通的<code>JavaScript</code>对象，这些配置项可以使应用在<code>UDP</code>或者<code>TCP</code>的优势之间进行变化。</p>
+<ul>
+<li><code>reliable</code>:设置消息是否进行担保</li>
+<li><code>ordered</code>:设置消息的接受是否需要按照发送时的顺序</li>
+<li><code>maxRetransmitTime</code>:设置消息发送失败时，多久重新发送</li>
+<li><code>maxRetransmits</code>:设置消息发送失败时，最多重发次数</li>
+<li><code>protocol</code>:设置强制使用其他子协议，但当用户代理不支持该协议时会报错</li>
+<li><code>negotiated</code>:设置开发人员是否有责任在两边创建数据通道，还是浏览器自动完成这个步骤</li>
+<li><code>id</code>:设置通道的唯一标识</li>
+</ul>
+<h2 id="4-文件共享"><a href="#4-文件共享" class="headerlink" title="4. 文件共享"></a>4. 文件共享</h2><p>目前，数据通道支持如下类型：</p>
+<ul>
+<li><code>String</code>:<code>JavaScript</code>基本的字符串</li>
+<li><code>Blob(binary large object)</code>:二进制大对象</li>
+<li><code>ArrayBuffer</code>:确定数组长度的数据类型</li>
+<li><code>ArrayBufferView</code>:基础的数组视图</li>
+</ul>
+<p>其中，<code>Blob</code>类型是一个可以存储二进制文件的容器，结合<code>HTML5</code>相关文件读取<code>API</code>，可以实现文件共享的功能。</p>
+<h2 id="5-更多"><a href="#5-更多" class="headerlink" title="5.更多"></a>5.更多</h2><p>MDN文档：<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>WebRTC学习资料大全：<a href="https://blog.csdn.net/foruok/article/details/53005728" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>官方Github地址：<a href="https://github.com/webrtc" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>SDP字段解析：<a href="https://github.com/Nirvana-cn/Live-platform/blob/master/doc/sdp.md" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>个人demo代码地址：<a href="https://github.com/Nirvana-cn/Live-platform/tree/master/demo" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>书籍《WebRTC权威指南》，《Learning WebRTC 中文版》</p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2018/04/16/summary-for-webrtc/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/webrtc/">
+              #webrtc
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2018/04/11/notes-2/" target="_self">摘记2018-04-11</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2018/04/24/notes-3/" target="_self">摘记2018-04-24</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

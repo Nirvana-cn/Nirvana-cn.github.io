@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>现代启发式算法（一）——遗传算法 | 冰，水为之而寒于水</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="数学逻辑和算法,遗传算法,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="网罗前端知识(HTML,CSS,JavaScript,Vuejs,PWA)">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">冰比冰水冰</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">专栏</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Android指南/" target="_blank">
+                    Android指东
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="http://iceiceice.top/categories/Flutter指南/" target="_blank">
+                    Flutter指南
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else="">抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/Nirvana-cn" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://segmentfault.com/u/nirvana_cn" target="_blank">
+                    SegmentFault
+                  </a>
+                </li>
+              
+                <li>
+                  <a href="https://juejin.im/user/5977378c51882548c3769e61" target="_blank">
+                    掘金
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>现代启发式算法（一）——遗传算法</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2017-09-13
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/数学逻辑和算法/">
+            数学逻辑和算法
+          </a>
+      </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="genetic-algorithm"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p></p>
+<h2 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h2><p>在阅读本文之前，可以先阅读文末推荐的两篇文章，不需要理解理论部分，概览全文，着重看一下原文举的例子，有助于理解遗传算法的实现原理。</p>
+<p>前面的理论部分看不懂没有关系，后面有很详细的实例说明，把例子看懂并自己动手敲个代码（源码我会上传，但一定要自己亲自去实现一下，这样才能对遗传算法的每一步以及参数的意义有深刻的认识），再回过头来看遗传算法的理论部分，相信遗传算法你就入门了。</p>
+<p>标准遗传算法的步骤如下：</p>
+<ol>
+<li><p>构造满足约束条件的染色体。由于遗传算法不能直接处理解空间中的解,所以必须通过编码将解表示成适当的染色体。实际问题的染色体有多种编码方式,染色体编码方式的选取应尽可能的符合问题约束,否则将影响计算效率。</p>
+</li>
+<li><p>随机产生初始群体。初始群体是搜索开始的一组染色体,其数量应适当选择。</p>
+</li>
+<li><p>计算每个染色体的适应度。适应度是反应染色体优劣的唯一指标,遗传算法就是要寻求适应度最大的染色体。</p>
+</li>
+<li><p>使用复制、交叉和变异算子产生子群体。这三个算子是遗传算法的基本算子,其中复制体现了优胜劣汰的自然规律,交叉体现了有性繁殖的思想,变异体现了进化过程中基因突变。</p>
+</li>
+<li><p>重复步骤,直到满足终止条件为止。</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p07.png" alt=""></p>
+<p>从生物学角度简单来说，每一个染色体就代表一个个体，N个个体形成一个种群，计算每一个个体的适应度大小，从种群中挑选适应度大的个体，进行遗传、交叉、变异操作生成下一代种群。</p>
+<p>从数学角度出发，上面的话翻译下来的意思就是说对某个待解决的问题先生成N个初始解，形成一个解集。计算每一个解的好坏，留下好的解，对留下的解进行一番倒腾，再生成一组解，不断循环，最后解集中的解趋近于理想值。</p>
+<p>遗传算法是一种复杂度为<code>O(n)</code>的并行全局搜索算法。</p>
+<p>与传统方法相比,遗传算法的优越性主要表现在首先,在遗传算子的作用下,遗传算法具有很强的搜索能力,能以很大的概率找到问题的全局最优解其次,由于它固有的并行性,能有效处理大规模的优化问题。</p>
+<h2 id="2、求解TSP问题"><a href="#2、求解TSP问题" class="headerlink" title="2、求解TSP问题"></a>2、求解TSP问题</h2><p>前面理论和优点说了一大堆，遗传算法到底该怎么用呢？下面通过解决<code>TSP</code>问题，我们来看看如何将问题转化，进而使用遗传算法求解（掌握思想最重要，用什么语言无所谓，我这里使用<code>Matlab</code>，不用担心不会<code>Matlab</code>，我会很详细的解释每一行代码的作用，然后你用自己会的语言实现一遍就可以了）。</p>
+<p>旅行商问题（即<code>TSP</code>问题）指一个商人要经过且只经过一次指定的N座城市，即遍历这N座不同的城市，求最短的遍历路径。这是一个<code>NP-hard</code>问题，随着城市数量的增多，使用穷举法计算的复杂度为<code>O(n!)</code>，想要求得精确解是不切合实际的。</p>
+<p>遗传算法求解思想：我给每一个城市一个特定编号行不行，1-&gt;2就代表从城市1到城市2，如果现在有5个城市，旅行商从城市0出发，那么0-1-2-3-4-5-0就是旅行商的一条可选路线，也就是我们<code>TSP</code>问题的一个解，而路径的长度就是对应的适应度值。使用遗传算法的对应术语来说，0-1-2-3-4-5-0就是一个染色体，一个个体；一个染色体里面的每一个数字就是一个基因，接下来的遗传、交叉、变异就是针对基因进行操作。<code>Matlab</code>里面<code>randperm(n)</code>函数可以生成<code>1-n</code>的随机全排列，调用该函数10次，就会生成10个解（父代），根据适应度值我们按照一定的策略从父代中选择10个作为子代，对子代进行遗传、交叉、变异操作，即变化染色体中基因点的位置，生成新的解，经过多次迭代，种群中的解都会趋向于某个最优解。</p>
+<h4 id="第一步：编码"><a href="#第一步：编码" class="headerlink" title="第一步：编码"></a>第一步：编码</h4><p>这里我们使用自然数编码，代码的14-19行是初始化种群的过程，通过<code>randperm</code>生成需要城市数的随机全排列，把出发城市放两端，这样一个解就构造出来了，循环指定的次数生成需要的种群大小。</p>
+<h4 id="第二步：遗传算法迭代"><a href="#第二步：遗传算法迭代" class="headerlink" title="第二步：遗传算法迭代"></a>第二步：遗传算法迭代</h4><p>代码20-28行是遗传算法的迭代过程，第21行计算适应度，第22-24行分别进行选择、交叉、变异操作。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 单旅行商问题的遗传算法  </span></span><br><span class="line"><span class="comment">% 20个城市，1条线路  </span></span><br><span class="line">clear,clc  </span><br><span class="line">close all  </span><br><span class="line">load city_distance.mat  <span class="comment">%载入距离矩阵  </span></span><br><span class="line">load city_location.mat  </span><br><span class="line">City_Number=<span class="number">20</span>;         <span class="comment">%城市数量  </span></span><br><span class="line">Race_Number=<span class="number">200</span>;        <span class="comment">%种群数量  </span></span><br><span class="line">Iteration=<span class="number">100</span>;          <span class="comment">%迭代次数  </span></span><br><span class="line">P_Cross=<span class="number">0.8</span>;            <span class="comment">%交叉概率  </span></span><br><span class="line">P_Mutation=<span class="number">0.2</span>;         <span class="comment">%变异概率  </span></span><br><span class="line">race=<span class="built_in">zeros</span>(Race_Number,City_Number+<span class="number">2</span>);  </span><br><span class="line"><span class="comment">%初始化种群  </span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:Race_Number                           </span><br><span class="line">    temp=randperm(City_Number);  </span><br><span class="line">    route=[City_Number+<span class="number">1</span>,temp,City_Number+<span class="number">1</span>];  </span><br><span class="line">    route=ga_hamilton(route);        <span class="comment">%使用改良圈算法优化初始种群  </span></span><br><span class="line">    race(<span class="built_in">i</span>,:)=route;  </span><br><span class="line"><span class="keyword">end</span>  </span><br><span class="line"><span class="keyword">for</span> t=<span class="number">1</span>:Iteration  </span><br><span class="line">    adaptation=ga_adaptation(race);         <span class="comment">%计算适应度大小  </span></span><br><span class="line">    race=ga_choose(race,adaptation);        <span class="comment">%进行选择操作  </span></span><br><span class="line">    race=ga_cross(race,P_Cross);            <span class="comment">%进行交叉操作  </span></span><br><span class="line">    race=ga_mutation(race,P_Mutation);      <span class="comment">%进行变异操作  </span></span><br><span class="line">    [path,val]=ga_plot(race);  </span><br><span class="line">    pause(<span class="number">0.1</span>);  </span><br><span class="line">    fprintf(<span class="string">'第%d代,最优解为%d\n'</span>,t,val);  </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p08.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p09.png" alt=""></p>
+<p>遗传算法每次求得的结果不尽相同，求解的效率也和设置的参数相关，迭代时可进行的遗传操作也多种多样，所以遗传算法是一种很自由的算法。不同于传统方法有固定的求解套路，只要核心思路没错，遗传算法的每一个步骤都是可以自定义的。我在<code>ga_mutation</code>函数中采取的变异操作是单点变异，即随机取两点，交换基因；在<code>ga_cross</code>函数中采取的交叉操作是顺序交叉（具体的交叉操作和解释可以参考<a href="http://blog.csdn.net/u012750702/article/details/54563515" target="_blank" rel="noopener">交叉算子</a>这篇博客）；在<code>ga_choose</code>函数中采取的选择策略是精英选择策略。如果你下载了源码，文件夹里还有一个<code>ga_select</code>函数，这是赌轮盘选择。如果你对比求解<code>TSP</code>和<code>mTSP</code>的主函数，你会发现<code>mTSP</code>主函数中多了，<code>ga_exchange</code>和<code>ga_invert</code>两个操作，不是说遗传算法只有遗传、交叉、变异三个操作吗，你怎么五个？其实这里不是三个操作，而是三类操作，每一类中你又可以使用多种方法，目的是为了保证种群的多样性，从而使搜索到全局最优解的概率更大。所以说遗传算法没有固定的套路，算法的自由度很大，只有适合的方法才是最好的。</p>
+<h2 id="3、求解mTSP问题"><a href="#3、求解mTSP问题" class="headerlink" title="3、求解mTSP问题"></a>3、求解mTSP问题</h2><p>回过头来看看求解<code>TSP</code>的过程，是不是特别简单，你完全不用考虑最终结果是怎么计算出来的，你只要告诉遗传算法怎么进行下一步就行。</p>
+<p>事实上，遗传算法的难点在于：</p>
+<ol>
+<li><p>如何将复杂问题转化成可用遗传算法求解的问题；</p>
+</li>
+<li><p>寻找合适的编码方式；</p>
+</li>
+<li><p>建立恰当的适应度值评价方法。</p>
+</li>
+</ol>
+<p>在学会求解<code>TSP</code>问题的基础上，我们加大难度，现在依然有N座城市，要求M个旅行商遍历N座城市，使总路程最短。这就是<code>mTSP</code>问题，不再是一条线路了，而是多条线路，而且总距离要最短。你可以先花几分钟自己思考一下，让你用遗传算法求解，你要怎么做，如何转化问题是关键。</p>
+<p>遗传算法求解思想：</p>
+<ol>
+<li><p>依然给每座城市一个编号，方便我们使用自然数编码。假设现在有6座城市，旅行商从0点出发。那么0-1-2-3-0-4-5-6-0就是我们的一个解，为了更方便地表示，我们可以假设一个虚拟城市7，即假设两个旅行商分别从两个不同的城市出发，而这两个城市位置坐标一致，从而上面的解可表示为0-1-2-3-7-4-5-6-0。这样一来我们就把<code>mTSP</code>问题转化成了一个<code>TSP</code>问题，不同的地方就是城市数量增加了1，由6座城市，增加为7座。这样转换的便利性是显而易见的，除去端点，中间数的序列又是一组1-n的全排列，我们只要做稍许变化，就可以继续调用解决<code>TSP</code>问题的函数代码；</p>
+</li>
+<li><p>到这里遗传算法的三个难点我们已经解决了编码和转化这两个难点，还剩最重要的计算适应度值。如果依旧按照求解<code>TSP</code>的方法把距离作为计算适应度的指标，在求解<code>mTSP</code>问题时会出现0-7的情形，从出发点直接回到终点，即两条线路一条特别长，另一条特别短，这明显不是我们希望得到的结果，所以在计算适应度值时要综合考虑距离和路线长度两个指标。在<code>ga_adaptation</code>函数中，代码16行我取两段路线长度的最大值作为另一个指标，总体适应度即两个指标之和。如果你认为两条线路长度一致比较重要，你可以增大代码16行中的系数，反之减小比例系数。</p>
+</li>
+</ol>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 多旅行商问题的遗传算法  </span></span><br><span class="line"><span class="comment">% 20个城市，2条线路  </span></span><br><span class="line">clear,clc  </span><br><span class="line">close all  </span><br><span class="line">load city_distance.mat  </span><br><span class="line">load city_location.mat  </span><br><span class="line">City_Number=<span class="number">21</span>;         <span class="comment">%城市数量  </span></span><br><span class="line">Race_Number=<span class="number">200</span>;        <span class="comment">%种群数量  </span></span><br><span class="line">Iteration=<span class="number">200</span>;          <span class="comment">%迭代次数  </span></span><br><span class="line">P_Cross=<span class="number">0.6</span>;            <span class="comment">%交叉概率  </span></span><br><span class="line">P_Mutation=<span class="number">0.2</span>;         <span class="comment">%变异概率  </span></span><br><span class="line">race=<span class="built_in">zeros</span>(Race_Number,City_Number+<span class="number">2</span>);  </span><br><span class="line"><span class="comment">%初始化种群  </span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:Race_Number                           </span><br><span class="line">    temp=randperm(City_Number);  </span><br><span class="line">    route=[City_Number+<span class="number">1</span>,temp,City_Number+<span class="number">1</span>];  </span><br><span class="line">    route=ga_hamilton(route);         <span class="comment">%使用改良圈算法优化初始种群  </span></span><br><span class="line">    race(<span class="built_in">i</span>,:)=route;  </span><br><span class="line"><span class="keyword">end</span>  </span><br><span class="line"><span class="keyword">for</span> t=<span class="number">1</span>:Iteration  </span><br><span class="line">    adaptation=ga_adaptation(race);  </span><br><span class="line">    race=ga_choose(race,adaptation);  </span><br><span class="line">    race=ga_cross(race,P_Cross);  </span><br><span class="line">    race=ga_mutation(race,P_Mutation);  </span><br><span class="line">    race=ga_exchange(race,P_Cross);     <span class="comment">%新增操作  </span></span><br><span class="line">    race=ga_invert(race,P_Cross);       <span class="comment">%新增操作  </span></span><br><span class="line">    [path,val]=ga_plot(race);  </span><br><span class="line">    best_path=path;  </span><br><span class="line">    best_value=val;  </span><br><span class="line">    pause(<span class="number">0.1</span>);  </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[ adaptation ]</span> = <span class="title">ga_adaptation</span><span class="params">( race )</span>  </span></span><br><span class="line">    load city_distance.mat  </span><br><span class="line">    k=race(<span class="number">1</span>,<span class="number">1</span>);  </span><br><span class="line">    [m,n]=<span class="built_in">size</span>(race);  </span><br><span class="line">    adaptation=<span class="built_in">zeros</span>(<span class="number">1</span>,m);  </span><br><span class="line">    adaptation_1=<span class="built_in">zeros</span>(<span class="number">1</span>,m);  </span><br><span class="line">    adaptation_2=<span class="built_in">zeros</span>(<span class="number">1</span>,m);  </span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:m  </span><br><span class="line">        path=<span class="number">0</span>;  </span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:n<span class="number">-1</span>  </span><br><span class="line">            path=path+city_distance(race(<span class="built_in">i</span>,<span class="built_in">j</span>),race(<span class="built_in">i</span>,<span class="built_in">j</span>+<span class="number">1</span>));  </span><br><span class="line">        <span class="keyword">end</span>  </span><br><span class="line">        path=path+city_distance(race(<span class="built_in">i</span>,n),race(<span class="built_in">i</span>,<span class="number">1</span>));  </span><br><span class="line">        adaptation_1(<span class="built_in">i</span>)=path;  </span><br><span class="line">        index=<span class="built_in">find</span>(race(<span class="built_in">i</span>,:)==k<span class="number">-1</span>);  </span><br><span class="line">        adaptation_2(<span class="built_in">i</span>)=max(index<span class="number">-1</span>,n-index)*<span class="number">3000</span>;      <span class="comment">%系数3000不是一个固定的值，需要根据实际情况取值  </span></span><br><span class="line">        adaptation(<span class="built_in">i</span>)=adaptation_1(<span class="built_in">i</span>)+adaptation_2(<span class="built_in">i</span>);  </span><br><span class="line">    <span class="keyword">end</span>  </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/Nirvana-cn/Photograph-deposit/master/p10.png" alt=""></p>
+<p>遗传算法每一步可选择的方法非常丰富，所以遗传算法理论简单，实现复杂。</p>
+<blockquote>
+<p>编码方法：二进制编码，浮点数编码，自然数编码，格雷码。</p>
+<p>选择策略：赌轮盘法，精英策略，最优保存策略。</p>
+<p>交叉操作：顺序交叉，部分匹配交叉，循环交叉，单点交叉。</p>
+<p>变异操作：均匀变异，边界变异，高斯近似变异。</p>
+</blockquote>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>遗传算法的理论非常简单，而实际在使用中，每一个步骤和参数都是要仔细考虑的。以求解<code>mTSP</code>问题为模板，可以用遗传算法求解其它许多复杂的<code>VRP</code>问题，具体问题需要你自己去探索如何解决咯~<br>如果你自己动手实现过，你会发现当城市数量较少时，遗传算法还可以得到较为理想的结果，当城市数量增加时，结果可能就不那么理想了，这个时候你就需要优化你的算法细节；你也可能遇到遗传算法过早收敛，即”早熟”的问题。凡事入门简单，精通却很难，想要真正熟练使用遗传算法还需要不断学习和实践。<br>遗传算法具有很强的全局搜索能力，但是局部搜索能力不足，即当解接近最优解时，在最优解附件徘徊而取不到最优解。解决该问题的方法之一是混合遗传算法和模拟退火算法，模拟退火算法有很强的局部搜索能力，可由遗传算法提供一个近似最优解，然后由模拟退火算法继续搜索，从而弥补遗传算法局部搜索能力不足的缺点。</p>
+<p>遗传算法的特点：</p>
+<ol>
+<li><p>遗传算法对问题参数的代码集起作用,而不是对参数本身起作用。遗传算法处理的对象是染色体,因而要求把所要优化问题的基本参数转化为定长的有限符号的染色体。</p>
+</li>
+<li><p>遗传算法是从初始群体开始搜索的,而不是从单点开始搜索的。许多传统优化方法都是从搜索空间的单点出发,通过某些转换规则确定下一点。这种点到点的搜索方法在多峰值优化问题中,首先找到的可能不是最优峰值，遗传算法是以点集开始的寻优过程,初始群体是随机在搜索空间中选取的,这样在搜索过程中达到最优峰值的概率大于点到点的概率。</p>
+</li>
+<li><p>遗传算法在搜索过程中只使用适应度函数,而不用导数及其他辅助信息。对于不同类型的优化问题具有广泛适应性。</p>
+</li>
+<li><p>遗传算法使用概率转换规则而不用确定性规则。遗传算法使用概率转换规则来调整其搜索方向,各代群体间没有统一的联系规律。但使用概率转换规则并不意味着这种方法属于随机算法范畴,它只是使用随机转换作为工具来调整搜索过程趋向于目标函数不断改进的区域。</p>
+</li>
+</ol>
+<h2 id="5-更多"><a href="#5-更多" class="headerlink" title="5. 更多"></a>5. 更多</h2><p>遗传算法入门到掌握：<a href="http://blog.csdn.net/emiyasstar__/article/details/6938608/" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>非常好的理解遗传算法的例子：<a href="https://blog.csdn.net/b2b160/article/details/4680853/" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+<p>本节源码地址：<a href="https://github.com/Nirvana-cn/Genetic_Algorithm" target="_blank" rel="noopener">&gt;&gt;&gt;点我进入</a></p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : 冰比冰水冰 <br>
+        
+        原文链接 : <a href="">http://iceiceice.top/2017/09/13/genetic-algorithm/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+    <p id="reward-meta">知识 & 情怀 | 二者兼得</p>
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/遗传算法/">
+              #遗传算法
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2017/08/29/install-mongodb/" target="_self">MongoDB安装和使用</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2017/10/10/simulated-annealing-algorithm/" target="_self">现代启发式算法（二）——模拟退火算法</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz",
+      appKey: "1AN5Co4AL1frr1KhlNWl92oI",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("0MbQfk4UsA0RbDhOp3LFn1o3-gzGzoHsz", "1AN5Co4AL1frr1KhlNWl92oI");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2018, 11, 31).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>
