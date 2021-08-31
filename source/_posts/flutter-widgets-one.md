@@ -56,6 +56,8 @@ Expanded组件必须作为Column、Row、Flex的子元素使用，当容易具�
 
 我们也可以指定flex属性，对剩余未使用的空间进行按比例分配。flex属性的值是一个整数。
 
+实际上，Expanded继承自Flexible（详见第34小节），Expanded调用了Flexible的构造函数，将fit属性指定为FlexFit.tight。
+
 ** Expanded会"强制"子元素填充父元素的剩余空间，这会造成子元素的布局约束失效。与之相对的是Align（详见第26小节），Align会继续让它的子元素保持自己的属性（Thanks, Align 😘）。
 
 ## 4. Wrap
