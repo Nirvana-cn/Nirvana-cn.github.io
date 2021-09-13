@@ -26,7 +26,7 @@ Table({
 ```
 
 Table的构造函数如上，
-1. children类型为\<TableRow\>[]；
+1. children类型为<TableRow>[]；
 2. defaultColumnWidth表示默认每一列的宽度，可以取固定值（FixedColumnWidth），也可以取弹性值（FractionColumnWidth），如果columnWidths不为null，则该值不生效；
 3. columnWidths值类型为Map<int, TableColumnWidth> ，可以定制每一列的宽度；
 4. defaultVerticalAlignment表示每一个单元格垂直方向上如何对齐，默认为顶部对齐。
@@ -318,7 +318,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ## 16. InheritedModel
 
-在Flutter中，可以使用InheritedWidget跨组件更新数据，但是InheritedWidget更新的时候，会调用updateShouldNotify方法询问是否需要通知观察者更新。这个更新粒度很粗，所有观察者都会更新。
+在Flutter中，可以使用InheritedWidget（参考第37小节）跨组件更新数据，但是InheritedWidget更新的时候，会调用updateShouldNotify方法询问是否需要通知观察者更新。这个更新粒度很粗，所有观察者都会更新。
 
 如果需要共享的数据有多个，比如有 name 和 age，有两个子组件，一个依赖 name，一个依赖 age，如果使用 InheritedWidget 组件，任何一个数据发生变化，这两个组件都会被通知更新。
 
